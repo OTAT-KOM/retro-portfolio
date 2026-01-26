@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "title": "T-SHIRT À IMPRIMÉ DESSINS",
+      "image": "img/uploads/sample-shirt.png",
+      "colors": "2 Colors",
+      "price": "€12.99",
+      "buy_text": "Buy it",
+      "buy_url": "#",
+      "body": "Soft cotton tee with graphic print."
+    }
+  ]
+}

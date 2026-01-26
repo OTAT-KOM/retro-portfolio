@@ -19,8 +19,23 @@ collections:
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Image", name: "image", widget: "image"}
-              - {label: "Date", name: "date", widget: "datetime", format: "DD/MM/YYYY", date_format: "DD/MM/YYYY", time_format: false}
+              - {label: "Date", name: "date", widget: "date", format: "YYYY-MM-DD"}
               - {label: "Time Range", name: "time", widget: "string", hint: "e.g. 17:00 > 23:00"}
               - {label: "Location", name: "location", widget: "string"}
               - {label: "Tickets", name: "tickets", widget: "string", default: "Doorsale only"}
+              - {label: "Description", name: "body", widget: "markdown"}
+      - name: "products"
+        label: "Shop Products"
+        file: "data/products.json"
+        fields:
+          - name: "items"
+            label: "Products List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Colors", name: "colors", widget: "string", hint: "e.g. 2 Colors"}
+              - {label: "Price", name: "price", widget: "string", hint: "e.g. €12.99"}
+              - {label: "Buy Text", name: "buy_text", widget: "string", default: "Buy it"}
+              - {label: "Buy URL", name: "buy_url", widget: "string", hint: "Link to product page"}
               - {label: "Description", name: "body", widget: "markdown"}

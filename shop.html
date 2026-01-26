@@ -8,36 +8,129 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
+        /* Shop Specific Overrides */
         body {
+            background-color: #d866c2; /* Pink/Orchid background */
+            background-image: none; /* Remove the rapper image */
+            display: block;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Add a noise texture overlay if possible, otherwise solid color is fine */
+        body::before {
+            content: none; /* Remove the flipped rapper image from main style */
+        }
+
+        /* Desktop Icon (Back) */
+        .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        /* Grid Layout */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 20px 20px 120px; /* Left padding clears the desktop icon */
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .window.product-window {
+            position: relative; /* Override absolute positioning */
+            width: 100%;
+            height: 380px;
+            top: auto;
+            left: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background: #c0c0c0;
+        }
+
+        .product-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .product-image-container {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: #fff;
+            border: inset 2px;
+            margin-bottom: 10px;
+            overflow: hidden;
         }
-        .page-window {
-            width: 80%;
-            height: 80%;
-            max-width: 800px;
+
+        .product-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .product-details {
             display: flex;
-            flex-direction: column;
-            position: relative;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 14px;
         }
-        .window-body {
-            flex: 1;
-            overflow-y: auto;
+
+        .product-price {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .buy-btn {
+            min-width: 80px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="window page-window">
-        <div class="title-bar">
-            <div class="title-bar-text">The Shop</div>
-            <div class="title-bar-controls">
-                <button aria-label="Close" onclick="window.location.href='index.html'"></button>
-            </div>
-        </div>
-        <div class="window-body">
-            <p>Shop content coming soon...</p>
-        </div>
+
+    <!-- Desktop Link -->
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
     </div>
+
+    <div class="shop-grid" id="products-grid">
+        <p>Loading products...</p>
+    </div>
+
 </body>
 </html>
