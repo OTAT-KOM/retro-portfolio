@@ -3,42 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unknown</title>
+    <title>About</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
+            background-color: #8544e3; /* Purple background */
+            background-image: none;
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-        .page-window {
-            width: 80%;
-            height: 80%;
-            max-width: 800px;
+        
+        body::before { content: none; }
+
+        /* Desktop Icon (Back) */
+        .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            position: relative;
+            align-items: center;
         }
-        .window-body {
-            flex: 1;
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        .page-window {
+            width: 650px;
+            max-width: 95vw;
+        }
+
+        /* Tab overrides */
+        menu[role=tablist] {
+            margin: 0 0 0 0;
+        }
+        
+        /* Inner content panel */
+        .tab-panel {
+            background: #c0c0c0;
+            border-top: none;
+            padding: 20px;
+            height: 400px;
             overflow-y: auto;
         }
+
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Summary Layout */
+        .summary-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .summary-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 2px inset white;
+            background: #000;
+        }
+
+        .summary-text-col {
+            flex: 1;
+        }
+
+        .summary-title {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .summary-desc {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* Footer Buttons */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            padding-bottom: 5px;
+        }
+
+        .social-btn {
+            min-width: 120px;
+            height: 30px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Contact Form Style */
+        .contact-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        
+        .field-row {
+            margin-bottom: 15px;
+        }
+        
+        .field-row label {
+            width: 100px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .field-row input {
+            width: 250px;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .summary-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .summary-text-col {
+                text-align: center;
+            }
+            .page-window {
+                height: 90vh;
+            }
+            .tab-panel {
+                height: auto;
+                flex: 1;
+            }
+        }
+
     </style>
 </head>
 <body>
+
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
     <div class="window page-window">
         <div class="title-bar">
-            <div class="title-bar-text">??</div>
+            <div class="title-bar-text">About</div>
             <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
                 <button aria-label="Close" onclick="window.location.href='index.html'"></button>
             </div>
         </div>
-        <div class="window-body">
-            <p>???</p>
+        <div class="window-body" style="display: flex; flex-direction: column; height: 100%;">
+            <menu role="tablist">
+                <li role="tab" aria-selected="true" class="tab-link" data-tab="summary">Summary</li>
+                <li role="tab" class="tab-link" data-tab="contact">Contact details</li>
+            </menu>
+            <div class="window tab-panel" role="tabpanel">
+                <div class="window-body">
+                    
+                    <!-- Summary Tab -->
+                    <div id="tab-content-summary" class="tab-content active">
+                        <div class="summary-layout">
+                            <img id="about-image" src="" class="summary-image" alt="OTAT">
+                            <div class="summary-text-col">
+                                <h3 id="about-title" class="summary-title">ABOUT OTAT</h3>
+                                <div id="about-text" class="summary-desc">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Tab -->
+                    <div id="tab-content-contact" class="tab-content">
+                        <div class="contact-form">
+                            <p>For inquiries, bookings, or press:</p>
+                            <br>
+                            <div class="field-row">
+                                <label>Email:</label>
+                                <input type="text" id="contact-email" readonly value="Loading...">
+                            </div>
+                            <div class="field-row">
+                                <label>Phone:</label>
+                                <input type="text" id="contact-phone" readonly value="Loading...">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="social-buttons">
+                <button id="btn-insta" class="social-btn">Instagram</button>
+                <button id="btn-twitter" class="social-btn">Twitter</button>
+                <button id="btn-tiktok" class="social-btn">TikTok</button>
+            </div>
         </div>
     </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

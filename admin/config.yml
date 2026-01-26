@@ -24,6 +24,24 @@ collections:
               - {label: "Location", name: "location", widget: "string"}
               - {label: "Tickets", name: "tickets", widget: "string", default: "Doorsale only"}
               - {label: "Description", name: "body", widget: "markdown"}
+      - name: "about"
+        label: "About / Contact"
+        file: "data/about.json"
+        fields:
+          - {label: "Summary Image", name: "summary_image", widget: "image"}
+          - {label: "Summary Title", name: "summary_title", widget: "string", default: "ABOUT OTAT"}
+          - {label: "Summary Text", name: "summary_text", widget: "text"}
+          - {label: "Contact Email", name: "contact_email", widget: "string"}
+          - {label: "Contact Phone", name: "contact_phone", widget: "string"}
+          - {label: "Instagram URL", name: "instagram_url", widget: "string"}
+          - {label: "Twitter URL", name: "twitter_url", widget: "string"}
+          - {label: "TikTok URL", name: "tiktok_url", widget: "string"}
+      - name: "note"
+        label: "Note"
+        file: "data/note.json"
+        fields:
+          - {label: "Title", name: "title", widget: "string", default: "ملاحظة !!"}
+          - {label: "Content", name: "content", widget: "markdown"}
       - name: "products"
         label: "Shop Products"
         file: "data/products.json"
@@ -39,3 +57,13 @@ collections:
               - {label: "Buy Text", name: "buy_text", widget: "string", default: "Buy it"}
               - {label: "Buy URL", name: "buy_url", widget: "string", hint: "Link to product page"}
               - {label: "Description", name: "body", widget: "markdown"}
+      - name: "pictures"
+        label: "Gallery Pictures"
+        file: "data/pictures.json"
+        fields:
+          - name: "items"
+            label: "Pictures List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Image", name: "image", widget: "image"}

@@ -9,35 +9,83 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
+            background-color: #d461d5; /* Purple background from image */
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
+        
+        .desktop-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .desktop-link img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+
         .page-window {
             width: 80%;
-            height: 80%;
+            height: 90%;
             max-width: 800px;
             display: flex;
             flex-direction: column;
             position: relative;
+            background-color: #c0c0c0; /* Standard Windows 98 gray */
         }
+
         .window-body {
             flex: 1;
             overflow-y: auto;
+            padding: 20px;
+            direction: rtl; /* Right-to-left for Arabic text */
+            text-align: right;
+            font-family: 'Arial', sans-serif; /* Better for Arabic */
+            background-color: white; /* White paper look */
+            margin: 5px;
+            border: 2px inset #dfdfdf;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1em;
+            font-size: 1.1em;
         }
     </style>
 </head>
 <body>
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
     <div class="window page-window">
         <div class="title-bar">
             <div class="title-bar-text">Note</div>
             <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
                 <button aria-label="Close" onclick="window.location.href='index.html'"></button>
             </div>
         </div>
-        <div class="window-body">
-            <p>Welcome to my portfolio!</p>
-            <p>This site is designed with a retro desktop aesthetic.</p>
+        <div class="window-body" id="note-content">
+            <p>Loading note...</p>
         </div>
     </div>
     <script src="js/main.js"></script>

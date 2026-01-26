@@ -58,7 +58,7 @@ document.addEventListener('mouseup', () => {
 
 async function loadEvents() {
     try {
-        const response = await fetch('data/events.json');
+        const response = await fetch('data/events.json?t=' + Date.now());
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -95,7 +95,7 @@ async function loadEvents() {
                     <div class="event-right">
                         <h3 class="event-title">${event.title}</h3>
                         <div class="event-details">
-                            <div><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</div>
+                            ${event.date ? `<div><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</div>` : ''}
                             ${event.time ? `<div><strong>Time:</strong> ${event.time}</div>` : ''}
                             ${event.location ? `<div><strong>Location:</strong> ${event.location}</div>` : ''}
                             ${event.tickets ? `<div><strong>Tickets:</strong> ${event.tickets}</div>` : ''}
@@ -137,7 +137,104 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('products-grid')) {
         loadProducts();
     }
+    if (document.getElementById('gallery-container')) {
+        loadPictures();
+    }
+    if (document.getElementById('about-title')) {
+        loadAbout();
+        setupTabs();
+    }
+    if (document.getElementById('note-content')) {
+        loadNote();
+    }
 });
+
+async function loadNote() {
+    const container = document.getElementById('note-content');
+    if (!container) return;
+
+    try {
+        const response = await fetch('data/note.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load note');
+        
+        const data = await response.json();
+        
+        let html = '';
+        if (data.title) {
+            html += `<h2>${escapeHtml(data.title)}</h2>`;
+        }
+        if (data.content) {
+            // Check if content is markdown or plain text
+            // Simple newline to <br> or <p> conversion if it's plain text from a simple textarea
+            // But since we use markdown widget in CMS, it might be markdown.
+            // For now, let's treat newlines as paragraphs
+            const paragraphs = data.content.split('\n').filter(p => p.trim() !== '');
+            html += paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('');
+        } else {
+            html = '<p>No content available.</p>';
+        }
+        
+        container.innerHTML = html;
+
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<p>Error loading note.</p>';
+    }
+}
+
+async function loadAbout() {
+    if (!document.getElementById('about-title')) return;
+
+    try {
+        const response = await fetch('data/about.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load about data');
+        const data = await response.json();
+
+        // Summary
+        if (data.summary_title) document.getElementById('about-title').innerText = data.summary_title;
+        if (data.summary_text) document.getElementById('about-text').innerText = data.summary_text;
+        if (data.summary_image) document.getElementById('about-image').src = data.summary_image;
+
+        // Contact
+        if (data.contact_email) document.getElementById('contact-email').value = data.contact_email;
+        if (data.contact_phone) document.getElementById('contact-phone').value = data.contact_phone;
+
+        // Socials
+        const setBtn = (id, url) => {
+            const btn = document.getElementById(id);
+            if (btn && url) {
+                btn.onclick = () => window.open(url, '_blank');
+            } else if (btn) {
+                btn.disabled = true;
+            }
+        };
+        setBtn('btn-insta', data.instagram_url);
+        setBtn('btn-twitter', data.twitter_url);
+        setBtn('btn-tiktok', data.tiktok_url);
+
+    } catch (e) {
+        console.error('Error loading about:', e);
+    }
+}
+
+function setupTabs() {
+    const tabs = document.querySelectorAll('.tab-link');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active from all tabs
+            tabs.forEach(t => t.removeAttribute('aria-selected'));
+            // Add active to clicked
+            tab.setAttribute('aria-selected', 'true');
+
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            // Show target content
+            const targetId = tab.getAttribute('data-tab');
+            const targetContent = document.getElementById('tab-content-' + targetId);
+            if (targetContent) targetContent.classList.add('active');
+        });
+    });
+}
 
 async function loadProducts() {
     try {
@@ -181,5 +278,79 @@ async function loadProducts() {
     } catch (e) {
         const grid = document.getElementById('products-grid');
         if (grid) grid.innerHTML = '<p>Error loading products.</p>';
+    }
+}
+
+async function loadPictures() {
+    const container = document.getElementById('gallery-container');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const loading = document.getElementById('gallery-loading');
+    
+    if (!container) return;
+
+    try {
+        const response = await fetch('data/pictures.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load pictures');
+        
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        
+        if (items.length === 0) {
+            loading.innerText = 'No pictures found.';
+            prevBtn.classList.add('disabled');
+            nextBtn.classList.add('disabled');
+            return;
+        }
+
+        // Render all images but hide them
+        loading.style.display = 'none';
+        container.innerHTML = items.map((item, index) => `
+            <img src="${item.image}" class="gallery-image ${index === 0 ? 'active' : ''}" alt="${item.title || 'Gallery Image'}" data-index="${index}">
+        `).join('');
+
+        let currentIndex = 0;
+        const totalItems = items.length;
+
+        const updateButtons = () => {
+            if (currentIndex === 0) {
+                prevBtn.classList.add('disabled');
+            } else {
+                prevBtn.classList.remove('disabled');
+            }
+            
+            if (currentIndex === totalItems - 1) {
+                nextBtn.classList.add('disabled');
+            } else {
+                nextBtn.classList.remove('disabled');
+            }
+        };
+
+        const showImage = (index) => {
+            document.querySelectorAll('.gallery-image').forEach(img => img.classList.remove('active'));
+            const newImg = container.querySelector(`.gallery-image[data-index="${index}"]`);
+            if (newImg) newImg.classList.add('active');
+            updateButtons();
+        };
+
+        prevBtn.onclick = () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showImage(currentIndex);
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (currentIndex < totalItems - 1) {
+                currentIndex++;
+                showImage(currentIndex);
+            }
+        };
+
+        updateButtons();
+
+    } catch (e) {
+        console.error(e);
+        loading.innerText = 'Error loading pictures.';
     }
 }
