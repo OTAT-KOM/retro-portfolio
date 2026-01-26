@@ -1,0 +1,11 @@
+{
+  "name": "otat-portfolio",
+  "version": "1.0.0",
+  "description": "Retro portfolio with CMS",
+  "scripts": {
+    "start": "npx decap-server"
+  },
+  "dependencies": {
+    "decap-server": "^3.1.2"
+  }
+}
