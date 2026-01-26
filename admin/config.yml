@@ -1,0 +1,26 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "img/uploads"
+public_folder: "/img/uploads"
+
+collections:
+  - name: "data"
+    label: "Data"
+    files:
+      - name: "events"
+        label: "Events"
+        file: "data/events.json"
+        fields:
+          - name: "items"
+            label: "Events List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Date", name: "date", widget: "datetime", format: "DD/MM/YYYY", date_format: "DD/MM/YYYY", time_format: false}
+              - {label: "Time Range", name: "time", widget: "string", hint: "e.g. 17:00 > 23:00"}
+              - {label: "Location", name: "location", widget: "string"}
+              - {label: "Tickets", name: "tickets", widget: "string", default: "Doorsale only"}
+              - {label: "Description", name: "body", widget: "markdown"}
