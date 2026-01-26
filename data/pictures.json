@@ -2,7 +2,11 @@
   "items": [
     {
       "title": "Concert 1",
-      "image": "img/uploads/sample-concert.jpg"
+      "image": "images/uploads/otatweb.png"
+    },
+    {
+      "title": "concert 2",
+      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
     }
   ]
 }
