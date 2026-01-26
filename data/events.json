@@ -1,3 +1,13 @@
 {
-  "items": []
+  "items": [
+    {
+      "tickets": "Doorsale only",
+      "date": "2026-01-27",
+      "title": "heyyyy ",
+      "image": "images/uploads/otatweb.png",
+      "time": "e.g. 17:00 > 23:00",
+      "location": "rabat",
+      "body": "ddd"
+    }
+  ]
 }
