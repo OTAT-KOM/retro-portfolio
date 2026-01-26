@@ -6,11 +6,10 @@
     <title>About</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #8544e3; /* Purple background */
-            background-image: none;
+            background-color: #9e5bdb; /* Purple background from mockup */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -18,11 +17,8 @@
             margin: 0;
             overflow: hidden;
         }
-        
-        body::before { content: none; }
 
-        /* Desktop Icon (Back) */
-        .desktop-link {
+       .desktop-link {
             position: fixed;
             top: 20px;
             left: 20px;
@@ -49,28 +45,91 @@
         }
 
         .page-window {
-            width: 650px;
-            max-width: 95vw;
+            width: 600px;
+            max-width: 90vw;
+            height: auto;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Tab overrides */
-        menu[role=tablist] {
-            margin: 0 0 0 0;
+        .window-body {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
-        
-        /* Inner content panel */
-        .tab-panel {
+
+        /* Tabs Customization - High Fidelity Windows 98 */
+        menu[role=tablist] {
+            display: flex;
+            margin: 0 0 -2px 0;
+            padding-left: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-link {
+            list-style: none;
+            padding: 3px 8px;
+            margin-right: 2px;
             background: #c0c0c0;
-            border-top: none;
+            cursor: pointer;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            user-select: none;
+        }
+
+        .tab-link[aria-selected="true"] {
+/* Extends down to cover border */
+            border-bottom: none;
+            box-shadow: 1px 0 0 #000, 1px 0 0 #808080; /* Right shadow adjustment */
+            z-index: 2;
+            position: relative;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+        }
+
+        /* Fix the left/top highlights for active tab */
+        .tab-link[aria-selected="true"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            pointer-events: none;
+        }
+
+        .tab-content-container {
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
             padding: 20px;
-            height: 400px;
+            background: #c0c0c0;
+            flex: 1;
             overflow-y: auto;
+            position: relative;
+            z-index: 0;
         }
 
         .tab-content {
             display: none;
+            height: 100%;
         }
-        
+
         .tab-content.active {
             display: block;
         }
@@ -79,96 +138,96 @@
         .summary-layout {
             display: flex;
             gap: 20px;
-            align-items: flex-start;
+            height: 100%;
         }
 
-        .summary-image {
+        .summary-image-container {
+            flex-shrink: 0;
             width: 200px;
             height: 200px;
-            object-fit: cover;
             border: 2px inset white;
             background: #000;
         }
 
-        .summary-text-col {
+        .summary-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .summary-text {
             flex: 1;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            overflow-y: auto;
         }
 
         .summary-title {
-            font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 1.2em;
             margin-top: 0;
             margin-bottom: 15px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .summary-desc {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
+            font-size: 0.9em;
+            line-height: 1.6;
         }
 
         /* Footer Buttons */
-        .social-buttons {
+        .footer-buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 15px;
-            padding-bottom: 5px;
+            margin-top: auto;
+            padding-top: 10px;
         }
 
-        .social-btn {
-            min-width: 120px;
-            height: 30px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-        }
-        
-        /* Contact Form Style */
-        .contact-form {
-            max-width: 400px;
-            margin: 0 auto;
-            padding-top: 20px;
-        }
-        
-        .field-row {
-            margin-bottom: 15px;
-        }
-        
-        .field-row label {
-            width: 100px;
-            display: inline-block;
+        .footer-buttons button {
+            min-width: 100px;
             font-weight: bold;
         }
-        
-        .field-row input {
-            width: 250px;
+
+        /* Contact Creative Layout */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            align-content: center;
+            height: 100%;
+            text-align: center;
         }
-        
-        /* Mobile responsive */
-        @media (max-width: 600px) {
-            .summary-layout {
-                flex-direction: column;
-                align-items: center;
-            }
-            .summary-text-col {
-                text-align: center;
-            }
-            .page-window {
-                height: 90vh;
-            }
-            .tab-panel {
-                height: auto;
-                flex: 1;
-            }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px dotted transparent;
+        }
+
+        .contact-item:hover {
+            border: 1px dotted #000;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-item img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+        }
+
+        .contact-item span {
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
         }
 
     </style>
 </head>
 <body>
-
     <div class="desktop-link" onclick="window.location.href='index.html'">
         <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
         <div>Desktop</div>
@@ -183,52 +242,100 @@
                 <button aria-label="Close" onclick="window.location.href='index.html'"></button>
             </div>
         </div>
-        <div class="window-body" style="display: flex; flex-direction: column; height: 100%;">
+        <div class="window-body">
             <menu role="tablist">
-                <li role="tab" aria-selected="true" class="tab-link" data-tab="summary">Summary</li>
-                <li role="tab" class="tab-link" data-tab="contact">Contact details</li>
+                <li role="tab" aria-selected="true" class="tab-link" data-tab="summary" >Summary</li>
+                <li role="tab" class="tab-link" data-tab="contact" >Contact details</li>
             </menu>
-            <div class="window tab-panel" role="tabpanel">
-                <div class="window-body">
-                    
-                    <!-- Summary Tab -->
-                    <div id="tab-content-summary" class="tab-content active">
-                        <div class="summary-layout">
-                            <img id="about-image" src="" class="summary-image" alt="OTAT">
-                            <div class="summary-text-col">
-                                <h3 id="about-title" class="summary-title">ABOUT OTAT</h3>
-                                <div id="about-text" class="summary-desc">Loading...</div>
-                            </div>
+            
+            <div class="tab-content-container">
+                <!-- Summary Tab -->
+                <div class="tab-content active" id="tab-content-summary">
+                    <div class="summary-layout">
+                        <div class="summary-image-container">
+                            <img id="about-image" src="" alt="Profile" class="summary-image" onerror="this.style.display='none'">
+                        </div>
+                        <div class="summary-text">
+                            <h2 id="about-title" class="summary-title">Loading...</h2>
+                            <p id="about-text" class="summary-desc"></p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Contact Tab -->
-                    <div id="tab-content-contact" class="tab-content">
-                        <div class="contact-form">
-                            <p>For inquiries, bookings, or press:</p>
-                            <br>
-                            <div class="field-row">
-                                <label>Email:</label>
-                                <input type="text" id="contact-email" readonly value="Loading...">
-                            </div>
-                            <div class="field-row">
-                                <label>Phone:</label>
-                                <input type="text" id="contact-phone" readonly value="Loading...">
-                            </div>
+                <!-- Contact Tab -->
+                <div class="tab-content" id="tab-content-contact">
+                    <div class="contact-grid">
+                        <div class="contact-item" id="btn-insta-contact">
+                            <img src="images/icons/insta.svg" alt="Instagram">
+                            <span>Instagram</span>
+                        </div>
+                        <div class="contact-item" id="btn-tiktok-contact">
+                            <img src="images/icons/tik.svg" alt="TikTok">
+                            <span>TikTok</span>
+                        </div>
+                        <div class="contact-item" id="btn-linkedin-contact">
+                            <img src="images/icons/directory_favorites-2.png" alt="LinkedIn">
+                            <span>LinkedIn</span>
+                        </div>
+                        <div class="contact-item" id="btn-youtube-contact">
+                            <img src="images/icons/youtube.svg" alt="YouTube">
+                            <span>YouTube</span>
+                        </div>
+                        <div class="contact-item" id="btn-spotify-contact">
+                            <img src="images/icons/cd_audio_cd_a-4.png" alt="Spotify">
+                            <span>Spotify</span>
+                        </div>
+                        <div class="contact-item" id="btn-email-contact">
+                            <img src="images/icons/outlook_express-4.png" alt="Email">
+                            <span>Email Me</span>
                         </div>
                     </div>
-
                 </div>
             </div>
-            
-            <div class="social-buttons">
-                <button id="btn-insta" class="social-btn">Instagram</button>
-                <button id="btn-twitter" class="social-btn">Twitter</button>
-                <button id="btn-tiktok" class="social-btn">TikTok</button>
+
+            <div class="footer-buttons">
+                <button id="btn-insta">Instagram</button>
+                <button id="btn-tiktok">TikTok</button>
+                <button id="btn-linkedin">LinkedIn</button>
             </div>
         </div>
     </div>
 
     <script src="js/main.js"></script>
+    <script>
+        // Additional script to handle contact tab clicks specifically if needed, 
+        // though main.js handles the buttons. 
+        // We need to map the new contact items to the same URLs.
+        
+        async function loadExtraContactLogic() {
+            try {
+                const response = await fetch('data/about.json?t=' + Date.now());
+                if (!response.ok) return;
+                const data = await response.json();
+                
+                const setLink = (id, url, isMail = false) => {
+                    const el = document.getElementById(id);
+                    if (el && url) {
+                        el.onclick = () => window.open(isMail ? 'mailto:' + url : url, '_blank');
+                    } else if (el) {
+                        el.style.opacity = '0.5';
+                        el.style.cursor = 'default';
+                        el.style.display = 'none'; // Hide if not available
+                    }
+                };
+
+                setLink('btn-insta-contact', data.instagram_url);
+                setLink('btn-tiktok-contact', data.tiktok_url);
+                setLink('btn-linkedin-contact', data.linkedin_url);
+                setLink('btn-youtube-contact', data.youtube_url);
+                setLink('btn-spotify-contact', data.spotify_url);
+                setLink('btn-email-contact', data.contact_email, true);
+
+            } catch(e) { console.log(e); }
+        }
+        
+        // Run after main.js loads (which is async-ish) or just run it now
+        document.addEventListener('DOMContentLoaded', loadExtraContactLogic);
+    </script>
 </body>
 </html>

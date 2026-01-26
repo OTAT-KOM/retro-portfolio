@@ -34,8 +34,10 @@ collections:
           - {label: "Contact Email", name: "contact_email", widget: "string"}
           - {label: "Contact Phone", name: "contact_phone", widget: "string"}
           - {label: "Instagram URL", name: "instagram_url", widget: "string"}
-          - {label: "Twitter URL", name: "twitter_url", widget: "string"}
           - {label: "TikTok URL", name: "tiktok_url", widget: "string"}
+          - {label: "LinkedIn URL", name: "linkedin_url", widget: "string"}
+          - {label: "YouTube URL", name: "youtube_url", widget: "string"}
+          - {label: "Spotify URL", name: "spotify_url", widget: "string"}
       - name: "note"
         label: "Note"
         file: "data/note.json"
@@ -67,3 +69,28 @@ collections:
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Image", name: "image", widget: "image"}
+      - name: "watch"
+        label: "Watch (Videos)"
+        file: "data/watch.json"
+        fields:
+          - name: "items"
+            label: "Videos List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Video URL (YouTube/Embed)", name: "video_url", widget: "string"}
+              - {label: "Thumbnail", name: "thumbnail", widget: "image", required: false}
+              - {label: "Description", name: "description", widget: "markdown", required: false}
+      - name: "listen"
+        label: "Listen (Music)"
+        file: "data/listen.json"
+        fields:
+          - name: "items"
+            label: "Tracks List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Artist", name: "artist", widget: "string"}
+              - {label: "Audio URL/Link", name: "audio_url", widget: "string"}
+              - {label: "Cover Image", name: "cover_image", widget: "image", required: false}
+

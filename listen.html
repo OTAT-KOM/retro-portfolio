@@ -9,36 +9,119 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .page-window {
-            width: 80%;
-            height: 80%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
+            background-color: #800080; /* Purple/Maroon */
+            display: block;
+            padding: 20px;
+            overflow-y: auto;
             position: relative;
         }
+
+        /* Desktop Icon (Back) */
+        .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        /* Grid Layout */
+        .listen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 20px 20px 120px; /* Left padding clears the desktop icon */
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .window.audio-window {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
         .window-body {
             flex: 1;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: #c0c0c0;
+            align-items: center;
+            text-align: center;
+        }
+
+        .album-art {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px inset white;
+            background: #000;
+            margin-bottom: 10px;
+        }
+
+        .track-info {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .track-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .track-artist {
+            color: #555;
+        }
+
+        .audio-player {
+            width: 100%;
+        }
+        
+        .listen-btn {
+            margin-top: 10px;
+            min-width: 100px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="window page-window">
-        <div class="title-bar">
-            <div class="title-bar-text">Listen</div>
-            <div class="title-bar-controls">
-                <button aria-label="Close" onclick="window.location.href='index.html'"></button>
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
+    <div class="listen-grid" id="listen-grid">
+        <!-- Content loaded by JS -->
+        <div class="window audio-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Loading...</div>
+            </div>
+            <div class="window-body">
+                <p>Loading music...</p>
             </div>
         </div>
-        <div class="window-body">
-            <p>Music player coming soon...</p>
-        </div>
     </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

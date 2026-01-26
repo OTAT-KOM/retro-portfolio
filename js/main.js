@@ -147,7 +147,121 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('note-content')) {
         loadNote();
     }
+    if (document.getElementById('watch-grid')) {
+        loadWatch();
+    }
+    if (document.getElementById('listen-grid')) {
+        loadListen();
+    }
 });
+
+async function loadWatch() {
+    const grid = document.getElementById('watch-grid');
+    if (!grid) return;
+
+    try {
+        const response = await fetch('data/watch.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load videos');
+        
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        
+        if (!items.length) {
+            grid.innerHTML = '<p style="color:white; text-align:center; width:100%;">No videos available.</p>';
+            return;
+        }
+
+        grid.innerHTML = items.map(video => {
+            let videoContent = '';
+            let url = video.video_url || '';
+            
+            // Simple YouTube Embed detection
+            if (url.includes('youtube.com/watch') || url.includes('youtu.be')) {
+                let videoId = '';
+                if (url.includes('youtu.be')) {
+                    videoId = url.split('/').pop();
+                } else {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    videoId = urlParams.get('v');
+                }
+                videoContent = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                videoContent = `<video src="${url}" controls></video>`;
+            } else {
+                // Fallback or other embeds
+                videoContent = `<div style="display:flex;align-items:center;justify-content:center;height:100%;"><a href="${url}" target="_blank">Watch Video</a></div>`;
+            }
+
+            return `
+            <div class="window video-window">
+                <div class="title-bar">
+                    <div class="title-bar-text">${video.title || 'Video'}</div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Minimize"></button>
+                        <button aria-label="Maximize"></button>
+                        <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div class="video-container">
+                        ${videoContent}
+                    </div>
+                    <div class="video-title">${video.title || ''}</div>
+                    ${video.description ? `<div class="video-desc">${video.description}</div>` : ''}
+                </div>
+            </div>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error(e);
+        grid.innerHTML = '<p style="color:white;">Error loading videos.</p>';
+    }
+}
+
+async function loadListen() {
+    const grid = document.getElementById('listen-grid');
+    if (!grid) return;
+
+    try {
+        const response = await fetch('data/listen.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load music');
+        
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        
+        if (!items.length) {
+            grid.innerHTML = '<p style="color:white; text-align:center; width:100%;">No music available.</p>';
+            return;
+        }
+
+        grid.innerHTML = items.map(track => `
+            <div class="window audio-window">
+                <div class="title-bar">
+                    <div class="title-bar-text">${track.title || 'Track'}</div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Minimize"></button>
+                        <button aria-label="Maximize"></button>
+                        <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div class="album-art" style="background-image: url('${track.cover_image || 'images/logo.png'}'); background-size: cover; background-position: center;"></div>
+                    <div class="track-info">
+                        <div class="track-title">${track.title || 'Unknown Title'}</div>
+                        <div class="track-artist">${track.artist || 'Unknown Artist'}</div>
+                    </div>
+                    <audio controls class="audio-player" src="${track.audio_url}"></audio>
+                    <a href="${track.audio_url}" download class="listen-btn" style="text-decoration:none; color:black; border:2px outset white; padding:2px 10px; background:#c0c0c0; display:inline-block; margin-top:5px;">Download</a>
+                </div>
+            </div>
+        `).join('');
+
+    } catch (e) {
+        console.error(e);
+        grid.innerHTML = '<p style="color:white;">Error loading music.</p>';
+    }
+}
 
 async function loadNote() {
     const container = document.getElementById('note-content');
@@ -206,11 +320,14 @@ async function loadAbout() {
                 btn.onclick = () => window.open(url, '_blank');
             } else if (btn) {
                 btn.disabled = true;
+                btn.style.display = 'none'; // Hide if not set
             }
         };
         setBtn('btn-insta', data.instagram_url);
-        setBtn('btn-twitter', data.twitter_url);
         setBtn('btn-tiktok', data.tiktok_url);
+        setBtn('btn-linkedin', data.linkedin_url);
+        setBtn('btn-youtube', data.youtube_url);
+        setBtn('btn-spotify', data.spotify_url);
 
     } catch (e) {
         console.error('Error loading about:', e);

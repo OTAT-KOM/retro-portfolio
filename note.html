@@ -18,20 +18,31 @@
             overflow: hidden;
         }
         
+        /* Desktop Icon (Back) */
         .desktop-link {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
+            width: 80px;
             text-align: center;
-            color: white;
             cursor: pointer;
             z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
+
         .desktop-link img {
-            width: 32px;
-            height: 32px;
+            width: 48px;
+            height: 48px;
             margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
         }
 
         .page-window {

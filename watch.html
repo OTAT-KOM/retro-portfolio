@@ -9,36 +9,111 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .page-window {
-            width: 80%;
-            height: 80%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
+            background-color: #008080; /* Teal background */
+            display: block;
+            padding: 20px;
+            overflow-y: auto;
             position: relative;
         }
+
+        /* Desktop Icon (Back) */
+        .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        /* Grid Layout */
+        .watch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+            padding: 20px 20px 20px 120px; /* Left padding clears the desktop icon */
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .window.video-window {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
         .window-body {
             flex: 1;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: #c0c0c0;
+        }
+
+        .video-container {
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+            background: #000;
+            margin-bottom: 10px;
+            border: 2px inset white;
+        }
+
+        .video-container iframe, .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .video-desc {
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <div class="window page-window">
-        <div class="title-bar">
-            <div class="title-bar-text">Watch</div>
-            <div class="title-bar-controls">
-                <button aria-label="Close" onclick="window.location.href='index.html'"></button>
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
+    <div class="watch-grid" id="watch-grid">
+        <!-- Content loaded by JS -->
+        <div class="window video-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Loading...</div>
+            </div>
+            <div class="window-body">
+                <p>Loading videos...</p>
             </div>
         </div>
-        <div class="window-body">
-            <p>Video player coming soon...</p>
-        </div>
     </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>
