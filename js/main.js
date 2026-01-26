@@ -65,8 +65,20 @@ async function loadEvents() {
         const data = await response.json();
         const items = Array.isArray(data.items) ? data.items.slice() : [];
         const today = new Date();
-        const upcoming = items.filter(e => new Date(e.date) >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
-        const previous = items.filter(e => new Date(e.date) < today).sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Helper to check if date is valid
+        const isValidDate = (d) => d && !isNaN(new Date(d).getTime());
+
+        // Include events with missing dates in upcoming, sorted last
+        const upcoming = items.filter(e => !e.date || (isValidDate(e.date) && new Date(e.date) >= today))
+                              .sort((a, b) => {
+                                  if (!a.date) return 1;
+                                  if (!b.date) return -1;
+                                  return new Date(a.date) - new Date(b.date);
+                              });
+                              
+        const previous = items.filter(e => e.date && isValidDate(e.date) && new Date(e.date) < today)
+                              .sort((a, b) => new Date(b.date) - new Date(a.date));
 
         const render = (list, targetId) => {
             const target = document.getElementById(targetId);
