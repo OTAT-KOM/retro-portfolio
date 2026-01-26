@@ -236,30 +236,18 @@ async function loadListen() {
         }
 
         grid.innerHTML = items.map(track => `
-            <div class="window audio-window">
-                <div class="title-bar">
-                    <div class="title-bar-text">${track.title || 'Track'}</div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close"></button>
-                    </div>
+            <div class="music-item">
+                <div class="cover-container">
+                    <img src="${track.cover_image || 'images/logo.png'}" class="music-cover" alt="${track.title || 'Album Art'}">
                 </div>
-                <div class="window-body">
-                    <div class="album-art" style="background-image: url('${track.cover_image || 'images/logo.png'}'); background-size: cover; background-position: center;"></div>
-                    <div class="track-info">
-                        <div class="track-title">${track.title || 'Unknown Title'}</div>
-                        <div class="track-artist">${track.artist || 'Unknown Artist'}</div>
-                    </div>
-                    <audio controls class="audio-player" src="${track.audio_url}"></audio>
-                    <a href="${track.audio_url}" download class="listen-btn" style="text-decoration:none; color:black; border:2px outset white; padding:2px 10px; background:#c0c0c0; display:inline-block; margin-top:5px;">Download</a>
-                </div>
+                <div class="music-title">${track.title || 'UNTITLED'}</div>
+                <a href="${track.audio_url}" target="_blank" class="stream-btn">STREAM / DOWNLOAD</a>
             </div>
         `).join('');
 
     } catch (e) {
         console.error(e);
-        grid.innerHTML = '<p style="color:white;">Error loading music.</p>';
+        grid.innerHTML = '<p class="empty-state">Error loading music.</p>';
     }
 }
 

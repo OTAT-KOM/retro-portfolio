@@ -9,14 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #800080; /* Purple/Maroon */
+            background-color: #000000; /* Black background matching reference */
             display: block;
             padding: 20px;
             overflow-y: auto;
             position: relative;
+            font-family: 'Arial', sans-serif; /* Clean font */
         }
 
-        /* Desktop Icon (Back) */
+        /* Desktop Icon (Back) - Adapted for dark bg */
         .desktop-link {
             position: fixed;
             top: 20px;
@@ -43,64 +44,98 @@
             text-shadow: 1px 1px 0px black;
         }
 
+        /* Navigation / Header Placeholder (Optional to match screenshot "HOME MUSIC STORE...") */
+        .nf-nav {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+            font-family: 'Courier Prime', monospace; /* Or similar clean font */
+            letter-spacing: 2px;
+            font-size: 14px;
+            padding-top: 20px;
+        }
+        
+        .nf-nav span {
+            margin: 0 15px;
+            cursor: pointer;
+        }
+
+        .nf-nav span.active {
+            text-decoration: underline;
+        }
+
         /* Grid Layout */
         .listen-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 20px 20px 20px 120px; /* Left padding clears the desktop icon */
-            max-width: 1400px;
+            gap: 50px;
+            padding: 20px 20px 20px 100px; /* Left padding clears the desktop icon */
+            max-width: 1200px;
             margin: 0 auto;
+            align-items: start;
         }
 
-        .window.audio-window {
-            position: relative;
-            width: 100%;
+        /* Music Item Styles */
+        .music-item {
             display: flex;
             flex-direction: column;
-        }
-
-        .window-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            background: #c0c0c0;
             align-items: center;
             text-align: center;
         }
 
-        .album-art {
-            width: 150px;
-            height: 150px;
+        .cover-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .music-cover {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border: 2px inset white;
-            background: #000;
-            margin-bottom: 10px;
+            transition: transform 0.3s ease;
         }
 
-        .track-info {
-            margin-bottom: 10px;
-            width: 100%;
+        .music-item:hover .music-cover {
+            transform: scale(1.02);
         }
 
-        .track-title {
+        .music-title {
+            color: white;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
         }
 
-        .track-artist {
-            color: #555;
+        .stream-btn {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            transition: background 0.3s, color 0.3s;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-block;
         }
 
-        .audio-player {
-            width: 100%;
+        .stream-btn:hover {
+            background: white;
+            color: black;
         }
-        
-        .listen-btn {
-            margin-top: 10px;
-            min-width: 100px;
-            font-weight: bold;
+
+        /* Fallback for empty state */
+        .empty-state {
+            color: #888;
+            text-align: center;
+            grid-column: 1 / -1;
+            margin-top: 50px;
         }
     </style>
 </head>
@@ -110,16 +145,17 @@
         <div>Desktop</div>
     </div>
 
+    <div class="nf-nav">
+        <span>HOME</span>
+        <span class="active">MUSIC</span>
+        <span>STORE</span>
+        <span>VIDEOS</span>
+        <span>TOUR</span>
+    </div>
+
     <div class="listen-grid" id="listen-grid">
         <!-- Content loaded by JS -->
-        <div class="window audio-window">
-            <div class="title-bar">
-                <div class="title-bar-text">Loading...</div>
-            </div>
-            <div class="window-body">
-                <p>Loading music...</p>
-            </div>
-        </div>
+        <p class="empty-state">Loading music...</p>
     </div>
 
     <script src="js/main.js"></script>
