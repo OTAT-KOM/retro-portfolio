@@ -235,19 +235,54 @@ async function loadListen() {
             return;
         }
 
-        grid.innerHTML = items.map(track => `
-            <div class="music-item">
-                <div class="cover-container">
-                    <img src="${track.cover_image || 'images/logo.png'}" class="music-cover" alt="${track.title || 'Album Art'}">
+        grid.innerHTML = items.map(track => {
+            let embedContent = '';
+            // Check if audio_url is a Spotify link/embed
+            if (track.audio_url && (track.audio_url.includes('spotify.com') || track.audio_url.includes('open.spotify.com'))) {
+                let spotifyUrl = track.audio_url;
+                if (!spotifyUrl.includes('/embed')) {
+                    // Convert standard link to embed link
+                    // e.g. https://open.spotify.com/track/ID?si=... -> https://open.spotify.com/embed/track/ID
+                    spotifyUrl = spotifyUrl.replace('open.spotify.com/', 'open.spotify.com/embed/');
+                    // Remove query params if any, though embed usually ignores them or needs them clean
+                    const urlObj = new URL(spotifyUrl);
+                    spotifyUrl = urlObj.origin + urlObj.pathname; 
+                }
+                embedContent = `<iframe src="${spotifyUrl}" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+            } else {
+                // Fallback to audio tag if not Spotify
+                 embedContent = `
+                    <div class="album-art" style="background-image: url('${track.cover_image || 'images/logo.png'}'); background-size: cover; background-position: center; width: 100px; height: 100px; border: 2px inset white; margin-bottom: 10px;"></div>
+                    <div class="track-info">
+                        <div class="track-title" style="font-weight:bold;">${track.title || 'Unknown Title'}</div>
+                    </div>
+                    <audio controls class="audio-player" style="width:100%" src="${track.audio_url}"></audio>
+                `;
+            }
+
+            return `
+            <div class="window audio-window">
+                <div class="title-bar">
+                    <div class="title-bar-text">${track.title || 'Music'}</div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Minimize"></button>
+                        <button aria-label="Maximize"></button>
+                        <button aria-label="Close"></button>
+                    </div>
                 </div>
-                <div class="music-title">${track.title || 'UNTITLED'}</div>
-                <a href="${track.audio_url}" target="_blank" class="stream-btn">STREAM / DOWNLOAD</a>
+                <div class="window-body">
+                    ${track.audio_url && track.audio_url.includes('spotify') ? 
+                        `<div class="spotify-container">${embedContent}</div>` : 
+                        embedContent
+                    }
+                </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
     } catch (e) {
         console.error(e);
-        grid.innerHTML = '<p class="empty-state">Error loading music.</p>';
+        grid.innerHTML = '<p style="color:white;">Error loading music.</p>';
     }
 }
 

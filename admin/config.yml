@@ -91,6 +91,6 @@ collections:
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Artist", name: "artist", widget: "string"}
-              - {label: "Audio URL/Link", name: "audio_url", widget: "string"}
+              - {label: "Audio URL/Link (Spotify)", name: "audio_url", widget: "string", hint: "Paste Spotify Track/Album link here"}
               - {label: "Cover Image", name: "cover_image", widget: "image", required: false}
 
