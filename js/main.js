@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadProducts() {
     try {
-        const response = await fetch('data/products.json');
+        const response = await fetch('data/products.json?t=' + Date.now());
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
