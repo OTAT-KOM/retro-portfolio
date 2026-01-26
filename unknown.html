@@ -145,14 +145,18 @@
             flex-shrink: 0;
             width: 200px;
             height: 200px;
-            border: 2px inset white;
-            background: #000;
+            border: 2px inset #fff;
+            background: #808080; /* Changed from black to see if image is missing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .summary-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .summary-text {
@@ -253,7 +257,7 @@
                 <div class="tab-content active" id="tab-content-summary">
                     <div class="summary-layout">
                         <div class="summary-image-container">
-                            <img id="about-image" src="" alt="Profile" class="summary-image" onerror="this.style.display='none'">
+                            <img id="about-image" src="" alt="Profile" class="summary-image">
                         </div>
                         <div class="summary-text">
                             <h2 id="about-title" class="summary-title">Loading...</h2>

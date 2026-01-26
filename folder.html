@@ -9,36 +9,211 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
+            /* Inherit global styles but ensure full screen layout */
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
-        .page-window {
-            width: 80%;
-            height: 80%;
-            max-width: 800px;
+
+        .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            position: relative;
+            align-items: center;
         }
-        .window-body {
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        .folder-window {
+            width: 640px;
+            height: 480px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .menu-bar {
+            display: flex;
+            padding: 2px 5px;
+            border-bottom: 1px solid #808080;
+        }
+
+        .menu-item {
+            padding: 2px 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .menu-item:hover {
+            background-color: #000080;
+            color: white;
+        }
+
+        .address-bar {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-bottom: 1px solid #808080;
+            background: #c0c0c0;
+            gap: 5px;
+        }
+
+        .address-label {
+            font-size: 12px;
+            color: #444;
+        }
+
+        .address-input {
             flex: 1;
-            overflow-y: auto;
+            background: white;
+            border: 2px inset #dfdfdf;
+            padding: 2px 5px;
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
         }
+
+        .address-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        .window-content {
+            flex: 1;
+            background: white;
+            border: 2px inset #dfdfdf;
+            margin: 2px;
+            padding: 10px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-auto-rows: 100px;
+            gap: 10px;
+        }
+
+        .folder-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .folder-item:hover {
+            background-color: #cce8ff; /* Light blue hover like older windows */
+            border: 1px dotted #999;
+        }
+        
+        .folder-item:hover .folder-item-text {
+            color: black;
+        }
+
+        .folder-item img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+
+        .folder-item-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            color: black;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+
+        .status-bar {
+            border-top: 1px solid #808080;
+            padding: 2px 5px;
+            font-size: 11px;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status-segment {
+            border: 1px inset #dfdfdf;
+            padding: 2px 5px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="window page-window">
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
+    <div class="window folder-window">
         <div class="title-bar">
             <div class="title-bar-text">New Folder</div>
             <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
                 <button aria-label="Close" onclick="window.location.href='index.html'"></button>
             </div>
         </div>
-        <div class="window-body">
-            <p>Folder content...</p>
+        
+        <!-- Menu Bar -->
+        <div class="menu-bar">
+            <div class="menu-item">File</div>
+            <div class="menu-item">Edit</div>
+            <div class="menu-item">View</div>
+            <div class="menu-item">Go</div>
+            <div class="menu-item">Favorites</div>
+            <div class="menu-item">Help</div>
+        </div>
+
+        <!-- Address Bar -->
+        <div class="address-bar">
+            <span class="address-label">Address</span>
+            <div class="address-input">
+                <img src="images/icons/directory_open_file_mydocs-4.png" class="address-icon" alt="">
+                C:\Windows\Desktop\New Folder
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="window-content">
+            <!-- Items -->
+            <div class="folder-item" onclick="alert('Access Denied.')">
+                <img src="images/icons/file_eye.ico" alt="System">
+                <span class="folder-item-text">System.dll</span>
+            </div>
+
+
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-segment" style="flex: 1;">6 object(s)</div>
+            <div class="status-segment" style="width: 150px;">1.25 MB</div>
+            <div class="status-segment" style="width: 100px;">My Computer</div>
         </div>
     </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>
