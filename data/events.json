@@ -8,6 +8,15 @@
       "time": "e.g. 17:00 > 23:00",
       "location": "rabat",
       "body": "ddd"
+    },
+    {
+      "tickets": "Doorsale only",
+      "title": "old",
+      "image": "images/uploads/otatweb.png",
+      "date": "2026-01-25",
+      "time": "ddd",
+      "location": "dd",
+      "body": "dddd"
     }
   ]
 }
