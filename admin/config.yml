@@ -57,7 +57,7 @@ collections:
               - {label: "Type", name: "type", widget: "select", options: ["large", "medium", "small"]}
               - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
               - {label: "Summary", name: "summary", widget: "text"}
-              - {label: "Media Source", name: "media_src", widget: "image"}
+              - {label: "Media Source", name: "media_src", widget: "image", required: false}
               - {label: "Media Type", name: "media_type", widget: "select", options: ["image", "video"], default: "image"}
               - {label: "Full Description", name: "description", widget: "markdown"}
       - name: "pictures"
