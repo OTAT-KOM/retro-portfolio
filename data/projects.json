@@ -34,13 +34,8 @@
     },
     {
       "id": "p2",
-<<<<<<< HEAD
-      "type": "large",
-      "title": "Visual Module AQ",
-=======
       "type": "small",
-      "title": "Visual Module A",
->>>>>>> 53862db (video project fixing)
+      "title": "Visual Module AQ",
       "date": "2024-12-05",
       "summary": "Exploration of generative AI art.",
       "description": "An exploration of generative AI art and its implications for digital creativity.",
@@ -87,49 +82,14 @@
       "description": "Error tracking and debugging logs."
     },
     {
-      "media_type": "image",
-<<<<<<< HEAD
       "id": "p7",
       "title": "testing",
       "type": "medium",
       "date": "2026-01-27",
       "summary": "ddsdds",
       "description": "dsdsd",
+      "media_type": "image",
       "media_src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
-=======
-      "media_src": "images/uploads/otatweb.png",
-      "description": "Changelog for version 2.0."
-    },
-        {
-      "id": "p8",
-      "type": "small",
-      "title": "System Update",
-      "date": "2024-07-10",
-      "summary": "Changelog for version 2.0.",
-      "media_type": "image",
-      "media_src": "images/uploads/otatweb.png",
-      "description": "Changelog for version 2.0."
-    },
-    {
-      "id": "p7",
-      "type": "small",
-      "title": "System Update",
-      "date": "2024-07-10",
-      "summary": "Changelog for version 2.0.",
-      "media_type": "image",
-      "media_src": "images/uploads/otatweb.png",
-      "description": "Changelog for version 2.0."
-    },
-        {
-      "id": "p8",
-      "type": "large",
-      "title": "System Update",
-      "date": "2024-07-10",
-      "summary": "Changelog for version 2.0.",
-      "media_type": "image",
-      "media_src": "images/uploads/otatweb.png",
-      "description": "Changelog for version 2.0."
->>>>>>> 53862db (video project fixing)
     }
   ]
 }

@@ -568,6 +568,7 @@ function openProjectModal(id) {
     modal.style.flexDirection = 'column';
     modal.style.zIndex = 9999;
     modal.style.padding = '2px';
+    modal.style.background = '#ffffff';
     modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
 
     const descriptionHtml = project.description ? 
@@ -633,9 +634,9 @@ function openProjectModal(id) {
         
         // Render Main Media
         if (item.type === 'video') {
-            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:2px inset white; display:block; margin: 0 auto; object-fit: contain;"></video>`;
+            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
         } else {
-            mediaView.innerHTML = `<img src="${item.src}" style="max-height:100%; max-width:100%; width:auto; height:auto; border:2px inset white; display:block; margin: 0 auto; object-fit: contain;" alt="${item.caption || 'Project Image'}">`;
+            mediaView.innerHTML = `<img src="${item.src}" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;" alt="${item.caption || 'Project Image'}">`;
         }
 
         // Render Thumbnails (Highlight active)
