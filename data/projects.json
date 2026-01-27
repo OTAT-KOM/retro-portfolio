@@ -8,12 +8,39 @@
       "summary": "The central processing unit of the portfolio.",
       "media_type": "image",
       "media_src": "images/uploads/otatweb.png",
-      "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications."
+      "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications.",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Main Interface"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Alternate View"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Detail Shot"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Another Perspective"
+        }
+      ]
     },
     {
       "id": "p2",
+<<<<<<< HEAD
       "type": "large",
       "title": "Visual Module AQ",
+=======
+      "type": "small",
+      "title": "Visual Module A",
+>>>>>>> 53862db (video project fixing)
       "date": "2024-12-05",
       "summary": "Exploration of generative AI art.",
       "description": "An exploration of generative AI art and its implications for digital creativity.",
@@ -21,7 +48,7 @@
     },
     {
       "id": "p3",
-      "type": "medium",
+      "type": "large",
       "title": "Audio Interface",
       "date": "2024-11-20",
       "summary": "Ambient textures and glitched rhythms.",
@@ -31,7 +58,7 @@
     },
     {
       "id": "p4",
-      "type": "small",
+      "type": "large",
       "title": "Legacy Code",
       "date": "2024-10-15",
       "summary": "Archived scripts from the early days.",
@@ -61,6 +88,7 @@
     },
     {
       "media_type": "image",
+<<<<<<< HEAD
       "id": "p7",
       "title": "testing",
       "type": "medium",
@@ -68,6 +96,40 @@
       "summary": "ddsdds",
       "description": "dsdsd",
       "media_src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+=======
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Changelog for version 2.0."
+    },
+        {
+      "id": "p8",
+      "type": "small",
+      "title": "System Update",
+      "date": "2024-07-10",
+      "summary": "Changelog for version 2.0.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Changelog for version 2.0."
+    },
+    {
+      "id": "p7",
+      "type": "small",
+      "title": "System Update",
+      "date": "2024-07-10",
+      "summary": "Changelog for version 2.0.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Changelog for version 2.0."
+    },
+        {
+      "id": "p8",
+      "type": "large",
+      "title": "System Update",
+      "date": "2024-07-10",
+      "summary": "Changelog for version 2.0.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Changelog for version 2.0."
+>>>>>>> 53862db (video project fixing)
     }
   ]
 }

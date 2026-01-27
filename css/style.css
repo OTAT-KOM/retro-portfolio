@@ -147,13 +147,22 @@ body.has-overlay-icons .agenda-container {
     display: flex;
     flex-direction: column;
     font-size: 16px;
+
+    background: transparent;
 }
 
 .window-body {
-    max-height: 400px;
+    flex: 1 1 auto;        /* fill remaining height */
+    min-height: 0;         /* 🔥 prevents phantom space */
     overflow-y: auto;
-    background: #c0c0c0; 
+
+    background: #ffffff;   /* white content area */
 }
+
+
+
+
+
 
 .event-item {
     background: white;

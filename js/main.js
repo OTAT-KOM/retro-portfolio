@@ -442,59 +442,20 @@ async function loadProjects() {
             return;
         }
 
-        // Fixed Layout Map (Indices 0-6 match the user's grid request)
-        // 1 | 2 3
-        // 1 | 4 | 7
-        // 5 6   | 7
-        // Grid System: 3 Columns, 3 Rows.
-        // Gap: 2% Horizontal, 4% Vertical (for visual consistency).
-        // Width: 30%. Height: 25%.
-        // Start: Top 10%, Left 2%.
-        const layouts = [
-            // 0 (1): Top Left, Tall (Rows 1-2)
-            { top: '10%', left: '2%', width: '30%', height: '54%', zIndex: 10 },
-            
-            // 1 (2): Top Center (Row 1)
-            { top: '10%', left: '34%', width: '30%', height: '25%', zIndex: 9 },
-            
-            // 2 (3): Top Right (Row 1)
-            { top: '10%', left: '66%', width: '30%', height: '25%', zIndex: 8 },
-            
-            // 3 (4): Center (Row 2)
-            { top: '39%', left: '34%', width: '30%', height: '25%', zIndex: 7 },
-            
-            // 4 (5): Bottom Left (Row 3)
-            { top: '68%', left: '2%', width: '30%', height: '25%', zIndex: 6 },
-            
-            // 5 (6): Bottom Center (Row 3)
-            { top: '68%', left: '34%', width: '30%', height: '25%', zIndex: 5 },
-            
-            // 6 (7): Right Tall (Rows 2-3)
-            { top: '39%', left: '66%', width: '30%', height: '54%', zIndex: 4 }
-        ];
-
-        items.forEach((project, index) => {
-            if (index >= layouts.length) return; // Only show first 7 projects
-            
-            const pos = layouts[index];
+        items.forEach((project) => {
             const win = document.createElement('div');
-            // We use a generic class but override styles
             win.className = `window`;
-            win.style.position = 'absolute';
-            win.style.top = pos.top;
-            win.style.left = pos.left;
-            win.style.width = pos.width;
-            win.style.height = pos.height;
-            win.style.zIndex = pos.zIndex;
-            win.style.display = 'flex';
-            win.style.flexDirection = 'column';
             
-            // Determine Layout Type based on shape
-            // Tall windows: 0, 6 -> Column Layout
-            // Short windows: 1, 2, 3, 4, 5 -> Row Layout (Image Left)
-            const isTall = (index === 0 || index === 6);
+            // Determine size based on type
+            const type = project.type || 'small';
+            const isLarge = type === 'large';
             
-            let internalContent = '';
+            // Apply grid spanning for large items
+            if (isLarge) {
+                win.style.gridRow = 'span 2';
+            } else {
+                win.style.gridRow = 'span 1';
+            }
 
             // Common Text Content
             const titleDate = `
@@ -508,7 +469,7 @@ async function loadProjects() {
                 `<p style="margin:0; font-size:13px; line-height:1.3; flex:1; overflow-y:auto; padding-right:2px;">${project.summary}</p>` : 
                 '<div style="flex:1;"></div>';
                 
-            const readMoreBtn = `<button class="read-more-btn" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
+            const readMoreBtn = `<button class="read-more-btn" onclick="openProjectModal('${project.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
 
             // Media Generation
             let mediaEl = '';
@@ -521,11 +482,12 @@ async function loadProjects() {
                 }
             }
 
-            if (isTall) {
-                // TALL LAYOUT (Vertical Stack)
-                // Image Top (45%), Content Bottom
+            let internalContent = '';
+
+            if (isLarge) {
+                // TALL LAYOUT (Vertical Stack) for Large items
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:2px;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
                         ${mediaEl ? `<div style="height:45%; flex-shrink:0;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -535,10 +497,9 @@ async function loadProjects() {
                     </div>
                 `;
             } else {
-                // SHORT LAYOUT (Side-by-Side)
-                // Image Left (40%), Content Right
+                // SHORT LAYOUT (Side-by-Side) for Small items
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:2px;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0;">
                         ${mediaEl ? `<div style="width:40%; flex-shrink:0; height:100%;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -564,7 +525,7 @@ async function loadProjects() {
 
     } catch (e) {
         console.error(e);
-        desktop.innerHTML = '<p style="color:white;">Error loading projects.</p>';
+        desktop.innerHTML = '<p style="color:white; padding:20px;">Error loading projects.</p>';
     }
 }
 
@@ -580,6 +541,19 @@ function openProjectModal(id) {
         return;
     }
 
+    // Collect all media items (Cover + Gallery)
+    const mediaList = [];
+    if (project.media_src) {
+        mediaList.push({
+            type: project.media_type || 'image',
+            src: project.media_src,
+            caption: 'Main Cover'
+        });
+    }
+    if (project.gallery && Array.isArray(project.gallery)) {
+        mediaList.push(...project.gallery);
+    }
+
     const modal = document.createElement('div');
     modal.className = 'window';
     modal.id = `modal-${id}`;
@@ -587,33 +561,132 @@ function openProjectModal(id) {
     modal.style.top = '50%';
     modal.style.left = '50%';
     modal.style.transform = 'translate(-50%, -50%)';
-    modal.style.width = '600px';
-    modal.style.maxWidth = '90%';
+    modal.style.width = '800px';
+    modal.style.maxWidth = '95%';
+    modal.style.height = '85vh';
+    modal.style.setProperty('display', 'flex', 'important');
+    modal.style.flexDirection = 'column';
     modal.style.zIndex = 9999;
+    modal.style.padding = '2px';
     modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
 
+    const descriptionHtml = project.description ? 
+        project.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
+        '<p>No detailed description available.</p>';
+
+    // Initial Render Structure
     modal.innerHTML = `
         <div class="title-bar">
-            <div class="title-bar-text">${project.title} - Details</div>
+            <div class="title-bar-text">${project.title}</div>
             <div class="title-bar-controls">
                 <button aria-label="Close"></button>
             </div>
         </div>
-        <div class="window-body" style="max-height:80vh;overflow-y:auto;">
-            <h2>${project.title}</h2>
-            <p><strong>Date:</strong> ${project.date}</p>
-            ${project.media_src ? `<div style="text-align:center;margin:10px 0;"><img src="${project.media_src}" style="max-width:100%;border:2px inset white;"></div>` : ''}
-            <div class="project-description">
-                ${project.description || 'No detailed description available.'}
+        <div class="window-body" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 15px; background: white; margin: 0; display: block;">
+            <!-- Carousel Container -->
+            <div id="carousel-${id}" style="margin-bottom: 10px; text-align: center; position: relative; width: 100%;">
+                
+                <!-- Main Media View -->
+                <div id="media-view-${id}" style="position: relative; height: 350px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
+                    <!-- Media will be injected here -->
+                </div>
+
+                <!-- Navigation Buttons (only if > 1 item) -->
+                ${mediaList.length > 1 ? `
+                    <button id="prev-btn-${id}" style="position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 10; cursor: pointer; padding: 5px 10px; font-weight: bold;">&lt;</button>
+                    <button id="next-btn-${id}" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%); z-index: 10; cursor: pointer; padding: 5px 10px; font-weight: bold;">&gt;</button>
+                ` : ''}
+
+                <!-- Thumbnails Strip -->
+                ${mediaList.length > 1 ? `
+                    <div id="thumbnails-${id}" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+                        <!-- Thumbnails will be injected here -->
+                    </div>
+                ` : ''}
+
+            </div>
+
+            <h2 style="margin-top: 10px; font-size: 22px; text-align:center;">${project.title}</h2>
+            <p style="margin-bottom: 10px; color: #555; text-align:center;"><strong>Date:</strong> ${project.date}</p>
+            <div class="project-description" style="line-height: 1.5; font-size: 15px; max-width: 90%; margin: 0 auto;">
+                ${descriptionHtml}
             </div>
         </div>
     `;
 
     document.body.appendChild(modal);
     
+    // Logic for Carousel
+    let currentIndex = 0;
+    const mediaView = document.getElementById(`media-view-${id}`);
+    const thumbContainer = document.getElementById(`thumbnails-${id}`);
+    const prevBtn = document.getElementById(`prev-btn-${id}`);
+    const nextBtn = document.getElementById(`next-btn-${id}`);
+
+    function updateCarousel() {
+        if (mediaList.length === 0) {
+            mediaView.innerHTML = '<p>No media available</p>';
+            return;
+        }
+
+        const item = mediaList[currentIndex];
+        
+        // Render Main Media
+        if (item.type === 'video') {
+            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:2px inset white; display:block; margin: 0 auto; object-fit: contain;"></video>`;
+        } else {
+            mediaView.innerHTML = `<img src="${item.src}" style="max-height:100%; max-width:100%; width:auto; height:auto; border:2px inset white; display:block; margin: 0 auto; object-fit: contain;" alt="${item.caption || 'Project Image'}">`;
+        }
+
+        // Render Thumbnails (Highlight active)
+        if (thumbContainer) {
+            thumbContainer.innerHTML = mediaList.map((m, idx) => {
+                const isActive = idx === currentIndex;
+                const borderStyle = isActive ? 'border: 2px solid blue;' : 'border: 2px outset white;';
+                
+                if (m.type === 'video') {
+                    return `
+                        <div onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))" 
+                             style="width: 60px; height: 60px; background: black; ${borderStyle} display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            ▶
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <img src="${m.src}" 
+                             onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))"
+                             style="width: 60px; height: 60px; object-fit: cover; ${borderStyle} cursor: pointer;"
+                        >
+                    `;
+                }
+            }).join('');
+        }
+    }
+
+    // Initial Render
+    updateCarousel();
+
+    // Event Listeners
+    modal.addEventListener('changeSlide', (e) => {
+        currentIndex = e.detail;
+        updateCarousel();
+    });
+
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
+            updateCarousel();
+        };
+    }
+
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            currentIndex = (currentIndex + 1) % mediaList.length;
+            updateCarousel();
+        };
+    }
+
     modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
-    
-    // Modal IS draggable
     makeDraggable(modal);
 }
 
