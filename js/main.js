@@ -556,23 +556,11 @@ async function loadProjects() {
             win.innerHTML = `
                 <div class="title-bar" style="cursor: default;">
                     <div class="title-bar-text">${project.title}</div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close"></button>
-                    </div>
                 </div>
                 ${internalContent}
             `;
             
             desktop.appendChild(win);
-            
-             // Window controls
-             win.querySelector('button[aria-label="Close"]').onclick = () => win.remove();
-             win.querySelector('button[aria-label="Minimize"]').onclick = () => { win.style.display = 'none'; };
-             
-             // Enable dragging
-             if (typeof makeDraggable === 'function') makeDraggable(win);
         });
 
         // Store projects globally
