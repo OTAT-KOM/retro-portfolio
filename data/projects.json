@@ -16,7 +16,8 @@
       "title": "Visual Module A",
       "date": "2024-12-05",
       "summary": "Exploration of generative AI art.",
-      "description": "An exploration of generative AI art and its implications for digital creativity."
+      "description": "An exploration of generative AI art and its implications for digital creativity.",
+      "media_type": "image"
     },
     {
       "id": "p3",
@@ -35,7 +36,8 @@
       "date": "2024-10-15",
       "summary": "Archived scripts from the early days.",
       "media_src": "images/uploads/otatweb.png",
-      "description": "Archived scripts from the early days."
+      "description": "Archived scripts from the early days.",
+      "media_type": "image"
     },
     {
       "id": "p5",
@@ -44,7 +46,8 @@
       "date": "2024-09-01",
       "summary": "Useful code snippets collection.",
       "media_src": "images/uploads/otatweb.png",
-      "description": "A collection of useful code snippets."
+      "description": "A collection of useful code snippets.",
+      "media_type": "image"
     },
     {
       "id": "p6",
@@ -55,18 +58,6 @@
       "media_type": "image",
       "media_src": "images/uploads/otatweb.png",
       "description": "Error tracking and debugging logs."
-    },
-    {
-      "id": "p7",
-      "type": "small",
-      "title": "System Update",
-      "date": "2024-07-10",
-      "summary": "Changelog for version 2.0.",
-      "media_type": "image",
-      "media_src": "images/uploads/otatweb.png",
-      "description": "Changelog for version 2.0."
     }
-    
-    
   ]
 }
