@@ -1,14 +1,9 @@
 {
   "items": [
     {
-      "id": "p1",
-      "type": "large",
-      "title": "Main System: Core",
-      "date": "2025-02-10",
       "summary": "The central processing unit of the portfolio.",
-      "media_type": "image",
       "media_src": "images/uploads/otatweb.png",
-      "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications.",
+      "date": "2025-02-10",
       "gallery": [
         {
           "type": "image",
@@ -29,8 +24,17 @@
           "type": "image",
           "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
           "caption": "Another Perspective"
+        },
+        {
+          "type": "video",
+          "src": "https://OTAT-KOM.github.io/vid-test/WhatsApp%20Video%202026-01-27%20at%2018.03.32.mp4"
         }
-      ]
+      ],
+      "media_type": "image",
+      "title": "Main System: Core",
+      "type": "large",
+      "id": "p1",
+      "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications."
     },
     {
       "id": "p2",
