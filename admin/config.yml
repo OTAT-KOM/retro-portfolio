@@ -57,7 +57,8 @@ collections:
               - {label: "Type", name: "type", widget: "select", options: ["large", "small"]}
               - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
               - {label: "Summary", name: "summary", widget: "text"}
-              - {label: "Media Source", name: "media_src", widget: "image", required: false, hint: "Cover Image/Video for the grid"}
+              - {label: "Media Source", name: "media_src", widget: "file", required: false, hint: "Cover Image/Video for the grid"}
+              - {label: "Media Type", name: "media_type", widget: "select", options: ["image", "video"], default: "image"}
               - {label: "Full Description", name: "description", widget: "markdown"}
               - name: "gallery"
                 label: "Gallery (More Pics/Vids)"
@@ -65,7 +66,7 @@ collections:
                 required: false
                 fields:
                   - {label: "Type", name: "type", widget: "select", options: ["image", "video"], default: "image"}
-                  - {label: "File", name: "src", widget: "image"}
+                  - {label: "File", name: "src", widget: "file"}
                   - {label: "Caption", name: "caption", widget: "string", required: false}
       - name: "pictures"
         label: "Gallery Pictures"
