@@ -26,8 +26,8 @@
           "caption": "Another Perspective"
         },
         {
-          "type": "video",
-          "src": "https://OTAT-KOM.github.io/vid-test/WhatsApp%20Video%202026-01-27%20at%2018.03.32.mp4"
+          "type": "image",
+          "src": "images/uploads/whatsapp-video-2026-01-27-at-18.03.32.mp4"
         }
       ],
       "media_type": "image",
