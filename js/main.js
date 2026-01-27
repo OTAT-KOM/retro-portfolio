@@ -202,10 +202,6 @@ function ensureDesktopIcons() {
                 <div class="icon-label">??</div>
             </div>
         </div>
-        <div class="recycle-bin icon" onclick="alert('Recycle Bin is empty')">
-            <img src="images/icons/recycle_bin_empty-5.png" class="icon-img" alt="Trash">
-            <div class="icon-label">Trash</div>
-        </div>
     `;
     
     document.body.appendChild(overlay);
@@ -453,28 +449,30 @@ async function loadProjects() {
         // 1 | 2 3
         // 1 | 4 | 7
         // 5 6   | 7
-        // Note: Shifted further left (2% margin).
+        // Grid System: 3 Columns, 3 Rows.
+        // Gap: 2%. Width: 30%. Height: 25%.
+        // Start: Top 10%, Left 2%.
         const layouts = [
             // 0 (1): Top Left, Tall (Rows 1-2)
-            { top: '10%', left: '2%', width: '24%', height: '50%', zIndex: 10 },
+            { top: '10%', left: '2%', width: '30%', height: '52%', zIndex: 10 },
             
             // 1 (2): Top Center (Row 1)
-            { top: '10%', left: '27%', width: '26%', height: '24%', zIndex: 9 },
+            { top: '10%', left: '34%', width: '30%', height: '25%', zIndex: 9 },
             
             // 2 (3): Top Right (Row 1)
-            { top: '10%', left: '54%', width: '30%', height: '24%', zIndex: 8 },
+            { top: '10%', left: '66%', width: '30%', height: '25%', zIndex: 8 },
             
             // 3 (4): Center (Row 2)
-            { top: '35%', left: '27%', width: '26%', height: '24%', zIndex: 7 },
+            { top: '37%', left: '34%', width: '30%', height: '25%', zIndex: 7 },
             
             // 4 (5): Bottom Left (Row 3)
-            { top: '61%', left: '2%', width: '24%', height: '29%', zIndex: 6 },
+            { top: '64%', left: '2%', width: '30%', height: '25%', zIndex: 6 },
             
             // 5 (6): Bottom Center (Row 3)
-            { top: '61%', left: '27%', width: '26%', height: '29%', zIndex: 5 },
+            { top: '64%', left: '34%', width: '30%', height: '25%', zIndex: 5 },
             
             // 6 (7): Right Tall (Rows 2-3)
-            { top: '35%', left: '54%', width: '30%', height: '55%', zIndex: 4 }
+            { top: '37%', left: '66%', width: '30%', height: '52%', zIndex: 4 }
         ];
 
         items.forEach((project, index) => {
@@ -529,7 +527,7 @@ async function loadProjects() {
                 // TALL LAYOUT (Vertical Stack)
                 // Image Top (45%), Content Bottom
                 internalContent = `
-                    <div class="window-body" style="flex:1; display:flex; flex-direction:column; overflow:hidden; padding:0; margin:0;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:0; margin:0;">
                         ${mediaEl ? `<div style="height:45%; flex-shrink:0; border-bottom:2px solid #808080;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:8px; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -542,7 +540,7 @@ async function loadProjects() {
                 // SHORT LAYOUT (Side-by-Side)
                 // Image Left (40%), Content Right
                 internalContent = `
-                    <div class="window-body" style="flex:1; display:flex; flex-direction:row; overflow:hidden; padding:0; margin:0;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:0; margin:0;">
                         ${mediaEl ? `<div style="width:40%; flex-shrink:0; border-right:2px solid #808080; height:100%;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:8px; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
