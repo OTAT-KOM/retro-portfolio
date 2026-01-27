@@ -47,7 +47,7 @@
     },
     {
       "id": "p3",
-      "type": "large",
+      "type": "medium",
       "title": "Audio Interface",
       "date": "2024-11-20",
       "summary": "Ambient textures and glitched rhythms.",
@@ -88,7 +88,25 @@
     {
       "id": "p7",
       "title": "testing",
+      "type": "small",
+      "date": "2026-01-27",
+      "summary": "ddsdds",
+      "description": "dsdsd",
+      "media_type": "image",
+      "media_src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+    },    {
+      "id": "p7",
+      "title": "testing",
       "type": "medium",
+      "date": "2026-01-27",
+      "summary": "ddsdds",
+      "description": "dsdsd",
+      "media_type": "image",
+      "media_src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+    },    {
+      "id": "p7",
+      "title": "testing",
+      "type": "large",
       "date": "2026-01-27",
       "summary": "ddsdds",
       "description": "dsdsd",

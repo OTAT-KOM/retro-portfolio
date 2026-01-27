@@ -449,12 +449,15 @@ async function loadProjects() {
             // Determine size based on type
             const type = project.type || 'small';
             const isLarge = type === 'large';
+            const isMedium = type === 'medium';
             
-            // Apply grid spanning for large items
+            // Apply grid spanning based on size
             if (isLarge) {
-                win.style.gridRow = 'span 2';
+                win.style.gridRow = 'span 9';
+            } else if (isMedium) {
+                win.style.gridRow = 'span 6';
             } else {
-                win.style.gridRow = 'span 1';
+                win.style.gridRow = 'span 4';
             }
 
             // Common Text Content
@@ -488,7 +491,19 @@ async function loadProjects() {
                 // TALL LAYOUT (Vertical Stack) for Large items
                 internalContent = `
                     <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
-                        ${mediaEl ? `<div style="height:45%; flex-shrink:0;">${mediaEl}</div>` : ''}
+                        ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
+                            ${titleDate}
+                            ${summary}
+                            ${readMoreBtn}
+                        </div>
+                    </div>
+                `;
+            } else if (isMedium) {
+                // MEDIUM LAYOUT (Vertical Stack, Fixed Image Height)
+                internalContent = `
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                        ${mediaEl ? `<div style="width:100%; height:55%; flex-shrink:0;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
                             ${summary}
@@ -607,10 +622,12 @@ function openProjectModal(id) {
 
             </div>
 
-            <h2 style="margin-top: 10px; font-size: 22px; text-align:center;">${project.title}</h2>
-            <p style="margin-bottom: 10px; color: #555; text-align:center;"><strong>Date:</strong> ${project.date}</p>
-            <div class="project-description" style="line-height: 1.5; font-size: 15px; max-width: 90%; margin: 0 auto;">
-                ${descriptionHtml}
+            <div style="background: #e0e0e0; padding: 15px; border-top: 2px solid #808080; margin-top: 15px;">
+                <h2 style="margin-top: 0; font-size: 22px; text-align:center;">${project.title}</h2>
+                <p style="margin-bottom: 10px; color: #555; text-align:center;"><strong>Date:</strong> ${project.date}</p>
+                <div class="project-description" style="line-height: 1.5; font-size: 15px; max-width: 90%; margin: 0 auto;">
+                    ${descriptionHtml}
+                </div>
             </div>
         </div>
     `;

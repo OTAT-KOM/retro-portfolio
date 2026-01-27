@@ -128,7 +128,7 @@ body::before {
 
 /* Adjust layout for pages with persistent icons */
 body.has-overlay-icons {
-    padding-left: 240px !important;
+    padding-left: 215px !important;
     box-sizing: border-box;
 }
 
