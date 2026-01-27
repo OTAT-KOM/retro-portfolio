@@ -44,21 +44,22 @@ collections:
         fields:
           - {label: "Title", name: "title", widget: "string", default: "ملاحظة !!"}
           - {label: "Content", name: "content", widget: "markdown"}
-      - name: "products"
-        label: "Shop Products"
-        file: "data/products.json"
+      - name: "projects"
+        label: "Video Projects"
+        file: "data/projects.json"
         fields:
           - name: "items"
-            label: "Products List"
+            label: "Projects List"
             widget: "list"
             fields:
+              - {label: "ID", name: "id", widget: "string"}
               - {label: "Title", name: "title", widget: "string"}
-              - {label: "Image", name: "image", widget: "image"}
-              - {label: "Colors", name: "colors", widget: "string", hint: "e.g. 2 Colors"}
-              - {label: "Price", name: "price", widget: "string", hint: "e.g. €12.99"}
-              - {label: "Buy Text", name: "buy_text", widget: "string", default: "Buy it"}
-              - {label: "Buy URL", name: "buy_url", widget: "string", hint: "Link to product page"}
-              - {label: "Description", name: "body", widget: "markdown"}
+              - {label: "Type", name: "type", widget: "select", options: ["large", "medium", "small"]}
+              - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
+              - {label: "Summary", name: "summary", widget: "text"}
+              - {label: "Media Source", name: "media_src", widget: "image"}
+              - {label: "Media Type", name: "media_type", widget: "select", options: ["image", "video"], default: "image"}
+              - {label: "Full Description", name: "description", widget: "markdown"}
       - name: "pictures"
         label: "Gallery Pictures"
         file: "data/pictures.json"

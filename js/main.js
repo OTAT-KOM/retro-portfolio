@@ -132,9 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('events-list') || document.getElementById('upcoming-list') || document.getElementById('previous-list')) {
         loadEvents();
     }
-    if (document.getElementById('products-grid')) {
-        loadProducts();
-    }
     if (document.getElementById('gallery-container')) {
         loadPictures();
     }
@@ -170,8 +167,8 @@ function ensureDesktopIcons() {
     overlay.innerHTML = `
         <div class="desktop-icons">
             <div class="icon icon-shop" onclick="window.location.href='shop.html'">
-                <img src="images/icons/directory_favorites-3.png" class="icon-img" alt="The Shop">
-                <div class="icon-label">The Shop</div>
+                <img src="images/icons/directory_favorites-3.png" class="icon-img" alt="Video Project">
+                <div class="icon-label">Video Project</div>
             </div>
             <div class="icon icon-folder" onclick="window.location.href='folder.html'">
                 <img src="images/icons/directory_open_file_mydocs-4.png" class="icon-img" alt="New Folder">
