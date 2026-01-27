@@ -1,0 +1,72 @@
+{
+  "items": [
+    {
+      "id": "p1",
+      "type": "large",
+      "title": "Main System: Core",
+      "date": "2025-02-10",
+      "summary": "The central processing unit of the portfolio.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications."
+    },
+    {
+      "id": "p2",
+      "type": "medium",
+      "title": "Visual Module A",
+      "date": "2024-12-05",
+      "summary": "Exploration of generative AI art.",
+      "description": "An exploration of generative AI art and its implications for digital creativity."
+    },
+    {
+      "id": "p3",
+      "type": "medium",
+      "title": "Audio Interface",
+      "date": "2024-11-20",
+      "summary": "Ambient textures and glitched rhythms.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Sound design project focusing on ambient textures and glitched rhythms."
+    },
+    {
+      "id": "p4",
+      "type": "small",
+      "title": "Legacy Code",
+      "date": "2024-10-15",
+      "summary": "Archived scripts from the early days.",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Archived scripts from the early days."
+    },
+    {
+      "id": "p5",
+      "type": "small",
+      "title": "Snippet v1",
+      "date": "2024-09-01",
+      "summary": "Useful code snippets collection.",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "A collection of useful code snippets."
+    },
+    {
+      "id": "p6",
+      "type": "small",
+      "title": "Log Entry 404",
+      "date": "2024-08-20",
+      "summary": "Error tracking and debugging logs.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Error tracking and debugging logs."
+    },
+    {
+      "id": "p7",
+      "type": "small",
+      "title": "System Update",
+      "date": "2024-07-10",
+      "summary": "Changelog for version 2.0.",
+      "media_type": "image",
+      "media_src": "images/uploads/otatweb.png",
+      "description": "Changelog for version 2.0."
+    }
+    
+    
+  ]
+}

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #9e5bdb; /* Purple background from mockup */
+            background-color: #9e5bdb;  
             display: flex;
             align-items: center;
             justify-content: center;
@@ -45,7 +45,7 @@
         }
 
         .page-window {
-            width: 600px;
+            width: 700px;
             max-width: 90vw;
             height: auto;
             display: flex;
@@ -60,7 +60,7 @@
             height: 100%;
         }
 
-        /* Tabs Customization - High Fidelity Windows 98 */
+         
         menu[role=tablist] {
             display: flex;
             margin: 0 0 -2px 0;
@@ -86,9 +86,9 @@
         }
 
         .tab-link[aria-selected="true"] {
-/* Extends down to cover border */
+ 
             border-bottom: none;
-            box-shadow: 1px 0 0 #000, 1px 0 0 #808080; /* Right shadow adjustment */
+            box-shadow: 1px 0 0 #000, 1px 0 0 #808080;  
             z-index: 2;
             position: relative;
             border-top: 1px solid #fff;
@@ -96,7 +96,7 @@
             border-right: 1px solid #808080;
         }
 
-        /* Fix the left/top highlights for active tab */
+         
         .tab-link[aria-selected="true"]::before {
             content: '';
             position: absolute;
@@ -134,21 +134,23 @@
             display: block;
         }
 
-        /* Summary Layout */
+         
         .summary-layout {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             height: 100%;
+            padding: 20px;
+            align-items: flex-start;
         }
 
         .summary-image-container {
             flex-shrink: 0;
-            width: 200px;
-            height: 200px;
-            border: 2px inset #fff;
-            background: #808080; /* Changed from black to see if image is missing */
+            width: 220px;
+            height: 220px;
+            border: none;
+            background: transparent;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
 
@@ -157,43 +159,50 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
 
         .summary-text {
             flex: 1;
             font-family: 'Courier Prime', 'Courier New', monospace;
             overflow-y: auto;
+            color: #000;
         }
 
         .summary-title {
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.4em;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-family: 'Courier Prime', 'Courier New', monospace;
         }
 
         .summary-desc {
             font-size: 0.9em;
             line-height: 1.6;
+            text-align: left;
         }
 
         /* Footer Buttons */
         .footer-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 40px;
             margin-top: auto;
-            padding-top: 10px;
+            padding: 15px 40px; /* Add side padding */
         }
 
         .footer-buttons button {
-            min-width: 100px;
+            min-width: 120px;
             font-weight: bold;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-size: 14px;
+            height: 35px;
         }
 
-        /* Contact Creative Layout */
+         
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -253,7 +262,7 @@
             </menu>
             
             <div class="tab-content-container">
-                <!-- Summary Tab -->
+                
                 <div class="tab-content active" id="tab-content-summary">
                     <div class="summary-layout">
                         <div class="summary-image-container">
@@ -266,7 +275,7 @@
                     </div>
                 </div>
 
-                <!-- Contact Tab -->
+                
                 <div class="tab-content" id="tab-content-contact">
                     <div class="contact-grid">
                         <div class="contact-item" id="btn-insta-contact">
@@ -299,17 +308,17 @@
 
             <div class="footer-buttons">
                 <button id="btn-insta">Instagram</button>
+                <button id="btn-twitter">Twitter</button>
                 <button id="btn-tiktok">TikTok</button>
-                <button id="btn-linkedin">LinkedIn</button>
             </div>
         </div>
     </div>
 
     <script src="js/main.js"></script>
     <script>
-        // Additional script to handle contact tab clicks specifically if needed, 
-        // though main.js handles the buttons. 
-        // We need to map the new contact items to the same URLs.
+         
+         
+         
         
         async function loadExtraContactLogic() {
             try {
@@ -324,7 +333,7 @@
                     } else if (el) {
                         el.style.opacity = '0.5';
                         el.style.cursor = 'default';
-                        el.style.display = 'none'; // Hide if not available
+                        el.style.display = 'none';  
                     }
                 };
 
@@ -338,7 +347,7 @@
             } catch(e) { console.log(e); }
         }
         
-        // Run after main.js loads (which is async-ish) or just run it now
+         
         document.addEventListener('DOMContentLoaded', loadExtraContactLogic);
     </script>
 </body>
