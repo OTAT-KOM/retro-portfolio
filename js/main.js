@@ -450,11 +450,12 @@ async function loadProjects() {
         // 1 | 4 | 7
         // 5 6   | 7
         // Grid System: 3 Columns, 3 Rows.
-        // Gap: 2%. Width: 30%. Height: 25%.
+        // Gap: 2% Horizontal, 4% Vertical (for visual consistency).
+        // Width: 30%. Height: 25%.
         // Start: Top 10%, Left 2%.
         const layouts = [
             // 0 (1): Top Left, Tall (Rows 1-2)
-            { top: '10%', left: '2%', width: '30%', height: '52%', zIndex: 10 },
+            { top: '10%', left: '2%', width: '30%', height: '54%', zIndex: 10 },
             
             // 1 (2): Top Center (Row 1)
             { top: '10%', left: '34%', width: '30%', height: '25%', zIndex: 9 },
@@ -463,16 +464,16 @@ async function loadProjects() {
             { top: '10%', left: '66%', width: '30%', height: '25%', zIndex: 8 },
             
             // 3 (4): Center (Row 2)
-            { top: '37%', left: '34%', width: '30%', height: '25%', zIndex: 7 },
+            { top: '39%', left: '34%', width: '30%', height: '25%', zIndex: 7 },
             
             // 4 (5): Bottom Left (Row 3)
-            { top: '64%', left: '2%', width: '30%', height: '25%', zIndex: 6 },
+            { top: '68%', left: '2%', width: '30%', height: '25%', zIndex: 6 },
             
             // 5 (6): Bottom Center (Row 3)
-            { top: '64%', left: '34%', width: '30%', height: '25%', zIndex: 5 },
+            { top: '68%', left: '34%', width: '30%', height: '25%', zIndex: 5 },
             
             // 6 (7): Right Tall (Rows 2-3)
-            { top: '37%', left: '66%', width: '30%', height: '52%', zIndex: 4 }
+            { top: '39%', left: '66%', width: '30%', height: '54%', zIndex: 4 }
         ];
 
         items.forEach((project, index) => {
@@ -527,9 +528,9 @@ async function loadProjects() {
                 // TALL LAYOUT (Vertical Stack)
                 // Image Top (45%), Content Bottom
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:0; margin:0;">
-                        ${mediaEl ? `<div style="height:45%; flex-shrink:0; border-bottom:2px solid #808080;">${mediaEl}</div>` : ''}
-                        <div style="flex:1; padding:8px; display:flex; flex-direction:column; overflow:hidden;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px;">
+                        ${mediaEl ? `<div style="height:45%; flex-shrink:0;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
                             ${summary}
                             ${readMoreBtn}
@@ -540,9 +541,9 @@ async function loadProjects() {
                 // SHORT LAYOUT (Side-by-Side)
                 // Image Left (40%), Content Right
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:0; margin:0;">
-                        ${mediaEl ? `<div style="width:40%; flex-shrink:0; border-right:2px solid #808080; height:100%;">${mediaEl}</div>` : ''}
-                        <div style="flex:1; padding:8px; display:flex; flex-direction:column; overflow:hidden;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px;">
+                        ${mediaEl ? `<div style="width:40%; flex-shrink:0; height:100%;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
                             ${summary}
                             ${readMoreBtn}
