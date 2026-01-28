@@ -110,7 +110,7 @@
         }
 
         .profile-name {
-            font-size: 48px;
+            font-size: 30px;
             margin: 0 0 10px 0;
             font-weight: bold;
             letter-spacing: -1px;
@@ -168,9 +168,11 @@
         .playlists-section {
             flex: 1;
             padding: 20px;
-            overflow-y: auto;
+            overflow-y: hidden;
             background: #c0c0c0;
             margin: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .playlists-section h2 {
@@ -180,10 +182,26 @@
             font-weight: normal;
         }
 
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content */
+            gap: 10px;
+            flex: 1;
+            position: relative;
+            min-height: 0;
+            padding: 0 10px; /* Add some padding */
+        }
+
         .playlist-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            display: flex;
             gap: 15px;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            flex: 1;
+            width: 100%;
+            align-items: center; /* Center items vertically */
+            padding-bottom: 20px; /* Space for potential scrollbar if needed, though hidden */
         }
 
         .playlist-item {
@@ -192,6 +210,9 @@
             background: transparent;
             display: flex;
             flex-direction: column;
+            flex: 0 0 calc(20% - 12px);
+            min-width: 100px;
+            align-items: center; /* Center content horizontally */
         }
 
         .playlist-item:hover .playlist-title {
@@ -204,19 +225,24 @@
             background: #000;
             margin-bottom: 5px;
             object-fit: cover;
-            border: 2px outset #fff;
-            box-shadow: 1px 1px 0 #000;
+            border: none; /* No border */
+            box-shadow: none;
         }
 
         .playlist-title {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 11px; /* Smaller title */
             margin-top: 4px;
             color: #000;
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-align: center;
+        }
+        
+        .playlist-artist {
+            display: none; /* Remove artist */
         }
 
         /* Player Container */
@@ -226,42 +252,66 @@
             flex-direction: column;
         }
 
-        /* Seek Bar (Top of player) */
-        .seek-bar {
-            width: 98%;
-            margin: 0 auto;
-            height: 20px;
-            -webkit-appearance: none;
-            background: transparent;
+        /* Seek Bar Wrapper (Visual Container) */
+        .seek-bar-wrapper {
+            width: 95%;
+            height: 15px;
             position: relative;
-            top: 5px; /* Overlap slightly or just sit on top */
-            z-index: 10;
-        }
-        
-        .seek-bar:focus {
-            outline: none;
+            background: #fff;
+            margin: 0 auto 5px auto; /* ← THIS centers it */
+            border-top: 1px solid #808080;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            box-shadow: inset 1px 1px 0 #000, inset -1px -1px 0 #dfdfdf;
+            box-sizing: border-box;
+            margin-bottom: 5px; /* Spacing from controls */
         }
 
-        .seek-bar::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 10px;
-            cursor: pointer;
-            background: #fff;
-            border: 2px inset #dfdfdf;
-            border-right-color: #fff;
-            border-bottom-color: #fff;
-            box-shadow: inset 1px 1px 0 #000;
+        /* The Filled Part */
+        .seek-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%; /* Controlled by JS */
+            background: #000080; /* Navy Blue */
+            z-index: 1;
+            pointer-events: none; /* Let clicks pass through */
         }
-        
-        .seek-bar::-webkit-slider-thumb {
-            height: 20px;
-            width: 12px;
-            border: 2px outset #fff;
-            background: #c0c0c0;
+
+        /* The Input Range (Invisible Interaction Layer) */
+        .seek-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            opacity: 1; /* Invisible */
+            z-index: 2;
             cursor: pointer;
             -webkit-appearance: none;
-            margin-top: -7px; 
+            background: transparent;
+        }
+
+        .seek-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px; /* Full height of bar */
+            width: 14px; /* Wider to fit grip */
+            background: #c0c0c0;
+            /* 3D Outset Border for Thumb */
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
             box-shadow: 1px 1px 0 #000;
+            cursor: pointer;
+            margin-top: 0;
+            
+            /* Grip Texture (3D Ridges) */
+            background-image: linear-gradient(90deg, transparent 2px, #fff 2px, #fff 3px, #808080 3px, #808080 4px, transparent 4px, transparent 6px, #fff 6px, #fff 7px, #808080 7px, #808080 8px, transparent 8px);
+            background-position: center;
+            background-size: 10px 12px;
+            background-repeat: no-repeat;
         }
 
         /* Player Controls (Bottom) */
@@ -450,14 +500,10 @@
                 <div class="profile-info">
                     <div class="profile-label">Profile</div>
                     <h1 class="profile-name" id="profile-name">Audio Projects</h1>
-                    <div class="profile-summary" id="profile-summary">235 public playlists • 104 followers • 85 following [Follows you]</div>
+                    <div class="profile-summary" id="profile-summary"></div>
                     <div style="display: flex; gap: 5px;">
                         <button class="follow-btn" id="spotify-btn" onclick="window.open('https://open.spotify.com/artist/491mdcFHq3U4pW3imSwcyT?si=k1uVqZ1SQjqyNznvl3Jf_A')">Listen on Spotify</button>
-                        <button class="arrow-btn">
-                            <svg width="10" height="10" viewBox="0 0 10 10">
-                                <path d="M2,3 L8,3 L5,7 Z" fill="black"/>
-                            </svg>
-                        </button>
+                        
                     </div>
                 </div>
             </div>
@@ -467,16 +513,33 @@
             <!-- Projects Section -->
             <div class="playlists-section">
                 <h2>Projects</h2>
-                <div class="playlist-grid" id="playlist-grid">
-                    <!-- Javascript will inject items here -->
-                    <div style="grid-column: 1/-1; text-align: center; padding: 20px;">Loading tracks...</div>
+                <div class="carousel-wrapper">
+                    <button class="arrow-btn" id="tracks-prev-btn" style="height: 30px; width: 30px; min-width: 30px; font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                        <svg width="10" height="10" viewBox="0 0 10 10" style="display: block;">
+                            <path d="M7,1 L3,5 L7,9 V1 Z" fill="black"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="playlist-grid" id="playlist-grid">
+                        <!-- Javascript will inject items here -->
+                        <div style="flex: 1; text-align: center; padding: 20px;">Loading tracks...</div>
+                    </div>
+
+                    <button class="arrow-btn" id="tracks-next-btn" style="height: 30px; width: 30px; min-width: 30px; font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                         <svg width="10" height="10" viewBox="0 0 10 10" style="display: block;">
+                            <path d="M3,1 L7,5 L3,9 V1 Z" fill="black"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
             <!-- Player Controls -->
             <div class="player-container">
-                <input type="range" id="seek-bar" class="seek-bar" value="0" min="0" max="100">
-                
+                <div class="seek-bar-wrapper">
+                    <div id="seek-fill" class="seek-fill"></div>
+                    <input type="range" id="seek-bar" class="seek-bar" value="0" min="0" max="100" step="0.01">
+                </div>
+
                 <div class="player-controls">
                     <div class="current-track">
                         <img src="" id="current-cover" class="current-cover" style="opacity: 0;">
@@ -528,6 +591,7 @@
             </div>
         </div>
     </div>
+    
 
     <audio id="audio-player"></audio>
     <script src="js/main.js"></script>

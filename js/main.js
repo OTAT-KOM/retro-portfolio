@@ -287,6 +287,7 @@ async function loadListen() {
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const seekBar = document.getElementById('seek-bar');
+    const seekFill = document.getElementById('seek-fill');
     const volumeBar = document.getElementById('volume-bar');
     const currentCover = document.getElementById('current-cover');
     const currentTitle = document.getElementById('current-title');
@@ -332,14 +333,40 @@ async function loadListen() {
             <div class="playlist-item" data-index="${index}">
                 <img src="${item.cover || 'images/icons/cd_audio_cd_a-4.png'}" class="playlist-cover" onerror="this.src='images/icons/cd_audio_cd_a-4.png'">
                 <div class="playlist-title">${item.title}</div>
-                <div class="playlist-artist">${item.artist || 'Unknown Artist'}</div>
             </div>
         `).join('');
+
+        // Carousel Logic
+        const tracksPrevBtn = document.getElementById('tracks-prev-btn');
+        const tracksNextBtn = document.getElementById('tracks-next-btn');
+        
+        if (tracksPrevBtn) {
+            tracksPrevBtn.onclick = () => {
+                grid.scrollBy({ left: -grid.clientWidth * 0.5, behavior: 'smooth' });
+            };
+        }
+        if (tracksNextBtn) {
+            tracksNextBtn.onclick = () => {
+                grid.scrollBy({ left: grid.clientWidth * 0.5, behavior: 'smooth' });
+            };
+        }
 
         // Player Logic
         let currentIndex = -1;
         let isPlaying = false;
         let isSeeking = false;
+        let animationFrameId;
+
+        const updateSeekUI = () => {
+            if (!player.paused && !player.ended && !isSeeking && player.duration && seekBar) {
+                const value = (player.currentTime / player.duration) * 100;
+                seekBar.value = value;
+                if (seekFill) {
+                    seekFill.style.width = `${value}%`;
+                }
+                animationFrameId = requestAnimationFrame(updateSeekUI);
+            }
+        };
 
         const loadTrack = (index, autoPlay = true) => {
             if (index < 0 || index >= items.length) return;
@@ -350,8 +377,17 @@ async function loadListen() {
             currentCover.src = item.cover || 'images/icons/cd_audio_cd_a-4.png';
             currentCover.style.opacity = 1;
             currentTitle.innerText = item.title;
-            currentArtist.innerText = item.artist || 'Unknown Artist';
+            // currentArtist.innerText = item.artist || 'Unknown Artist';
             
+            if (seekBar) {
+                seekBar.value = 0;
+            }
+            if (seekFill) {
+                seekFill.style.width = '0%';
+            }
+            
+            cancelAnimationFrame(animationFrameId);
+
             if (autoPlay) {
                 playTrack();
             }
@@ -374,12 +410,15 @@ async function loadListen() {
                         <path d="M2,1 H4 V9 H2 Z M6,1 H8 V9 H6 Z" fill="black"/>
                     </svg>
                 `;
+                cancelAnimationFrame(animationFrameId);
+                updateSeekUI();
             }).catch(e => console.error("Playback error:", e));
         };
 
         const pauseTrack = () => {
             player.pause();
             isPlaying = false;
+            cancelAnimationFrame(animationFrameId);
             playBtn.innerHTML = `
                 <svg width="10" height="10" viewBox="0 0 10 10">
                     <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
@@ -390,6 +429,13 @@ async function loadListen() {
         const stopTrack = () => {
             player.pause();
             player.currentTime = 0;
+            cancelAnimationFrame(animationFrameId);
+            if (seekBar) {
+                seekBar.value = 0;
+            }
+            if (seekFill) {
+                seekFill.style.width = '0%';
+            }
             isPlaying = false;
             playBtn.innerHTML = `
                 <svg width="10" height="10" viewBox="0 0 10 10">
@@ -425,13 +471,11 @@ async function loadListen() {
         };
 
         if (player) {
-            player.ontimeupdate = () => {
-                if (!isSeeking && player.duration && seekBar) {
-                    seekBar.value = (player.currentTime / player.duration) * 100;
-                }
-            };
+            // Removed ontimeupdate UI logic to prevent conflict with rAF
+            player.ontimeupdate = null; 
             
             player.onended = () => {
+                 cancelAnimationFrame(animationFrameId);
                  if (currentIndex < items.length - 1) {
                      loadTrack(currentIndex + 1);
                  } else {
@@ -441,24 +485,49 @@ async function loadListen() {
         }
 
         if (seekBar) {
+            // Initialize background
+            if (seekFill) {
+                seekFill.style.width = '0%';
+            }
+
             seekBar.onmousedown = () => { isSeeking = true; };
             seekBar.ontouchstart = () => { isSeeking = true; };
             
             seekBar.oninput = (e) => {
                 // Update time while dragging
+                const value = e.target.value;
+                if (seekFill) {
+                    seekFill.style.width = `${value}%`;
+                }
+                
+                // Optional: Update player time smoothly while dragging? 
+                // Usually better to just update UI and commit on change, 
+                // but updating currentTime can be choppy.
+                // Let's keep existing logic but ensure loop doesn't fight us.
+                
                 if (player.duration) {
-                    const time = (e.target.value / 100) * player.duration;
+                    const time = (value / 100) * player.duration;
                     player.currentTime = time;
                 }
             };
 
             seekBar.onchange = (e) => {
                 // Commit time change
+                const value = e.target.value;
+                if (seekFill) {
+                    seekFill.style.width = `${value}%`;
+                }
+
                 if (player.duration) {
-                    const time = (e.target.value / 100) * player.duration;
+                    const time = (value / 100) * player.duration;
                     player.currentTime = time;
                 }
                 isSeeking = false;
+                // If playing, the loop is already running or will pick up new time
+                if (!player.paused && !player.ended) {
+                     cancelAnimationFrame(animationFrameId);
+                     updateSeekUI();
+                }
             };
             
             // Handle mouse up outside the element just in case
@@ -631,7 +700,6 @@ async function loadProjects() {
             let internalContent = '';
 
             if (isLarge) {
-                // TALL LAYOUT (Vertical Stack) for Large items
                 internalContent = `
                     <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
                         ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative;">${mediaEl}</div>` : ''}
@@ -721,7 +789,8 @@ function openProjectModal(id) {
     modal.style.transform = 'translate(-50%, -50%)';
     modal.style.width = '800px';
     modal.style.maxWidth = '95%';
-    modal.style.height = '85vh';
+    modal.style.height = 'auto';
+    modal.style.maxHeight = '85vh';
     modal.style.overflow = 'hidden';
     modal.style.setProperty('display', 'flex', 'important');
     modal.style.flexDirection = 'column';
@@ -742,7 +811,7 @@ function openProjectModal(id) {
                 <button aria-label="Close"></button>
             </div>
         </div>
-        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 3px solid #808080; box-sizing: border-box; flex-direction: column;">
+        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 8px solid #bdbdbdff; box-sizing: border-box; flex-direction: column;">
             <!-- Carousel Container -->
             <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
                 
@@ -776,7 +845,7 @@ function openProjectModal(id) {
 
             </div>
 
-            <div style="background: #e0e0e0; padding: 15px; border-top: 2px solid #808080; flex: 1;">
+            <div style="background: #e0e0e0; padding: 15px; flex: 1;">
                 <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${project.title}</h2>
                 <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${project.date}</p>
                 <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
@@ -787,6 +856,9 @@ function openProjectModal(id) {
     `;
 
     document.body.appendChild(modal);
+    
+    // Close button functionality
+    modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
     
     // Logic for Carousel
     let currentIndex = 0;
