@@ -1,12 +1,105 @@
 {
   "items": [
     {
+      "id": "pic1",
+      "type": "large",
       "title": "Concert 1",
-      "image": "images/uploads/otatweb.png"
+      "image": "images/uploads/otatweb.png",
+      "summary": "A short summary of Concert 1.",
+      "description": "Full description of Concert 1.\n\nIt was an amazing event with lots of energy.",
+      "date": "2023-10-01",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Main Interface"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Alternate View"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Detail Shot"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Another Perspective"
+        }
+      ]
     },
     {
-      "title": "concert 2",
-      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+      "id": "pic2",
+      "type": "medium",
+      "title": "Concert 2",
+      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+      "summary": "A short summary of Concert 2.",
+      "description": "Full description of Concert 2.\n\nAnother great performance.",
+      "date": "2023-11-15",
+      "gallery": []
+    },
+    {
+      "id": "pic3",
+      "type": "small",
+      "title": "Concert 2",
+      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+      "summary": "A short summary of Concert 2.",
+      "description": "Full description of Concert 2.\n\nAnother great performance.",
+      "date": "2023-11-15",
+      "gallery": []
+    },{
+      "id": "pic1",
+      "type": "large",
+      "title": "Concert 1",
+      "image": "images/uploads/otatweb.png",
+      "summary": "A short summary of Concert 1.",
+      "description": "Full description of Concert 1.\n\nIt was an amazing event with lots of energy.",
+      "date": "2023-10-01",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Main Interface"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Alternate View"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/otatweb.png",
+          "caption": "Detail Shot"
+        },
+        {
+          "type": "image",
+          "src": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+          "caption": "Another Perspective"
+        }
+      ]
+    },
+    {
+      "id": "pic2",
+      "type": "medium",
+      "title": "Concert 2",
+      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+      "summary": "A short summary of Concert 2.",
+      "description": "Full description of Concert 2.\n\nAnother great performance.",
+      "date": "2023-11-15",
+      "gallery": []
+    },
+    {
+      "id": "pic3",
+      "type": "small",
+      "title": "Concert 2",
+      "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
+      "summary": "A short summary of Concert 2.",
+      "description": "Full description of Concert 2.\n\nAnother great performance.",
+      "date": "2023-11-15",
+      "gallery": []
     }
   ]
 }

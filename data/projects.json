@@ -32,7 +32,7 @@
       ],
       "media_type": "image",
       "title": "Main System: Core",
-      "type": "large",
+      "type": "medium",
       "id": "p1",
       "description": "Full detailed description of the Core project. This project explores the intersection of retro aesthetics and modern web technologies. It features a complete desktop simulation with window management, file systems, and interactive applications."
     },
@@ -98,7 +98,7 @@
     {
       "id": "p7",
       "title": "testing",
-      "type": "medium",
+      "type": "large",
       "date": "2026-01-27",
       "summary": "ddsdds",
       "description": "dsdsd",

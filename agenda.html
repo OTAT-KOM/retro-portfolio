@@ -63,15 +63,31 @@
             padding: 10px 0;
             border-bottom: 1px solid #000;
         }
+
+        @media (max-width: 768px) {
+            .event-row {
+                grid-template-columns: 1fr;
+            }
+            .event-left {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+            .event-left .event-image {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+            }
+        }
         .event-row:last-child {
             border-bottom: none;
         }
         .event-left .event-image {
             width: 100%;
-            height: 260px;
-            background: #fff;
-            border: inset 2px;
-            object-fit: cover;
+            height: auto;
+            background: black;
+            border: 2px inset #fff;
+            display: block;
         }
         .event-left .event-image.placeholder {
             background: #fff;

@@ -21,34 +21,49 @@
         /* Container for floating windows */
         #desktop-area {
             position: relative;
-            width: 100%;
+            width: 95%;
+            max-width: 1400px;
             height: auto;
             min-height: 100%;
-            padding: 4% 2%; /* Matches previous margins roughly */
+            padding: 20px;
+            margin: 0 auto;
             box-sizing: border-box;
             
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: 5.1vh; /* Finer granularity for intermediate sizes */
-            gap: 2vh 2%; /* Adjusted gap */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: 20px; /* Granular rows for dynamic JS sizing */
+            align-items: start; 
+            gap: 20px;
         }
 
         .window {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: auto; /* Allow height to be determined by content */
             display: flex;
             flex-direction: column;
+            /* min-height removed to allow grid-row to dictate height */
         }
 
         /* Window Sizes */
         .window-large {
-            /* Width controlled by JS or min-width here */
-            min-height: 400px;
+            min-height: auto;
             z-index: 10;
+        }
+        
+        @media (max-width: 600px) {
+            .window-large {
+                 /* No specific override needed for auto layout */
+            }
+        }
+
+        .window-medium {
+            min-height: 280px; /* Preserve original medium height roughly */
+            z-index: 5;
         }
 
         .window-small {
+            min-height: 220px; /* Preserve original small height roughly */
             z-index: 2;
         }
 

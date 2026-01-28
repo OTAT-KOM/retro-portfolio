@@ -84,16 +84,31 @@
 
         /* Header Section */
         .spotify-header {
-            padding: 20px;
+            padding: 0 20px 20px 20px; /* Removed top padding */
             display: flex;
             align-items: center;
             gap: 20px;
             background: #c0c0c0;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .spotify-header {
+                justify-content: center;
+                text-align: center;
+            }
+            .profile-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
         .profile-pic {
             width: 150px;
-            height: 150px;
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 1;
             object-fit: contain;
             /* No border or background as requested */
             image-rendering: pixelated;
@@ -157,6 +172,15 @@
             transform: translate(1px, 1px);
         }
 
+        .arrow-btn[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: auto; /* Enable pointer events so hover works */
+            box-shadow: none;
+            border: 2px outset #fff;
+            filter: grayscale(100%);
+        }
+
         .divider {
             height: 2px;
             background: #808080;
@@ -166,13 +190,15 @@
 
         /* Playlists Section */
         .playlists-section {
-            flex: 1;
+            flex: 0 0 auto; /* Don't grow, take only needed height */
             padding: 20px;
             overflow-y: hidden;
             background: #c0c0c0;
             margin: 0;
             display: flex;
             flex-direction: column;
+            border-bottom: 2px groove white; /* Distinct separation */
+            margin-bottom: 10px; /* Fixed spacing between projects and player */
         }
 
         .playlists-section h2 {
@@ -187,7 +213,7 @@
             align-items: center;
             justify-content: center; /* Center content */
             gap: 10px;
-            flex: 1;
+            flex: 0 0 auto; /* Don't grow */
             position: relative;
             min-height: 0;
             padding: 0 10px; /* Add some padding */
@@ -210,9 +236,11 @@
             background: transparent;
             display: flex;
             flex-direction: column;
-            flex: 0 0 calc(20% - 12px);
-            min-width: 100px;
+            flex: 0 0 160px; /* Fixed width to prevent huge items on zoom out */
+            width: 160px;
             align-items: center; /* Center content horizontally */
+            justify-content: flex-start; /* Align close to center */
+            padding-left: 20px; /* Add some spacing */
         }
 
         .playlist-item:hover .playlist-title {
@@ -221,11 +249,12 @@
 
         .playlist-cover {
             width: 100%;
+            height: auto;
             aspect-ratio: 1;
-            background: #000;
-            margin-bottom: 5px;
             object-fit: cover;
-            border: none; /* No border */
+            margin-bottom: 5px;
+            border: none;
+            display: block;
             box-shadow: none;
         }
 
@@ -250,6 +279,9 @@
             background: #c0c0c0;
             display: flex;
             flex-direction: column;
+            margin-top: 0; /* Don't push to bottom, keep consistent spacing */
+            padding-top: 10px;
+            padding-bottom: 10px; /* Add some padding at the bottom */
         }
 
         /* Seek Bar Wrapper (Visual Container) */
@@ -319,16 +351,21 @@
             padding: 10px 15px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            height: 80px;
+            justify-content: flex-start; /* Move EVERYTHING to the left */
+            min-height: 80px;
+            height: auto;
             box-sizing: border-box;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .current-track {
             display: flex;
             align-items: center;
-            width: 220px;
+            flex: 0 1 auto; /* Don't grow to fill space */
+            width: auto; /* Allow width to shrink to content */
+            min-width: 150px; /* Minimum width to prevent collapsing too much */
+            max-width: 250px;
             gap: 10px;
         }
 
@@ -337,40 +374,50 @@
             height: 50px;
             background: #808080;
             object-fit: cover;
-            border: 2px outset #fff; /* 3D border for cover */
+            border: 2px outset #fff;
+            flex-shrink: 0; /* Don't squash cover */
         }
 
         .track-details {
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            flex: 1;
         }
 
         .track-title {
             font-weight: bold;
             font-size: 14px;
             color: #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .track-artist {
             font-size: 12px;
             color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .main-controls {
-            flex: 1;
+            flex: 0 1 auto; /* Don't grow */
             display: flex;
             gap: 20px;
-            justify-content: flex-start; /* Align to left */
+            justify-content: flex-start; /* Move controls to the left */
             align-items: center;
+            min-width: 0; /* Remove min-width so it can be tight */
         }
 
         .control-group {
             display: flex;
-            gap: 2px; /* Tightly packed buttons */
+            justify-content: flex-start;
+            gap: 2px;
             background: #c0c0c0;
             padding: 2px;
-            border: 2px outset #fff; /* Group container border */
+            border: 2px outset #fff;
         }
 
         .control-btn {
@@ -394,12 +441,15 @@
         }
 
         .volume-control {
-            width: 120px;
+            width: auto;
+            min-width: 100px;
+            flex: 0 1 auto;
             display: flex;
             align-items: center;
             gap: 8px;
-            justify-content: flex-end;
-            padding-right: 10px;
+            justify-content: flex-start; /* Align close to center */
+            padding-left: 0; /* Removed extra spacing */
+            margin-left: auto; /* Push volume to the far right */
         }
         
         /* Volume Triangle */
@@ -461,7 +511,7 @@
         <div>Desktop</div>
     </div>
 
-    <div class="window" style="width: 90%; max-width: 1000px; height: 85vh; min-height: 600px; display: flex; flex-direction: column; margin: auto; position: relative; z-index: 100;">
+    <div class="window" style="width: 90%; max-width: 1000px; height: auto; max-height: 85vh; display: flex; flex-direction: column; margin: auto; position: relative; z-index: 100;">
         <div class="title-bar">
             <div class="title-bar-text">Spotify.exe</div>
             <div class="title-bar-controls">
@@ -493,7 +543,7 @@
             <span><u>L</u>og out</span>
         </div>
         
-        <div class="window-body" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0; margin: 0;">
+        <div class="window-body" style="flex: 1; display: flex; flex-direction: column; overflow: auto; padding: 0; margin: 0;">
             <!-- Header -->
             <div class="spotify-header">
                 <img src="images/uploads/otatweb.png" class="profile-pic" id="profile-pic" onerror="this.src='images/icons/user.png'">
@@ -572,10 +622,8 @@
                                     <path d="M1,1 L6,5 L1,9 V1 Z M7,1 V9 H9 V1 Z" fill="black"/>
                                 </svg>
                             </button>
+                            
                         </div>
-                            
-                            
-
                     </div>
 
                     <div class="volume-control">
@@ -587,6 +635,8 @@
                             <input type="range" id="volume-bar" class="volume-triangle" min="0" max="1" step="0.1" value="1">
                         </div>
                     </div>
+
+                    
                 </div>
             </div>
         </div>

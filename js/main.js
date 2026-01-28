@@ -24,38 +24,6 @@ function bringToFront(element) {
     element.style.zIndex = maxZ + 1;
 }
 
-let isDragging = false;
-let currentWindow = null;
-let dragOffsetX = 0;
-let dragOffsetY = 0;
-
-document.querySelectorAll('.title-bar').forEach(header => {
-    header.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.title-bar-controls')) return;
-
-        isDragging = true;
-        currentWindow = header.closest('.window');
-        bringToFront(currentWindow);
-        
-        const rect = currentWindow.getBoundingClientRect();
-        dragOffsetX = e.clientX - rect.left;
-        dragOffsetY = e.clientY - rect.top;
-    });
-});
-
-document.addEventListener('mousemove', (e) => {
-    if (isDragging && currentWindow) {
-        e.preventDefault();
-        currentWindow.style.left = (e.clientX - dragOffsetX) + 'px';
-        currentWindow.style.top = (e.clientY - dragOffsetY) + 'px';
-    }
-});
-
-document.addEventListener('mouseup', () => {
-    isDragging = false;
-    currentWindow = null;
-});
-
 async function loadEvents() {
     try {
         const response = await fetch('data/events.json?t=' + Date.now());
@@ -340,6 +308,25 @@ async function loadListen() {
         const tracksPrevBtn = document.getElementById('tracks-prev-btn');
         const tracksNextBtn = document.getElementById('tracks-next-btn');
         
+        const updateArrows = () => {
+             if (!grid || !tracksPrevBtn || !tracksNextBtn) return;
+             
+             // Check if scrollable
+             const isScrollable = grid.scrollWidth > grid.clientWidth;
+             
+             if (!isScrollable) {
+                 tracksPrevBtn.disabled = true;
+                 tracksNextBtn.disabled = true;
+                 return;
+             }
+
+             // Left Arrow
+             tracksPrevBtn.disabled = grid.scrollLeft <= 0;
+
+             // Right Arrow (allow 1px tolerance)
+             tracksNextBtn.disabled = Math.ceil(grid.scrollLeft + grid.clientWidth) >= grid.scrollWidth;
+        };
+
         if (tracksPrevBtn) {
             tracksPrevBtn.onclick = () => {
                 grid.scrollBy({ left: -grid.clientWidth * 0.5, behavior: 'smooth' });
@@ -350,6 +337,12 @@ async function loadListen() {
                 grid.scrollBy({ left: grid.clientWidth * 0.5, behavior: 'smooth' });
             };
         }
+        
+        grid.addEventListener('scroll', updateArrows);
+        window.addEventListener('resize', updateArrows);
+        
+        // Initial check
+        setTimeout(updateArrows, 100);
 
         // Player Logic
         let currentIndex = -1;
@@ -663,14 +656,10 @@ async function loadProjects() {
             const isLarge = type === 'large';
             const isMedium = type === 'medium';
             
-            // Apply grid spanning based on size
-            if (isLarge) {
-                win.style.gridRow = 'span 9';
-            } else if (isMedium) {
-                win.style.gridRow = 'span 5';
-            } else {
-                win.style.gridRow = 'span 4';
-            }
+            // Add specific class for sizing
+            win.classList.add(`window-${type}`);
+            
+            /* Grid row spans are now handled in CSS for better responsiveness */
 
             // Common Text Content
             const titleDate = `
@@ -680,9 +669,14 @@ async function loadProjects() {
                 </div>
             `;
             
+            // Conditional summary style: Large items pack content at top; others fill space
+            const summaryStyle = isLarge 
+                ? 'margin:0; font-size:13px; line-height:1.3; padding-right:2px;' 
+                : 'margin:0; font-size:13px; line-height:1.3; flex:1; overflow-y:auto; padding-right:2px;';
+
             const summary = project.summary ? 
-                `<p style="margin:0; font-size:13px; line-height:1.3; flex:1; overflow-y:auto; padding-right:2px;">${project.summary}</p>` : 
-                '<div style="flex:1;"></div>';
+                `<p style="${summaryStyle}">${project.summary}</p>` : 
+                (isLarge ? '' : '<div style="flex:1;"></div>');
                 
             const readMoreBtn = `<button class="read-more-btn" onclick="openProjectModal('${project.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
 
@@ -701,9 +695,9 @@ async function loadProjects() {
 
             if (isLarge) {
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
-                        ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative;">${mediaEl}</div>` : ''}
-                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0;">
+                        ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative; background:black; border: 2px inset white; box-sizing:border-box;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:visible;">
                             ${titleDate}
                             ${summary}
                             ${readMoreBtn}
@@ -714,7 +708,7 @@ async function loadProjects() {
                 // MEDIUM LAYOUT (Vertical Stack, Fixed Image Height)
                 internalContent = `
                     <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
-                        ${mediaEl ? `<div style="width:100%; height:55%; flex-shrink:0;">${mediaEl}</div>` : ''}
+                        ${mediaEl ? `<div style="width:100%; height:200px; flex-shrink:0; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
                             ${summary}
@@ -726,7 +720,7 @@ async function loadProjects() {
                 // SHORT LAYOUT (Side-by-Side) for Small items
                 internalContent = `
                     <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0;">
-                        ${mediaEl ? `<div style="width:40%; flex-shrink:0; height:100%;">${mediaEl}</div>` : ''}
+                        ${mediaEl ? `<div style="width:40%; flex-shrink:0; aspect-ratio:1/1; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
                             ${summary}
@@ -745,6 +739,38 @@ async function loadProjects() {
             
             desktop.appendChild(win);
         });
+
+        // Dynamic Grid Layout (Masonry-like)
+        const resizeGridItem = (item) => {
+            const grid = document.getElementById("desktop-area");
+            if (!grid) return;
+            
+            const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+            
+            // Reset grid row to auto to calculate natural height first
+            item.style.gridRowEnd = 'auto';
+            
+            // Calculate required span
+            const contentHeight = item.querySelector('.window-body').getBoundingClientRect().height + item.querySelector('.title-bar').getBoundingClientRect().height;
+            const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            
+            item.style.gridRowEnd = "span " + rowSpan;
+        };
+
+        const resizeAllGridItems = () => {
+            const allItems = document.getElementsByClassName("window");
+            for (let x = 0; x < allItems.length; x++) {
+                resizeGridItem(allItems[x]);
+            }
+        };
+
+        // Run resize after creation and on window resize
+        resizeAllGridItems();
+        window.addEventListener("resize", resizeAllGridItems);
+        
+        // Also run after a short delay to ensure rendering is complete
+        setTimeout(resizeAllGridItems, 100);
 
         // Store projects globally
         window.allProjects = items;
@@ -966,74 +992,339 @@ function openProjectModal(id) {
 }
 
 async function loadPictures() {
-    const container = document.getElementById('gallery-container');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const loading = document.getElementById('gallery-loading');
-    
-    if (!container) return;
+    const desktop = document.getElementById('desktop-area');
+    if (!desktop) return;
 
     try {
         const response = await fetch('data/pictures.json?t=' + Date.now());
         if (!response.ok) throw new Error('Failed to load pictures');
-        
         const data = await response.json();
         const items = Array.isArray(data.items) ? data.items : [];
-        
-        if (items.length === 0) {
-            loading.innerText = 'No pictures found.';
-            prevBtn.classList.add('disabled');
-            nextBtn.classList.add('disabled');
+
+        desktop.innerHTML = '';
+
+        if (!items.length) {
+            desktop.innerHTML = '<p style="color:white; padding:20px;">No pictures found.</p>';
             return;
         }
 
-        loading.style.display = 'none';
-        container.innerHTML = items.map((item, index) => `
-            <img src="${item.image}" class="gallery-image ${index === 0 ? 'active' : ''}" alt="${item.title || 'Gallery Image'}" data-index="${index}">
-        `).join('');
-
-        let currentIndex = 0;
-        const totalItems = items.length;
-
-        const updateButtons = () => {
-            if (currentIndex === 0) {
-                prevBtn.classList.add('disabled');
-            } else {
-                prevBtn.classList.remove('disabled');
-            }
+        items.forEach((item) => {
+            const win = document.createElement('div');
+            win.className = `window`;
             
-            if (currentIndex === totalItems - 1) {
-                nextBtn.classList.add('disabled');
+            // Determine size based on type
+            const type = item.type || 'small';
+            const isLarge = type === 'large';
+            const isMedium = type === 'medium';
+            
+            // Add specific class for sizing
+            win.classList.add(`window-${type}`);
+            
+            /* Grid row spans are now handled in CSS for better responsiveness */
+
+            // Common Text Content
+            const titleDate = `
+                <div style="flex-shrink:0; margin-bottom: 5px;">
+                    <h3 style="margin:0;font-size:16px;">${item.title}</h3>
+                    <p style="margin:2px 0;font-size:12px;"><strong>${item.date}</strong></p>
+                </div>
+            `;
+            
+            // Conditional summary style: Large items pack content at top; others fill space
+            const summaryStyle = isLarge 
+                ? 'margin:0; font-size:13px; line-height:1.3; padding-right:2px;' 
+                : 'margin:0; font-size:13px; line-height:1.3; flex:1; overflow-y:auto; padding-right:2px;';
+
+            const summary = item.summary ? 
+                `<p style="${summaryStyle}">${item.summary}</p>` : 
+                (isLarge ? '' : '<div style="flex:1;"></div>');
+                
+            const readMoreBtn = `<button class="read-more-btn" onclick="openPictureModal('${item.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
+
+            // Media Generation
+            let mediaEl = '';
+            if (item.image) {
+                const imgStyle = 'width:100%; height:100%; object-fit:cover; display:block;';
+                mediaEl = `<img src="${item.image}" alt="${item.title || ''}" style="${imgStyle}">`;
+            }
+
+            let internalContent = '';
+
+            if (isLarge) {
+                internalContent = `
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0;">
+                        ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative; background:black; border: 2px inset white; box-sizing:border-box;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:visible;">
+                            ${titleDate}
+                            ${summary}
+                            ${readMoreBtn}
+                        </div>
+                    </div>
+                `;
+            } else if (isMedium) {
+                // MEDIUM LAYOUT (Vertical Stack, Fixed Image Height) - COPIED FROM PROJECTS
+                internalContent = `
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                        ${mediaEl ? `<div style="width:100%; height:200px; flex-shrink:0; border: 2px inset white;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
+                            ${titleDate}
+                            ${summary}
+                            ${readMoreBtn}
+                        </div>
+                    </div>
+                `;
             } else {
-                nextBtn.classList.remove('disabled');
+                // SHORT LAYOUT (Side-by-Side) for Small items - COPIED FROM PROJECTS
+                internalContent = `
+                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                        ${mediaEl ? `<div style="width:40%; flex-shrink:0; aspect-ratio:1/1; border: 2px inset white;">${mediaEl}</div>` : ''}
+                        <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
+                            ${titleDate}
+                            ${summary}
+                            ${readMoreBtn}
+                        </div>
+                    </div>
+                `;
+            }
+
+            win.innerHTML = `
+                <div class="title-bar" style="cursor: default;">
+                    <div class="title-bar-text">${item.title}</div>
+                </div>
+                ${internalContent}
+            `;
+            
+            desktop.appendChild(win);
+        });
+
+        // Store pictures globally for the modal
+        window.allPictures = items;
+
+        // Dynamic Grid Layout (Masonry-like)
+        const resizeGridItem = (item) => {
+            const grid = document.getElementById("desktop-area");
+            if (!grid) return;
+            const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+            item.style.gridRowEnd = 'auto';
+            const contentHeight = item.querySelector('.window-body').getBoundingClientRect().height + item.querySelector('.title-bar').getBoundingClientRect().height;
+            const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            item.style.gridRowEnd = "span " + rowSpan;
+        };
+
+        const resizeAllGridItems = () => {
+            const allItems = document.getElementsByClassName("window");
+            for (let x = 0; x < allItems.length; x++) {
+                resizeGridItem(allItems[x]);
             }
         };
 
-        const showImage = (index) => {
-            document.querySelectorAll('.gallery-image').forEach(img => img.classList.remove('active'));
-            const newImg = container.querySelector(`.gallery-image[data-index="${index}"]`);
-            if (newImg) newImg.classList.add('active');
-            updateButtons();
-        };
-
-        prevBtn.onclick = () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                showImage(currentIndex);
-            }
-        };
-
-        nextBtn.onclick = () => {
-            if (currentIndex < totalItems - 1) {
-                currentIndex++;
-                showImage(currentIndex);
-            }
-        };
-
-        updateButtons();
+        resizeAllGridItems();
+        window.addEventListener("resize", resizeAllGridItems);
+        
+        // Also run after images load
+        const images = desktop.querySelectorAll('img');
+        images.forEach(img => {
+             img.onload = resizeAllGridItems;
+        });
+        setTimeout(resizeAllGridItems, 100);
 
     } catch (e) {
         console.error(e);
-        loading.innerText = 'Error loading pictures.';
+        desktop.innerHTML = '<p style="color:white; padding:20px;">Error loading pictures.</p>';
+    }
+}
+
+function openPictureModal(id) {
+    const item = window.allPictures ? window.allPictures.find(p => p.id === id) : null;
+    if (!item) return;
+    
+    // Check if modal already exists
+    const existing = document.getElementById(`modal-${id}`);
+    if (existing) {
+        existing.style.display = 'block';
+        bringToFront(existing);
+        return;
+    }
+
+    // Collect all media items (Main Image + Gallery)
+    const mediaList = [];
+    if (item.image) {
+        mediaList.push({
+            type: 'image',
+            src: item.image,
+            caption: item.title || 'Main Image'
+        });
+    }
+    if (item.gallery && Array.isArray(item.gallery)) {
+        mediaList.push(...item.gallery);
+    }
+
+    const modal = document.createElement('div');
+    modal.className = 'window';
+    modal.id = `modal-${id}`;
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.width = '800px';
+    modal.style.maxWidth = '95%';
+    modal.style.height = 'auto';
+    modal.style.maxHeight = '85vh';
+    modal.style.overflow = 'hidden';
+    modal.style.setProperty('display', 'flex', 'important');
+    modal.style.flexDirection = 'column';
+    modal.style.zIndex = 9999;
+    modal.style.padding = '2px';
+    modal.style.background = '#ffffff';
+    modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+
+    const descriptionHtml = item.description ? 
+        item.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
+        '<p>No detailed description available.</p>';
+
+    // Initial Render Structure
+    modal.innerHTML = `
+        <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
+            <div class="title-bar-text" style="color: #e0e0e0;">${item.title}</div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 8px solid #bdbdbdff; box-sizing: border-box; flex-direction: column;">
+            <!-- Carousel Container -->
+            <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
+                
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <!-- Navigation Buttons (Left) -->
+                    ${mediaList.length > 1 ? `
+                        <button id="prev-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span style="font-size: 10px;">&#9668;</span> Prev
+                        </button>
+                    ` : ''}
+
+                    <!-- Main Media View -->
+                    <div id="media-view-${id}" style="position: relative; height: 350px; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
+                        <!-- Media will be injected here -->
+                    </div>
+
+                    <!-- Navigation Buttons (Right) -->
+                    ${mediaList.length > 1 ? `
+                        <button id="next-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            Next <span style="font-size: 10px;">&#9658;</span>
+                        </button>
+                    ` : ''}
+                </div>
+
+                <!-- Thumbnails Strip -->
+                ${mediaList.length > 1 ? `
+                    <div id="thumbnails-${id}" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+                        <!-- Thumbnails will be injected here -->
+                    </div>
+                ` : ''}
+
+            </div>
+
+            <div style="background: #e0e0e0; padding: 15px; flex: 1;">
+                <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${item.title}</h2>
+                <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${item.date || 'N/A'}</p>
+                <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
+                    ${descriptionHtml}
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    
+    // Close button functionality
+    modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
+    
+    // Logic for Carousel
+    let currentIndex = 0;
+    const mediaView = document.getElementById(`media-view-${id}`);
+    const thumbContainer = document.getElementById(`thumbnails-${id}`);
+    const prevBtn = document.getElementById(`prev-btn-${id}`);
+    const nextBtn = document.getElementById(`next-btn-${id}`);
+
+    function updateCarousel() {
+        if (mediaList.length === 0) {
+            mediaView.innerHTML = '<p>No media available</p>';
+            return;
+        }
+
+        const mItem = mediaList[currentIndex];
+        
+        // Render Main Media
+        mediaView.innerHTML = `<img src="${mItem.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; cursor: zoom-in;" alt="${mItem.caption || 'Image'}">`;
+        
+        const img = mediaView.querySelector('img');
+        img.addEventListener('click', function() {
+            // Create full-screen overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
+            overlay.style.zIndex = '10000';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.cursor = 'zoom-out';
+            
+            const fullImg = document.createElement('img');
+            fullImg.src = this.src;
+            fullImg.style.maxWidth = '95%';
+            fullImg.style.maxHeight = '95%';
+            fullImg.style.objectFit = 'contain';
+            fullImg.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+            
+            overlay.appendChild(fullImg);
+            document.body.appendChild(overlay);
+            
+            overlay.addEventListener('click', () => {
+                overlay.remove();
+            });
+        });
+
+        // Render Thumbnails (Highlight active)
+        if (thumbContainer) {
+            thumbContainer.innerHTML = mediaList.map((m, idx) => {
+                const isActive = idx === currentIndex;
+                const borderStyle = isActive ? 'border: 2px solid blue;' : 'border: 2px outset white;';
+                
+                return `
+                    <img src="${m.src}" 
+                            onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))"
+                            style="width: 60px; height: 60px; object-fit: cover; ${borderStyle} cursor: pointer;"
+                    >
+                `;
+            }).join('');
+        }
+    }
+
+    // Initial Render
+    updateCarousel();
+
+    // Event Listeners
+    modal.addEventListener('changeSlide', (e) => {
+        currentIndex = e.detail;
+        updateCarousel();
+    });
+
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
+            updateCarousel();
+        };
+    }
+
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            currentIndex = (currentIndex + 1) % mediaList.length;
+            updateCarousel();
+        };
     }
 }
