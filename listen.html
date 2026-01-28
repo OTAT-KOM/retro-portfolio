@@ -13,9 +13,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow: auto; /* Allow scrolling when zoomed */
             font-family: var(--font-main, 'MS Sans Serif', monospace);
         }
 
@@ -461,7 +461,7 @@
         <div>Desktop</div>
     </div>
 
-    <div class="window" style="width: 90%; max-width: 1000px; height: 85vh; display: flex; flex-direction: column;">
+    <div class="window" style="width: 90%; max-width: 1000px; height: 85vh; min-height: 600px; display: flex; flex-direction: column; margin: auto; position: relative; z-index: 100;">
         <div class="title-bar">
             <div class="title-bar-text">Spotify.exe</div>
             <div class="title-bar-controls">
