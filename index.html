@@ -3,58 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Portfolio</title>
+    <title>About</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #9e5bdb;  
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+       .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        .page-window {
+            width: 700px;
+            max-width: 90vw;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window-body {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+         
+        menu[role=tablist] {
+            display: flex;
+            margin: 0 0 -2px 0;
+            padding-left: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-link {
+            list-style: none;
+            padding: 3px 8px;
+            margin-right: 2px;
+            background: #c0c0c0;
+            cursor: pointer;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            user-select: none;
+        }
+
+        .tab-link[aria-selected="true"] {
+ 
+            border-bottom: none;
+            box-shadow: 1px 0 0 #000, 1px 0 0 #808080;  
+            z-index: 2;
+            position: relative;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+        }
+
+         
+        .tab-link[aria-selected="true"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            pointer-events: none;
+        }
+
+        .tab-content-container {
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
+            padding: 20px;
+            background: #c0c0c0;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            z-index: 0;
+        }
+
+        .tab-content {
+            display: none;
+            height: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+         
+        .summary-layout {
+            display: flex;
+            gap: 30px;
+            height: 100%;
+            padding: 20px;
+            align-items: flex-start;
+        }
+
+        .summary-image-container {
+            flex-shrink: 0;
+            width: 220px;
+            height: 220px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .summary-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .summary-text {
+            flex: 1;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            overflow-y: auto;
+            color: #000;
+        }
+
+        .summary-title {
+            font-weight: bold;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+        }
+
+        .summary-desc {
+            font-size: 0.9em;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* Footer Buttons */
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: auto;
+            padding: 15px 40px; /* Add side padding */
+        }
+
+        .footer-buttons button {
+            min-width: 120px;
+            font-weight: bold;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-size: 14px;
+            height: 35px;
+        }
+
+         
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            align-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px dotted transparent;
+        }
+
+        .contact-item:hover {
+            border: 1px dotted #000;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-item img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+        }
+
+        .contact-item span {
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
+        }
+
+    </style>
 </head>
 <body>
-    <div id="desktop">
-        
-        <div class="desktop-icons">
-            <div class="icon icon-shop" onclick="window.location.href='shop.html'">
-                <img src="images/icons/directory_favorites-3.png" class="icon-img" alt="Video Project">
-                <div class="icon-label">Video Project</div>
-            </div>
-            <div class="icon icon-folder" onclick="window.location.href='folder.html'">
-                <img src="images/icons/directory_open_file_mydocs-4.png" class="icon-img" alt="New Folder">
-                <div class="icon-label">New Folder</div>
-            </div>
-            <div class="icon icon-pictures" onclick="window.location.href='pictures.html'">
-                <img src="images/icons/directory_open_file_mydocs_2k-4.png" class="icon-img" alt="Pictures">
-                <div class="icon-label">Pictures</div>
-            </div>
-            <div class="icon icon-listen" onclick="window.location.href='listen.html'">
-                <img src="images/icons/cd_audio_cd_a-4.png" class="icon-img" alt="Listen">
-                <div class="icon-label">Listen</div>
-            </div>
-            <div class="icon icon-watch" onclick="window.location.href='watch.html'">
-                <img src="images/icons/camera3_vid-4.png" class="icon-img" alt="Watch">
-                <div class="icon-label">Watch</div>
-            </div>
-            <div class="icon icon-agenda" onclick="window.location.href='agenda.html'">
-                <img src="images/icons/calendar-1.png" class="icon-img" alt="Agenda">
-                <div class="icon-label">Agenda</div>
-            </div>
-            <div class="icon icon-note" onclick="window.location.href='note.html'">
-                <img src="images/icons/notepad_file-2.png" class="icon-img" alt="Note">
-                <div class="icon-label">Note</div>
-            </div>
-            <div class="icon icon-unknown" onclick="window.location.href='unknown.html'">
-                <img src="images/icons/file_eye.ico" class="icon-img" style="padding-left: 13px;" alt="??">
-                <div class="icon-label">??</div>
+    <div class="desktop-link" onclick="window.location.href='index.html'">
+        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
+        <div>Desktop</div>
+    </div>
+
+    <div class="window page-window">
+        <div class="title-bar">
+            <div class="title-bar-text">About</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close" onclick=""></button>
             </div>
         </div>
+        <div class="window-body">
+            <menu role="tablist">
+                <li role="tab" aria-selected="true" class="tab-link" data-tab="summary" >Summary</li>
+                <li role="tab" class="tab-link" data-tab="contact" >Contact details</li>
+            </menu>
+            
+            <div class="tab-content-container">
+                
+                <div class="tab-content active" id="tab-content-summary">
+                    <div class="summary-layout">
+                        <div class="summary-image-container">
+                            <img id="about-image" src="" alt="Profile" class="summary-image">
+                        </div>
+                        <div class="summary-text">
+                            <h2 id="about-title" class="summary-title">Loading...</h2>
+                            <p id="about-text" class="summary-desc"></p>
+                        </div>
+                    </div>
+                </div>
 
-        
-        <div class="recycle-bin icon" onclick="alert('Recycle Bin is empty')">
-            <img src="images/icons/recycle_bin_empty-5.png" class="icon-img" alt="Trash">
-            <div class="icon-label">Trash</div>
+                
+                <div class="tab-content" id="tab-content-contact">
+                    <div class="contact-grid">
+                        <div class="contact-item" id="btn-insta-contact">
+                            <img src="images/icons/insta.svg" alt="Instagram">
+                            <span>Instagram</span>
+                        </div>
+                        <div class="contact-item" id="btn-tiktok-contact">
+                            <img src="images/icons/tik.svg" alt="TikTok">
+                            <span>TikTok</span>
+                        </div>
+                        <div class="contact-item" id="btn-linkedin-contact">
+                            <img src="images/icons/directory_favorites-2.png" alt="LinkedIn">
+                            <span>LinkedIn</span>
+                        </div>
+                        <div class="contact-item" id="btn-youtube-contact">
+                            <img src="images/icons/youtube.svg" alt="YouTube">
+                            <span>YouTube</span>
+                        </div>
+                        <div class="contact-item" id="btn-spotify-contact">
+                            <img src="images/icons/cd_audio_cd_a-4.png" alt="Spotify">
+                            <span>Spotify</span>
+                        </div>
+                        <div class="contact-item" id="btn-email-contact">
+                            <img src="images/icons/outlook_express-4.png" alt="Email">
+                            <span>Email Me</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-buttons">
+                <button id="btn-insta">Instagram</button>
+                <button id="btn-twitter">Twitter</button>
+                <button id="btn-tiktok">TikTok</button>
+            </div>
         </div>
-
-        
     </div>
 
     <script src="js/main.js"></script>
+    <script>
+         
+         
+         
+        
+        async function loadExtraContactLogic() {
+            try {
+                const response = await fetch('data/about.json?t=' + Date.now());
+                if (!response.ok) return;
+                const data = await response.json();
+                
+                const setLink = (id, url, isMail = false) => {
+                    const el = document.getElementById(id);
+                    if (el && url) {
+                        el.onclick = () => window.open(isMail ? 'mailto:' + url : url, '_blank');
+                    } else if (el) {
+                        el.style.opacity = '0.5';
+                        el.style.cursor = 'default';
+                        el.style.display = 'none';  
+                    }
+                };
+
+                setLink('btn-insta-contact', data.instagram_url);
+                setLink('btn-tiktok-contact', data.tiktok_url);
+                setLink('btn-linkedin-contact', data.linkedin_url);
+                setLink('btn-youtube-contact', data.youtube_url);
+                setLink('btn-spotify-contact', data.spotify_url);
+                setLink('btn-email-contact', data.contact_email, true);
+
+            } catch(e) { console.log(e); }
+        }
+        
+         
+        document.addEventListener('DOMContentLoaded', loadExtraContactLogic);
+    </script>
 </body>
 </html>

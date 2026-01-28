@@ -1,15 +1,56 @@
 {
+  "profile_name": "Audio Projects",
+  "profile_image": "images/uploads/otatweb.png",
+  "profile_summary": "235 public playlists • 104 followers • 85 following [Follows you]",
+  "spotify_url": "https://open.spotify.com/artist/491mdcFHq3U4pW3imSwcyT?si=k1uVqZ1SQjqyNznvl3Jf_A",
   "items": [
     {
-      "audio_url": "https://open.spotify.com/track/0UZCMB4yFc9Accw4oWcObd?si=79296ad2497b4247",
+      "audio": "images/uploads/otat wayway.mpeg",
       "artist": "OTAT",
-      "title": "La3bo bik"
+      "title": "Otat Wayway",
+      "cover": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
     },
     {
-      "audio_url": "https://open.spotify.com/track/5N7LvV5E6DfAb6UlQQgYxX?si=3c730c44ed3441b5",
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
       "title": "Incassable",
-      "cover_image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
-      "artist": "OTAT"
+      "cover": "images/uploads/otatweb.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Otat Wayway",
+      "cover": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Incassable",
+      "cover": "images/uploads/otatweb.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Otat Wayway",
+      "cover": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Incassable",
+      "cover": "images/uploads/otatweb.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Otat Wayway",
+      "cover": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png"
+    },
+    {
+      "audio": "images/uploads/otat wayway.mpeg",
+      "artist": "OTAT",
+      "title": "Incassable",
+      "cover": "images/uploads/otatweb.png"
     }
   ]
 }

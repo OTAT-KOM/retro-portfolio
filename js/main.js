@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('watch-grid')) {
         loadWatch();
     }
-    if (document.getElementById('listen-grid')) {
+    if (document.getElementById('playlist-grid')) {
         loadListen();
     }
     
@@ -194,7 +194,7 @@ function ensureDesktopIcons() {
                 <img src="images/icons/notepad_file-2.png" class="icon-img" alt="Note">
                 <div class="icon-label">Note</div>
             </div>
-            <div class="icon icon-unknown" onclick="window.location.href='unknown.html'">
+            <div class="icon icon-unknown" onclick="window.location.href='index.html'">
                 <img src="images/icons/file_eye.ico" class="icon-img" style="padding-left: 13px;" alt="??">
                 <div class="icon-label">??</div>
             </div>
@@ -245,9 +245,21 @@ async function loadWatch() {
                 <div class="title-bar">
                     <div class="title-bar-text">${video.title || 'Video'}</div>
                     <div class="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close"></button>
+                        <button aria-label="Minimize">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <rect x="2" y="8" width="6" height="2" fill="black"/>
+                            </svg>
+                        </button>
+                        <button aria-label="Maximize">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <path d="M1,1 H9 V9 H1 V1 M2,2 V8 H8 V2 H2" fill="black" fill-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <button aria-label="Close">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <path d="M1,1 L9,9 M9,1 L1,9" stroke="black" stroke-width="2"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div class="window-body">
@@ -268,64 +280,195 @@ async function loadWatch() {
 }
 
 async function loadListen() {
-    const grid = document.getElementById('listen-grid');
+    const grid = document.getElementById('playlist-grid');
+    const player = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const seekBar = document.getElementById('seek-bar');
+    const volumeBar = document.getElementById('volume-bar');
+    const currentCover = document.getElementById('current-cover');
+    const currentTitle = document.getElementById('current-title');
+    const currentArtist = document.getElementById('current-artist');
+    const stats = document.getElementById('playlist-stats');
+
     if (!grid) return;
 
     try {
         const response = await fetch('data/listen.json?t=' + Date.now());
-        if (!response.ok) throw new Error('Failed to load music');
-        
+        if (!response.ok) throw new Error('Failed to load data');
         const data = await response.json();
-        const items = Array.isArray(data.items) ? data.items : [];
-        
-        if (!items.length) {
-            grid.innerHTML = '<p style="color:white; text-align:center; width:100%;">No music available.</p>';
+
+        // Update Profile Info
+        if (data.profile_name) {
+            const el = document.getElementById('profile-name');
+            if (el) el.innerText = data.profile_name;
+        }
+        if (data.profile_image) {
+            const el = document.getElementById('profile-pic');
+            if (el) el.src = data.profile_image;
+        }
+        if (data.profile_summary) {
+            const el = document.getElementById('profile-summary');
+            if (el) el.innerText = data.profile_summary;
+        }
+        if (data.spotify_url) {
+             const btn = document.getElementById('spotify-btn');
+             if (btn) btn.onclick = () => window.open(data.spotify_url, '_blank');
+        }
+
+        const items = data.items || [];
+
+        // Stats removed as per request
+
+        if (items.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center;">No tracks found.</div>';
             return;
         }
 
-        grid.innerHTML = items.map(track => {
-            let embedContent = '';
-            if (track.audio_url && (track.audio_url.includes('spotify.com') || track.audio_url.includes('open.spotify.com'))) {
-                let spotifyUrl = track.audio_url;
-                if (!spotifyUrl.includes('/embed')) {
-                    spotifyUrl = spotifyUrl.replace('open.spotify.com/', 'open.spotify.com/embed/');
-                    const urlObj = new URL(spotifyUrl);
-                    spotifyUrl = urlObj.origin + urlObj.pathname; 
-                }
-                embedContent = `<iframe src="${spotifyUrl}" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
-            } else {
-                 embedContent = `
-                    <div class="album-art" style="background-image: url('${track.cover_image || 'images/logo.png'}'); background-size: cover; background-position: center; width: 100px; height: 100px; border: 2px inset white; margin-bottom: 10px;"></div>
-                    <div class="track-info">
-                        <div class="track-title" style="font-weight:bold;">${track.title || 'Unknown Title'}</div>
-                    </div>
-                    <audio controls class="audio-player" style="width:100%" src="${track.audio_url}"></audio>
-                `;
-            }
-
-            return `
-            <div class="window audio-window">
-                <div class="title-bar">
-                    <div class="title-bar-text">${track.title || 'Music'}</div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="window-body">
-                    ${track.audio_url && track.audio_url.includes('spotify') ? 
-                        `<div class="spotify-container">${embedContent}</div>` : 
-                        embedContent
-                    }
-                </div>
+        // Render Grid
+        grid.innerHTML = items.map((item, index) => `
+            <div class="playlist-item" data-index="${index}">
+                <img src="${item.cover || 'images/icons/cd_audio_cd_a-4.png'}" class="playlist-cover" onerror="this.src='images/icons/cd_audio_cd_a-4.png'">
+                <div class="playlist-title">${item.title}</div>
+                <div class="playlist-artist">${item.artist || 'Unknown Artist'}</div>
             </div>
+        `).join('');
+
+        // Player Logic
+        let currentIndex = -1;
+        let isPlaying = false;
+        let isSeeking = false;
+
+        const loadTrack = (index, autoPlay = true) => {
+            if (index < 0 || index >= items.length) return;
+            currentIndex = index;
+            const item = items[index];
+            
+            player.src = item.audio;
+            currentCover.src = item.cover || 'images/icons/cd_audio_cd_a-4.png';
+            currentCover.style.opacity = 1;
+            currentTitle.innerText = item.title;
+            currentArtist.innerText = item.artist || 'Unknown Artist';
+            
+            if (autoPlay) {
+                playTrack();
+            }
+        };
+
+        // Load first track info immediately (without auto-playing)
+        if (items.length > 0) {
+            loadTrack(0, false);
+        }
+
+        const playTrack = () => {
+            if (currentIndex === -1 && items.length > 0) {
+                loadTrack(0);
+                return;
+            }
+            player.play().then(() => {
+                isPlaying = true;
+                playBtn.innerHTML = `
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <path d="M2,1 H4 V9 H2 Z M6,1 H8 V9 H6 Z" fill="black"/>
+                    </svg>
+                `;
+            }).catch(e => console.error("Playback error:", e));
+        };
+
+        const pauseTrack = () => {
+            player.pause();
+            isPlaying = false;
+            playBtn.innerHTML = `
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
+                </svg>
             `;
-        }).join('');
+        };
+
+        const stopTrack = () => {
+            player.pause();
+            player.currentTime = 0;
+            isPlaying = false;
+            playBtn.innerHTML = `
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
+                </svg>
+            `;
+        };
+
+        // Event Listeners
+        grid.querySelectorAll('.playlist-item').forEach(item => {
+            item.addEventListener('click', () => {
+                loadTrack(parseInt(item.dataset.index));
+            });
+        });
+
+        if (playBtn) playBtn.onclick = () => {
+            if (isPlaying) pauseTrack();
+            else playTrack();
+        };
+
+        if (stopBtn) stopBtn.onclick = stopTrack;
+
+        if (prevBtn) prevBtn.onclick = () => {
+            if (currentIndex > 0) loadTrack(currentIndex - 1);
+        };
+
+        if (nextBtn) nextBtn.onclick = () => {
+            if (currentIndex < items.length - 1) loadTrack(currentIndex + 1);
+        };
+
+        if (volumeBar) volumeBar.oninput = (e) => {
+            player.volume = e.target.value;
+        };
+
+        if (player) {
+            player.ontimeupdate = () => {
+                if (!isSeeking && player.duration && seekBar) {
+                    seekBar.value = (player.currentTime / player.duration) * 100;
+                }
+            };
+            
+            player.onended = () => {
+                 if (currentIndex < items.length - 1) {
+                     loadTrack(currentIndex + 1);
+                 } else {
+                     pauseTrack();
+                 }
+            };
+        }
+
+        if (seekBar) {
+            seekBar.onmousedown = () => { isSeeking = true; };
+            seekBar.ontouchstart = () => { isSeeking = true; };
+            
+            seekBar.oninput = (e) => {
+                // Update time while dragging
+                if (player.duration) {
+                    const time = (e.target.value / 100) * player.duration;
+                    player.currentTime = time;
+                }
+            };
+
+            seekBar.onchange = (e) => {
+                // Commit time change
+                if (player.duration) {
+                    const time = (e.target.value / 100) * player.duration;
+                    player.currentTime = time;
+                }
+                isSeeking = false;
+            };
+            
+            // Handle mouse up outside the element just in case
+            seekBar.onmouseup = () => { isSeeking = false; };
+            seekBar.ontouchend = () => { isSeeking = false; };
+        }
 
     } catch (e) {
         console.error(e);
-        grid.innerHTML = '<p style="color:white;">Error loading music.</p>';
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center;">Error loading tracks.</div>';
     }
 }
 
@@ -455,7 +598,7 @@ async function loadProjects() {
             if (isLarge) {
                 win.style.gridRow = 'span 9';
             } else if (isMedium) {
-                win.style.gridRow = 'span 6';
+                win.style.gridRow = 'span 5';
             } else {
                 win.style.gridRow = 'span 4';
             }
@@ -579,6 +722,7 @@ function openProjectModal(id) {
     modal.style.width = '800px';
     modal.style.maxWidth = '95%';
     modal.style.height = '85vh';
+    modal.style.overflow = 'hidden';
     modal.style.setProperty('display', 'flex', 'important');
     modal.style.flexDirection = 'column';
     modal.style.zIndex = 9999;
@@ -592,26 +736,36 @@ function openProjectModal(id) {
 
     // Initial Render Structure
     modal.innerHTML = `
-        <div class="title-bar">
-            <div class="title-bar-text">${project.title}</div>
+        <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
+            <div class="title-bar-text" style="color: #e0e0e0;">${project.title}</div>
             <div class="title-bar-controls">
                 <button aria-label="Close"></button>
             </div>
         </div>
-        <div class="window-body" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 15px; background: white; margin: 0; display: block;">
+        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 3px solid #808080; box-sizing: border-box; flex-direction: column;">
             <!-- Carousel Container -->
-            <div id="carousel-${id}" style="margin-bottom: 10px; text-align: center; position: relative; width: 100%;">
+            <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
                 
-                <!-- Main Media View -->
-                <div id="media-view-${id}" style="position: relative; height: 350px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
-                    <!-- Media will be injected here -->
-                </div>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <!-- Navigation Buttons (Left) -->
+                    ${mediaList.length > 1 ? `
+                        <button id="prev-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span style="font-size: 10px;">&#9668;</span> Prev
+                        </button>
+                    ` : ''}
 
-                <!-- Navigation Buttons (only if > 1 item) -->
-                ${mediaList.length > 1 ? `
-                    <button id="prev-btn-${id}" style="position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 10; cursor: pointer; padding: 5px 10px; font-weight: bold;">&lt;</button>
-                    <button id="next-btn-${id}" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%); z-index: 10; cursor: pointer; padding: 5px 10px; font-weight: bold;">&gt;</button>
-                ` : ''}
+                    <!-- Main Media View -->
+                    <div id="media-view-${id}" style="position: relative; height: 350px; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
+                        <!-- Media will be injected here -->
+                    </div>
+
+                    <!-- Navigation Buttons (Right) -->
+                    ${mediaList.length > 1 ? `
+                        <button id="next-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            Next <span style="font-size: 10px;">&#9658;</span>
+                        </button>
+                    ` : ''}
+                </div>
 
                 <!-- Thumbnails Strip -->
                 ${mediaList.length > 1 ? `
@@ -622,10 +776,10 @@ function openProjectModal(id) {
 
             </div>
 
-            <div style="background: #e0e0e0; padding: 15px; border-top: 2px solid #808080; margin-top: 15px;">
-                <h2 style="margin-top: 0; font-size: 22px; text-align:center;">${project.title}</h2>
-                <p style="margin-bottom: 10px; color: #555; text-align:center;"><strong>Date:</strong> ${project.date}</p>
-                <div class="project-description" style="line-height: 1.5; font-size: 15px; max-width: 90%; margin: 0 auto;">
+            <div style="background: #e0e0e0; padding: 15px; border-top: 2px solid #808080; flex: 1;">
+                <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${project.title}</h2>
+                <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${project.date}</p>
+                <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
                     ${descriptionHtml}
                 </div>
             </div>
@@ -651,10 +805,41 @@ function openProjectModal(id) {
         
         // Render Main Media
         if (item.type === 'video') {
-            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
-        } else {
-            mediaView.innerHTML = `<img src="${item.src}" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;" alt="${item.caption || 'Project Image'}">`;
-        }
+                mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
+            } else {
+                mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; cursor: zoom-in;" alt="${item.caption || 'Project Image'}">`;
+                
+                const img = mediaView.querySelector('img');
+                img.addEventListener('click', function() {
+                    // Create full-screen overlay
+                    const overlay = document.createElement('div');
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100vw';
+                    overlay.style.height = '100vh';
+                    overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                    overlay.style.zIndex = '10000';
+                    overlay.style.display = 'flex';
+                    overlay.style.alignItems = 'center';
+                    overlay.style.justifyContent = 'center';
+                    overlay.style.cursor = 'zoom-out';
+                    
+                    const fullImg = document.createElement('img');
+                    fullImg.src = this.src;
+                    fullImg.style.maxWidth = '95%';
+                    fullImg.style.maxHeight = '95%';
+                    fullImg.style.objectFit = 'contain';
+                    fullImg.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                    
+                    overlay.appendChild(fullImg);
+                    document.body.appendChild(overlay);
+                    
+                    overlay.addEventListener('click', () => {
+                        overlay.remove();
+                    });
+                });
+            }
 
         // Render Thumbnails (Highlight active)
         if (thumbContainer) {
@@ -704,8 +889,8 @@ function openProjectModal(id) {
         };
     }
 
-    modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
-    makeDraggable(modal);
+    // modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
+    // makeDraggable(modal); // Disabled dragging for Read More modal
 }
 
 async function loadPictures() {

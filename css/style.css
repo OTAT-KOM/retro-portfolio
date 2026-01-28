@@ -150,6 +150,24 @@ body.has-overlay-icons .agenda-container {
 
 }
 
+/* Title Bar Controls SVG Support */
+.title-bar-controls button {
+    min-width: 16px;
+    min-height: 14px;
+    padding: 0;
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-bar-controls button img, 
+.title-bar-controls button svg {
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+}
+
 .window-body {
     flex: 1 1 auto;        /* fill remaining height */
     min-height: 0;         /* 🔥 prevents phantom space */

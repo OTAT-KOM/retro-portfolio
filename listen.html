@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listen</title>
+    <title>Audio Project</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #800080;  
-            display: block;
-            padding: 20px;
-            overflow-y: auto;
-            position: relative;
+            background-color: #008080;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: var(--font-main, 'MS Sans Serif', monospace);
         }
 
-         
         .desktop-link {
             position: fixed;
             top: 20px;
@@ -43,49 +45,363 @@
             text-shadow: 1px 1px 0px black;
         }
 
-         
-        .listen-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 20px 20px 20px 120px;  
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Title Bar Controls */
+        .title-bar-controls button {
+            min-width: 16px;
+            min-height: 14px;
+            padding: 0;
+            margin-left: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .window.audio-window {
-            position: relative;
-            width: 100%;
+        .title-bar-controls button img, 
+        .title-bar-controls button svg {
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+        }
+
+        /* Menu Bar */
+        .menu-bar {
+            display: flex;
+            gap: 15px;
+            padding: 2px 10px;
+            background: #c0c0c0;
+            border-bottom: 1px solid #808080;
+            font-size: 14px;
+        }
+        
+        .menu-bar span {
+            cursor: pointer;
+        }
+        
+        .menu-bar span:hover {
+            background: navy;
+            color: white;
+        }
+
+        /* Header Section */
+        .spotify-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #c0c0c0;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            /* No border or background as requested */
+            image-rendering: pixelated;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-label {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .profile-name {
+            font-size: 48px;
+            margin: 0 0 10px 0;
+            font-weight: bold;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .profile-summary {
+            font-size: 12px;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .follow-btn {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            padding: 5px 30px; /* Wider button */
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #000;
+            min-width: 120px;
+        }
+        
+        .follow-btn:active {
+            border: 2px inset #fff;
+            transform: translate(1px, 1px);
+        }
+        
+        .arrow-btn {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            width: 30px;
+            font-family: inherit;
+            font-size: 10px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .arrow-btn:active {
+            border: 2px inset #fff;
+            transform: translate(1px, 1px);
+        }
+
+        .divider {
+            height: 2px;
+            background: #808080;
+            border-bottom: 1px solid #fff;
+            margin: 0 4px; /* Full width minus margins */
+        }
+
+        /* Playlists Section */
+        .playlists-section {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #c0c0c0;
+            margin: 0;
+        }
+
+        .playlists-section h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .playlist-item {
+            cursor: pointer;
+            padding: 0;
+            background: transparent;
             display: flex;
             flex-direction: column;
         }
 
-        .window-body {
+        .playlist-item:hover .playlist-title {
+            text-decoration: underline;
+        }
+
+        .playlist-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #000;
+            margin-bottom: 5px;
+            object-fit: cover;
+            border: 2px outset #fff;
+            box-shadow: 1px 1px 0 #000;
+        }
+
+        .playlist-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 4px;
+            color: #000;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Player Container */
+        .player-container {
+            background: #c0c0c0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Seek Bar (Top of player) */
+        .seek-bar {
+            width: 98%;
+            margin: 0 auto;
+            height: 20px;
+            -webkit-appearance: none;
+            background: transparent;
+            position: relative;
+            top: 5px; /* Overlap slightly or just sit on top */
+            z-index: 10;
+        }
+        
+        .seek-bar:focus {
+            outline: none;
+        }
+
+        .seek-bar::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            cursor: pointer;
+            background: #fff;
+            border: 2px inset #dfdfdf;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+            box-shadow: inset 1px 1px 0 #000;
+        }
+        
+        .seek-bar::-webkit-slider-thumb {
+            height: 20px;
+            width: 12px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px; 
+            box-shadow: 1px 1px 0 #000;
+        }
+
+        /* Player Controls (Bottom) */
+        .player-controls {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            box-sizing: border-box;
+            gap: 15px;
+        }
+
+        .current-track {
+            display: flex;
+            align-items: center;
+            width: 220px;
+            gap: 10px;
+        }
+
+        .current-cover {
+            width: 50px;
+            height: 50px;
+            background: #808080;
+            object-fit: cover;
+            border: 2px outset #fff; /* 3D border for cover */
+        }
+
+        .track-details {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .track-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .track-artist {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .main-controls {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            padding: 10px;
-            background: #c0c0c0;
+            gap: 20px;
+            justify-content: flex-start; /* Align to left */
             align-items: center;
-            text-align: center;
         }
 
-        .spotify-container {
-            width: 100%;
-            height: 352px;  
-            background: #000;
-            border: 2px inset white;
+        .control-group {
+            display: flex;
+            gap: 2px; /* Tightly packed buttons */
+            background: #c0c0c0;
+            padding: 2px;
+            border: 2px outset #fff; /* Group container border */
         }
 
-        .spotify-container iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
+        .control-btn {
+            width: 20px; /* Smaller width */
+            height: 20px; /* Smaller height */
+            font-size: 10px; /* Smaller icon size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #c0c0c0;
+            border: 1px outset #fff; /* Individual button border */
+            padding: 0;
+            color: #000;
+        }
+        
+        .control-btn:active {
+            border: 1px inset #fff;
+            padding-top: 1px;
+            padding-left: 1px;
         }
 
-        .track-info {
-            margin-bottom: 10px;
+        .volume-control {
+            width: 120px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            padding-right: 10px;
+        }
+        
+        /* Volume Triangle */
+        .volume-triangle-container {
+            width: 80px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Use a standard range for now, styling a triangle is complex in pure CSS without SVG/Canvas */
+        .volume-triangle {
             width: 100%;
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        
+        .volume-triangle::-webkit-slider-runnable-track {
+             height: 8px;
+             background: linear-gradient(to right, transparent 0%, #000 100%); /* Fake triangle effect */
+             border: 1px solid #808080;
+        }
+        
+        .volume-triangle::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 8px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            margin-top: -4px;
+            cursor: pointer;
+        }
+
+        /* Scrollbar styling for webkit */
+        ::-webkit-scrollbar {
+            width: 16px;
+            background: #dfdfdf;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+        ::-webkit-scrollbar-button {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            height: 16px;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 4L4 12h8z' fill='black'/%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        ::-webkit-scrollbar-button:vertical:increment {
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 12L4 4h8z' fill='black'/%3E%3C/svg%3E");
         }
     </style>
 </head>
@@ -95,18 +411,125 @@
         <div>Desktop</div>
     </div>
 
-    <div class="listen-grid" id="listen-grid">
-        
-        <div class="window audio-window">
-            <div class="title-bar">
-                <div class="title-bar-text">Loading...</div>
+    <div class="window" style="width: 90%; max-width: 1000px; height: 85vh; display: flex; flex-direction: column;">
+        <div class="title-bar">
+            <div class="title-bar-text">Spotify.exe</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize">
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <rect x="2" y="8" width="6" height="2" fill="black"/>
+                    </svg>
+                </button>
+                <button aria-label="Maximize">
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <path d="M1,1 H9 V9 H1 V1 M2,2 V8 H8 V2 H2" fill="black" fill-rule="evenodd"/>
+                    </svg>
+                </button>
+                <button aria-label="Close" onclick="">
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <path d="M1,1 L9,9 M9,1 L1,9" stroke="black" stroke-width="2"/>
+                    </svg>
+                </button>
             </div>
-            <div class="window-body">
-                <p>Loading music...</p>
+        </div>
+        
+        <!-- Menu Bar -->
+        <div class="menu-bar">
+            <span><u>H</u>ome</span>
+            <span><u>P</u>rofile</span>
+            <span><u>C</u>reate</span>
+            <span><u>S</u>ettings</span>
+            <span><u>H</u>elp</span>
+            <span><u>L</u>og out</span>
+        </div>
+        
+        <div class="window-body" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0; margin: 0;">
+            <!-- Header -->
+            <div class="spotify-header">
+                <img src="images/uploads/otatweb.png" class="profile-pic" id="profile-pic" onerror="this.src='images/icons/user.png'">
+                <div class="profile-info">
+                    <div class="profile-label">Profile</div>
+                    <h1 class="profile-name" id="profile-name">Audio Projects</h1>
+                    <div class="profile-summary" id="profile-summary">235 public playlists • 104 followers • 85 following [Follows you]</div>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="follow-btn" id="spotify-btn" onclick="window.open('https://open.spotify.com/artist/491mdcFHq3U4pW3imSwcyT?si=k1uVqZ1SQjqyNznvl3Jf_A')">Listen on Spotify</button>
+                        <button class="arrow-btn">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <path d="M2,3 L8,3 L5,7 Z" fill="black"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Projects Section -->
+            <div class="playlists-section">
+                <h2>Projects</h2>
+                <div class="playlist-grid" id="playlist-grid">
+                    <!-- Javascript will inject items here -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 20px;">Loading tracks...</div>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="player-container">
+                <input type="range" id="seek-bar" class="seek-bar" value="0" min="0" max="100">
+                
+                <div class="player-controls">
+                    <div class="current-track">
+                        <img src="" id="current-cover" class="current-cover" style="opacity: 0;">
+                        <div class="track-details">
+                            <div id="current-title" class="track-title"></div>
+                            <div id="current-artist" class="track-artist"></div>
+                        </div>
+                    </div>
+
+                    <div class="main-controls">
+                        <div class="control-group">
+                            <button class="control-btn" id="prev-btn" title="Previous">
+                                <svg width="10" height="10" viewBox="0 0 10 10">
+                                    <path d="M1,1 V9 H3 V1 Z M9,1 L4,5 L9,9 V1 Z" fill="black"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn" id="play-btn" title="Play">
+                                <svg width="10" height="10" viewBox="0 0 10 10">
+                                    <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
+                                </svg>
+                            </button>
+
+                            <button class="control-btn" id="stop-btn" title="Stop">
+                                <svg width="10" height="10" viewBox="0 0 10 10">
+                                    <rect x="1" y="1" width="8" height="8" fill="black"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn" id="next-btn" title="Next">
+                                <svg width="10" height="10" viewBox="0 0 10 10">
+                                    <path d="M1,1 L6,5 L1,9 V1 Z M7,1 V9 H9 V1 Z" fill="black"/>
+                                </svg>
+                            </button>
+                        </div>
+                            
+                            
+
+                    </div>
+
+                    <div class="volume-control">
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <path d="M1,5 V11 H5 L9,15 V1 L5,5 Z M11,5 Q13,8 11,11 M12.5,3.5 Q16,8 12.5,12.5" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1,5 V11 H5 L9,15 V1 L5,5 Z" fill="black" stroke="none"/>
+                        </svg>
+                        <div class="volume-triangle-container">
+                            <input type="range" id="volume-bar" class="volume-triangle" min="0" max="1" step="0.1" value="1">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <audio id="audio-player"></audio>
     <script src="js/main.js"></script>
 </body>
 </html>

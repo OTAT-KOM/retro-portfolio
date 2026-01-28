@@ -94,12 +94,16 @@ collections:
         label: "Listen (Music)"
         file: "data/listen.json"
         fields:
+          - {label: "Profile Name", name: "profile_name", widget: "string", default: "Audio Projects"}
+          - {label: "Profile Picture", name: "profile_image", widget: "image", default: "images/uploads/otatweb.png"}
+          - {label: "Profile Summary", name: "profile_summary", widget: "string", default: "235 public playlists • 104 followers • 85 following [Follows you]"}
+          - {label: "Spotify URL", name: "spotify_url", widget: "string", default: "https://open.spotify.com/artist/491mdcFHq3U4pW3imSwcyT?si=k1uVqZ1SQjqyNznvl3Jf_A"}
           - name: "items"
             label: "Tracks List"
             widget: "list"
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Artist", name: "artist", widget: "string"}
-              - {label: "Audio URL/Link (Spotify)", name: "audio_url", widget: "string", hint: "Paste Spotify Track/Album link here"}
-              - {label: "Cover Image", name: "cover_image", widget: "image", required: false}
+              - {label: "Cover Image", name: "cover", widget: "image"}
+              - {label: "Audio File", name: "audio", widget: "file"}
 
