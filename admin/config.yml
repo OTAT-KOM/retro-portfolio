@@ -24,6 +24,14 @@ collections:
               - {label: "Location", name: "location", widget: "string"}
               - {label: "Tickets", name: "tickets", widget: "string", default: "Doorsale only"}
               - {label: "Description", name: "body", widget: "markdown"}
+      - name: "booking"
+        label: "Booking Settings"
+        file: "data/booking.json"
+        fields:
+          - {label: "Page Title", name: "title", widget: "string", default: "Book an Appointment"}
+          - {label: "Instructions", name: "instructions", widget: "text"}
+          - {label: "Google Appointment URL", name: "booking_url", widget: "string", hint: "Paste your Google Calendar Appointment Schedule URL here"}
+
       - name: "about"
         label: "About / Contact"
         file: "data/about.json"

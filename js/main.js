@@ -86,6 +86,53 @@ async function loadEvents() {
     }
 }
 
+async function loadBooking() {
+    const container = document.getElementById('booking-container');
+    if (!container) return;
+
+    try {
+        const response = await fetch('data/booking.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load booking info');
+        const data = await response.json();
+
+        // Set title if exists
+        const titleEl = document.getElementById('booking-title');
+        if (titleEl && data.title) {
+            titleEl.textContent = data.title;
+        }
+
+        // Set instructions
+        const instructionsEl = document.getElementById('booking-instructions');
+        if (instructionsEl && data.instructions) {
+            instructionsEl.textContent = data.instructions;
+        }
+
+        // Set iframe
+        const iframeContainer = document.getElementById('booking-iframe-container');
+        if (iframeContainer) {
+            if (data.booking_url && data.booking_url.includes('http')) {
+                iframeContainer.innerHTML = `
+                    <iframe src="${data.booking_url}" style="border: 0" width="100%" height="600" frameborder="0" scrolling="yes"></iframe>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <button onclick="window.open('${data.booking_url}', '_blank', 'width=800,height=600')">Open in New Window</button>
+                    </div>
+                `;
+            } else {
+                iframeContainer.innerHTML = `
+                    <div style="padding: 20px; text-align: center; background: #fff; border: 2px inset #fff;">
+                        <p><strong>Booking System Not Configured</strong></p>
+                        <p>Please update the Booking URL in the CMS (admin panel).</p>
+                        <p>If you are the admin, go to /admin/ and edit "Booking Settings".</p>
+                    </div>
+                `;
+            }
+        }
+    } catch (error) {
+        console.error("Error loading booking:", error);
+        container.innerHTML = '<p>Error loading booking system.</p>';
+    }
+}
+
 function escapeHtml(text) {
   if (!text) return '';
   return text
@@ -115,6 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (document.getElementById('playlist-grid')) {
         loadListen();
+    }
+    if (document.getElementById('booking-container')) {
+        loadBooking();
     }
     
     ensureDesktopIcons();

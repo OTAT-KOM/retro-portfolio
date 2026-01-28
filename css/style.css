@@ -136,7 +136,8 @@ body.has-overlay-icons {
 body.has-overlay-icons .listen-grid,
 body.has-overlay-icons .watch-grid,
 body.has-overlay-icons .shop-grid,
-body.has-overlay-icons .agenda-container {
+body.has-overlay-icons .agenda-container,
+body.has-overlay-icons .agenda-layout {
     padding-left: 20px !important;
 }
 
