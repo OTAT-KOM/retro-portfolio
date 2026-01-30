@@ -40,12 +40,13 @@ collections:
           - {label: "Summary Title", name: "summary_title", widget: "string", default: "ABOUT OTAT"}
           - {label: "Summary Text", name: "summary_text", widget: "text"}
           - {label: "Contact Email", name: "contact_email", widget: "string"}
-          - {label: "Contact Phone", name: "contact_phone", widget: "string"}
-          - {label: "Instagram URL", name: "instagram_url", widget: "string"}
-          - {label: "TikTok URL", name: "tiktok_url", widget: "string"}
-          - {label: "LinkedIn URL", name: "linkedin_url", widget: "string"}
-          - {label: "YouTube URL", name: "youtube_url", widget: "string"}
-          - {label: "Spotify URL", name: "spotify_url", widget: "string"}
+          - name: "social_media"
+            label: "Social Media Links"
+            widget: "list"
+            fields:
+              - {label: "Name", name: "name", widget: "string"}
+              - {label: "URL", name: "url", widget: "string"}
+              - {label: "Icon", name: "icon", widget: "image"}
       - name: "note"
         label: "Note"
         file: "data/note.json"

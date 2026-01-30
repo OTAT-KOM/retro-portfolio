@@ -194,8 +194,8 @@ function ensureDesktopIcons() {
                 <div class="icon-label">Pictures</div>
             </div>
             <div class="icon icon-listen" onclick="window.location.href='listen.html'">
-                <img src="images/icons/cd_audio_cd_a-4.png" class="icon-img" alt="Listen">
-                <div class="icon-label">Listen</div>
+                <img src="images/icons/cd_audio_cd_a-4.png" class="icon-img" alt="Audio projects">
+                <div class="icon-label">Audio projects</div>
             </div>
             <div class="icon icon-watch" onclick="window.location.href='watch.html'">
                 <img src="images/icons/camera3_vid-4.png" class="icon-img" alt="Watch">
@@ -209,9 +209,9 @@ function ensureDesktopIcons() {
                 <img src="images/icons/notepad_file-2.png" class="icon-img" alt="Note">
                 <div class="icon-label">Note</div>
             </div>
-            <div class="icon icon-unknown" onclick="window.location.href='index.html'">
-                <img src="images/icons/file_eye.ico" class="icon-img" style="padding-left: 13px;" alt="??">
-                <div class="icon-label">??</div>
+            <div class="icon icon-unknown" onclick="window.location.href='index.html?tab=contact'">
+                <img src="images/icons/file_eye.ico" class="icon-img" style="padding-left: 13px;" alt="Contact">
+                <div class="icon-label">Contact</div>
             </div>
         </div>
     `;

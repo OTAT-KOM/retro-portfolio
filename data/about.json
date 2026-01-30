@@ -1,12 +1,33 @@
 {
-  "instagram_url": "https://instagram.com",
   "summary_image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
   "summary_text": "OTAT, a Moroccan rapper and documentary filmmaker hailing from Salé, now based in Amsterdam. He embarked on his musical journey with producer Al-haqiqi just two years ago, yet his poetic roots trace back to childhood. OTAT's rhythmic verses flow in Moroccan dialect, weaving together poignant and politically charged lyrics drawn from his life experiences both in Morocco and the diaspora.",
-  "tiktok_url": "https://tiktok.com",
-  "spotify_url": "https://spotify.com",
-  "linkedin_url": "https://linkedin.com",
-  "contact_phone": "012345678",
-  "youtube_url": "https://youtube.com",
+  "summary_title": "ABOUT OTAT",
   "contact_email": "contact@otat.com",
-  "summary_title": "ABOUT OTAT"
+  "social_media": [
+    {
+      "name": "Instagram",
+      "url": "https://instagram.com",
+      "icon": "images/icons/insta.svg"
+    },
+    {
+      "name": "TikTok",
+      "url": "https://tiktok.com",
+      "icon": "images/icons/tik.svg"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com",
+      "icon": "images/icons/directory_favorites-2.png"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://youtube.com",
+      "icon": "images/icons/youtube.svg"
+    },
+    {
+      "name": "Spotify",
+      "url": "https://spotify.com",
+      "icon": "images/icons/cd_audio_cd_a-4.png"
+    }
+  ]
 }
