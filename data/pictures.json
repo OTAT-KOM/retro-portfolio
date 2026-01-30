@@ -84,7 +84,7 @@
     {
       "id": "pic2",
       "type": "medium",
-      "title": "Concert 2",
+      "title": "Concert med",
       "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
       "summary": "A short summary of Concert 2.",
       "description": "Full description of Concert 2.\n\nAnother great performance.",
@@ -94,7 +94,7 @@
     {
       "id": "pic3",
       "type": "small",
-      "title": "Concert 2",
+      "title": "Concert large",
       "image": "images/uploads/chatgpt-image-22-mai-2025-00_31_56.png",
       "summary": "A short summary of Concert 2.",
       "description": "Full description of Concert 2.\n\nAnother great performance.",

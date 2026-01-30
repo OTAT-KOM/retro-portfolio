@@ -49,6 +49,7 @@
          
         .watch-grid {
             display: grid;
+            /* Default to auto-fill for smaller screens, but we'll override for large screens to cap at 3 */
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px; /* Reduced gap to prevent huge spaces */
             padding: 20px;  
@@ -56,6 +57,13 @@
             max-width: 1400px; /* Increased max-width */
             margin: auto;
             justify-content: center;
+        }
+
+        /* Force max 3 columns on larger screens to prevent 4+ columns */
+        @media (min-width: 1000px) {
+            .watch-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .window.video-window {

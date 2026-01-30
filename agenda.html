@@ -24,30 +24,45 @@
             margin: 0 auto;
             padding-left: 120px; /* Space for desktop icons */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         .window.booking-window {
             width: 100%;
             position: relative;
             box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            background: transparent;
+            padding: 0;
         }
 
         .booking-content {
-            padding: 15px;
-            background: #c0c0c0; /* Windows 98 Gray */
+            padding: 0;
+            background: white;
+            border: 8px solid #bdbdbdff;
+            box-sizing: border-box;
+            overflow: visible !important;
+            height: auto !important;
+            flex: none !important;
+            margin: 0;
         }
 
         .booking-instructions {
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 0;
             font-size: 18px;
             text-align: center;
         }
 
+        .info-content {
+            background: #bdbdbd !important;
+        }
+
         #booking-iframe-container {
-            background: white;
-            border: 2px inset #fff;
-            min-height: 600px;
+            /* background: white; */
+            /* border: 2px inset #fff; */
+            min-height: 900px; 
             position: relative;
             overflow: hidden;
         }
@@ -72,10 +87,27 @@
     </div>
 
     <div class="agenda-layout">
+        <!-- Info Window -->
+        <div class="window booking-window">
+            <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
+                <div class="title-bar-text" style="color: #e0e0e0;">Info</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body booking-content info-content">
+                <div id="booking-instructions" class="booking-instructions" style="margin-bottom: 0;">
+                    select a time ....
+                </div>
+            </div>
+        </div>
+
         <!-- Main Booking Section -->
         <div class="window booking-window" id="booking-container">
             <div class="title-bar">
-                <div class="title-bar-text" id="booking-title">Book an Appointment</div>
+                <div class="title-bar-text" id="booking-title" style="color: #e0e0e0;">Book an Appointment</div>
                 <div class="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
@@ -83,9 +115,6 @@
                 </div>
             </div>
             <div class="window-body booking-content">
-                <div id="booking-instructions" class="booking-instructions">
-                    Select a time slot below to book a meeting with us.
-                </div>
                 <div id="booking-iframe-container">
                     <p style="text-align:center; padding: 20px;">Loading booking system...</p>
                 </div>

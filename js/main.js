@@ -112,10 +112,7 @@ async function loadBooking() {
         if (iframeContainer) {
             if (data.booking_url && data.booking_url.includes('http')) {
                 iframeContainer.innerHTML = `
-                    <iframe src="${data.booking_url}" style="border: 0" width="100%" height="600" frameborder="0" scrolling="yes"></iframe>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <button onclick="window.open('${data.booking_url}', '_blank', 'width=800,height=600')">Open in New Window</button>
-                    </div>
+                    <iframe src="${data.booking_url}" style="border: 0" width="100%" height="900" frameborder="0" scrolling="no"></iframe>
                 `;
             } else {
                 iframeContainer.innerHTML = `
@@ -796,14 +793,27 @@ async function loadProjects() {
             if (!grid) return;
             
             const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('row-gap')) || 0;
+            const marginBottom = parseInt(window.getComputedStyle(item).getPropertyValue('margin-bottom')) || 0;
             
             // Reset grid row to auto to calculate natural height first
             item.style.gridRowEnd = 'auto';
             
             // Calculate required span
             const contentHeight = item.querySelector('.window-body').getBoundingClientRect().height + item.querySelector('.title-bar').getBoundingClientRect().height;
-            const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            
+            // If rowHeight is small (e.g., 1px), use simpler formula
+            // Height needed = contentHeight + marginBottom (since rowGap is usually 0 when using 1px rows + margin)
+            // Total height = span * rowHeight + (span - 1) * rowGap
+            // If rowGap is 0: Total height = span * rowHeight
+            // So span = Total height / rowHeight
+            
+            let rowSpan;
+            if (rowGap === 0) {
+                 rowSpan = Math.ceil((contentHeight + marginBottom) / rowHeight);
+            } else {
+                 rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            }
             
             item.style.gridRowEnd = "span " + rowSpan;
         };
@@ -1154,11 +1164,22 @@ async function loadPictures() {
         const resizeGridItem = (item) => {
             const grid = document.getElementById("desktop-area");
             if (!grid) return;
+            
             const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+            const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('row-gap')) || 0;
+            const marginBottom = parseInt(window.getComputedStyle(item).getPropertyValue('margin-bottom')) || 0;
+            
             item.style.gridRowEnd = 'auto';
+            
             const contentHeight = item.querySelector('.window-body').getBoundingClientRect().height + item.querySelector('.title-bar').getBoundingClientRect().height;
-            const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            
+            let rowSpan;
+            if (rowGap === 0) {
+                 rowSpan = Math.ceil((contentHeight + marginBottom) / rowHeight);
+            } else {
+                 rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            }
+            
             item.style.gridRowEnd = "span " + rowSpan;
         };
 
