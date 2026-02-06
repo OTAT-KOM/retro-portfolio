@@ -270,6 +270,11 @@
             text-align: center;
         }
         
+        .playlist-info {
+            width: 100%;
+            text-align: center;
+        }
+
         .playlist-artist {
             display: none; /* Remove artist */
         }
@@ -503,6 +508,523 @@
         ::-webkit-scrollbar-button:vertical:increment {
             background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 12L4 4h8z' fill='black'/%3E%3C/svg%3E");
         }
+        /* Mobile iOS 4 Music Theme */
+        @media (max-width: 768px) {
+            body {
+                background-color: #000 !important;
+                overflow: hidden !important;
+                display: block !important;
+                font-family: Helvetica, Arial, sans-serif !important;
+            }
+
+            .desktop-link { display: none !important; }
+            
+            .window {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                border: none !important;
+                background: #fff !important; /* List background */
+                display: flex !important;
+                flex-direction: column !important;
+                position: relative;
+            }
+
+            .title-bar, .menu-bar, .divider, .carousel-wrapper > button {
+                display: none !important;
+            }
+
+            /* --- iOS 4 Header --- */
+            .mobile-header {
+                display: flex !important;
+                height: 44px;
+                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%);
+                border-bottom: 1px solid #2d3642;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 10px;
+                flex-shrink: 0;
+                position: relative;
+                z-index: 100;
+            }
+
+            .mobile-header-title {
+                color: white;
+                font-weight: bold;
+                font-size: 20px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .mobile-back-btn {
+                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
+                border: 1px solid #24354b;
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                padding: 5px 10px;
+                font-size: 12px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                cursor: pointer;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+            }
+
+            .mobile-menu-btn {
+                color: white;
+                font-weight: bold;
+                font-size: 20px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                cursor: pointer;
+                padding: 0 5px;
+            }
+
+            /* --- Main List View --- */
+            .window-body {
+                padding: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 !important;
+                overflow: hidden !important;
+                background: #fff !important;
+            }
+
+            /* Hide Desktop/Old Headers */
+            .spotify-header {
+                display: none !important;
+            }
+
+            /* Reuse Playlists Section as List Container */
+            .playlists-section {
+                display: block !important;
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                flex: 1 !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .playlists-section h2 {
+                display: none !important;
+            }
+
+            .carousel-wrapper {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+
+            .playlist-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                width: 100% !important;
+                gap: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+            }
+
+            /* List Item Styling */
+            .playlist-item {
+                width: 100% !important;
+                flex: 0 0 60px !important; /* Fixed row height */
+                flex-direction: row !important;
+                padding: 5px 10px !important;
+                box-sizing: border-box !important;
+                border-bottom: 1px solid #e0e0e0 !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                background: white !important;
+                min-height: 60px;
+            }
+            
+            .playlist-item:active {
+                background: #1976d2 !important; /* Selection Blue */
+            }
+            .playlist-item:active .playlist-title,
+            .playlist-item:active .playlist-artist {
+                color: white !important;
+            }
+
+            .playlist-cover {
+                width: 50px !important;
+                height: 50px !important;
+                margin-right: 15px !important;
+                margin-bottom: 0 !important;
+                border: 1px solid #ccc !important;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+            }
+            
+            .playlist-info {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                overflow: hidden !important;
+                text-align: left !important;
+            }
+
+            .playlist-title {
+                flex: 1 !important;
+                text-align: left !important;
+                font-size: 16px !important;
+                font-weight: bold !important;
+                color: black !important;
+                margin: 0 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            
+            .playlist-artist {
+                display: block !important;
+                font-size: 12px !important;
+                color: #8e8e93 !important;
+                margin-top: 2px !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            
+            /* Add Chevron via Pseudo-element */
+            .playlist-item::after {
+                content: '›';
+                color: #ccc;
+                font-size: 24px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+            /* --- Player Container (Hidden in List View, Shown in Full View) --- */
+            .player-container {
+                display: none !important; /* Hidden by default in List View */
+            }
+
+            /* --- Mini Player Bar --- */
+            .mobile-mini-player {
+                display: flex !important;
+                height: 50px;
+                background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+                border-top: 1px solid #a0a0a0;
+                align-items: center;
+                padding: 0 10px;
+                flex-shrink: 0;
+                cursor: pointer;
+                position: relative;
+                z-index: 200;
+                padding-bottom: env(safe-area-inset-bottom);
+                height: calc(50px + env(safe-area-inset-bottom));
+                box-sizing: border-box;
+            }
+            
+            .mobile-mini-player.hidden {
+                display: none !important;
+            }
+
+            .mini-cover {
+                width: 36px;
+                height: 36px;
+                border: 1px solid #aaa;
+                background: #888;
+                margin-right: 10px;
+                margin-bottom: env(safe-area-inset-bottom);
+                object-fit: cover;
+            }
+
+            .mini-info {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                overflow: hidden;
+                margin-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mini-title {
+                font-size: 14px;
+                font-weight: bold;
+                color: black;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mini-artist {
+                font-size: 11px;
+                color: #666;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mini-controls {
+                display: flex;
+                align-items: center;
+                margin-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mini-play-btn {
+                background: transparent;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            /* --- Full Player Mode (Activated via Class on Body or Window) --- */
+            body.full-player-active .playlists-section,
+            body.full-player-active .mobile-mini-player {
+                display: none !important;
+            }
+
+            body.full-player-active .mobile-header {
+                /* iOS 4 Standard Blue Gradient Header */
+                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%) !important;
+                border-bottom: 1px solid #2d3642 !important;
+                box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset !important;
+            }
+
+            body.full-player-active .player-container {
+                display: flex !important;
+                flex: 1;
+                flex-direction: column;
+                /* Light gray background with a soft gradient */
+                background: linear-gradient(to bottom, #f2f2f2 0%, #d4d4d4 100%) !important;
+                padding: 10px 20px;
+                justify-content: flex-start !important;
+                gap: 10px;
+                position: relative;
+                overflow-y: auto !important;
+            }
+            
+            body.full-player-active .mobile-header-title {
+                content: "Now Playing"; 
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5) !important;
+            }
+
+            /* Layout Reordering via Flexbox to match "Seek bar above artwork" if needed, 
+               but user said "Seek bar above artwork", which matches current DOM (Seek -> Controls(Art)). 
+               However, usually Art is top. Let's try to make it look balanced.
+               Actually, if Seek is top, it looks like a timeline.
+               Let's try to put Art FIRST, then Seek, then Controls? 
+               User said: "Thin iOS-style seek bar above the artwork". 
+               I will stick to that instruction literally: Seek Bar -> Artwork.
+            */
+
+            /* --- Flatten Structure for Flexible Reordering --- */
+            body.full-player-active .player-controls,
+            body.full-player-active .current-track,
+            body.full-player-active .track-details {
+                display: contents !important;
+            }
+
+            /* 1. Artwork */
+            body.full-player-active .current-cover {
+                order: 1 !important;
+                width: 260px !important;
+                height: 260px !important;
+                max-width: 70vw !important;
+                max-height: 70vw !important;
+                border: 1px solid rgba(0,0,0,0.2) !important;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+                border-radius: 4px;
+                display: block !important;
+                opacity: 1 !important;
+                background: #000 !important;
+                margin: 20px auto 15px auto !important; /* Centered */
+            }
+
+            /* 2. Title */
+            body.full-player-active .track-title {
+                order: 2 !important;
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 18px !important;
+                font-weight: bold !important;
+                color: #000 !important;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.8) !important;
+                text-align: center !important;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            /* 3. Seek Bar (Timeline) - iOS 4 Blue Glossy Style */
+            body.full-player-active .seek-bar-wrapper {
+                order: 3 !important;
+                width: 90% !important;
+                margin: 10px auto 0 auto !important;
+                height: 10px !important;
+                /* Inset Metallic Track */
+                background: linear-gradient(to bottom, #a0a0a0 0%, #d0d0d0 100%) !important;
+                border: 1px solid #666 !important;
+                border-bottom: 1px solid #fff !important; /* Highlight */
+                border-radius: 5px;
+                box-shadow: inset 0 2px 3px rgba(0,0,0,0.4);
+                position: relative;
+                overflow: visible !important;
+            }
+
+            body.full-player-active .seek-fill {
+                /* Classic iOS Blue Glass Gradient */
+                background: linear-gradient(to bottom, #aed9f9 0%, #76bdf5 49%, #299ae9 50%, #0886e3 100%) !important;
+                border-radius: 4px;
+                border: 1px solid #1c6ba5;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+                height: 8px !important; /* Fit inside wrapper */
+                top: 0 !important;
+                left: 0 !important;
+            }
+
+            body.full-player-active .seek-bar::-webkit-slider-thumb {
+                -webkit-appearance: none !important;
+                /* Silver Knob */
+                background: radial-gradient(circle at 50% 30%, #fff 0%, #bbb 100%) !important;
+                border: 1px solid #777 !important;
+                width: 22px !important;
+                height: 22px !important;
+                border-radius: 50% !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+                margin-top: -6px !important;
+                position: relative;
+                z-index: 10;
+            }
+
+            /* 4. Time Labels */
+            body.full-player-active .time-labels {
+                order: 4 !important;
+                width: 90% !important;
+                margin: 8px auto 10px auto !important;
+                display: flex;
+                justify-content: space-between;
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 11px;
+                font-weight: bold;
+                color: #333;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+            }
+
+            /* 5. Artist (Under Timeline) */
+            body.full-player-active .track-artist {
+                order: 5 !important;
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 14px !important;
+                color: #555 !important;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.6) !important;
+                text-align: center !important;
+                width: 100%;
+                margin-bottom: 25px;
+                font-weight: normal !important;
+            }
+
+            /* 6. Buttons - Redesigned to Silver/White Glossy */
+            body.full-player-active .main-controls {
+                order: 6 !important;
+                width: 100% !important;
+                justify-content: center !important;
+                gap: 30px !important;
+                margin-bottom: 25px;
+            }
+            
+            body.full-player-active .control-btn {
+                width: 60px !important;
+                height: 40px !important;
+                border-radius: 6px !important;
+                /* Silver/White Glossy Gradient */
+                background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 50%, #e0e0e0 51%, #d0d0d0 100%) !important;
+                border: 1px solid #999 !important;
+                box-shadow: 
+                    inset 0 1px 0 rgba(255,255,255,1), 
+                    0 1px 2px rgba(0,0,0,0.2) !important;
+                color: #333 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            body.full-player-active .control-btn:active {
+                background: linear-gradient(to bottom, #d0d0d0 0%, #e0e0e0 100%) !important;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.3) !important;
+            }
+            
+            body.full-player-active .control-btn svg {
+                fill: #333 !important;
+                filter: drop-shadow(0 1px 0 rgba(255,255,255,0.8));
+                width: 16px !important;
+                height: 16px !important;
+            }
+            
+            body.full-player-active #play-btn {
+                width: 70px !important; /* Play button wider */
+            }
+
+            /* 7. Volume - iOS 4 Silver Slider */
+            body.full-player-active .volume-control {
+                order: 7 !important;
+                width: 90% !important; /* Slightly reduced container width for padding */
+                margin: 0 auto 20px auto !important;
+                justify-content: center !important;
+                gap: 15px !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            body.full-player-active .volume-triangle-container {
+                width: auto !important;
+                flex: 1 !important; /* Take remaining space */
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            body.full-player-active .volume-control svg {
+                stroke: #666 !important;
+                fill: #666 !important;
+                filter: drop-shadow(0 1px 0 rgba(255,255,255,0.6));
+                flex-shrink: 0 !important;
+            }
+
+            body.full-player-active .volume-triangle {
+                width: 100% !important;
+            }
+
+            body.full-player-active .volume-triangle::-webkit-slider-runnable-track {
+                height: 6px;
+                background: linear-gradient(to bottom, #b0b0b0 0%, #e0e0e0 100%) !important;
+                border: 1px solid #888;
+                border-bottom: 1px solid #fff;
+                border-radius: 3px;
+                box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+                width: 100% !important;
+            }
+            
+            body.full-player-active .volume-triangle::-webkit-slider-thumb {
+                -webkit-appearance: none !important;
+                background: radial-gradient(circle at 50% 30%, #fff 0%, #bbb 100%) !important;
+                border: 1px solid #888 !important;
+                width: 18px !important;
+                height: 18px !important;
+                border-radius: 50% !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+                margin-top: -6px !important;
+            }
+            
+            body.full-player-active .volume-control svg {
+                stroke: #666 !important;
+                fill: #666 !important;
+            }
+            
+            body.full-player-active .volume-triangle::-webkit-slider-runnable-track {
+                background: linear-gradient(to right, transparent 0%, #aaa 100%) !important;
+                border: 1px solid #999;
+            }
+            
+            body.full-player-active .volume-triangle::-webkit-slider-thumb {
+                background: #eee !important;
+                border: 1px solid #888;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
+        }
     </style>
 </head>
 <body>
@@ -512,6 +1034,13 @@
     </div>
 
     <div class="window" style="width: 90%; max-width: 1000px; height: auto; display: flex; flex-direction: column; margin: auto; position: relative; z-index: 100;">
+        <!-- iOS Mobile Header -->
+        <div class="mobile-header" style="display: none;">
+            <button class="mobile-back-btn" id="mobile-back-btn">Back</button>
+            <div class="mobile-header-title" id="mobile-header-title">Audio Projects</div>
+            <div class="mobile-menu-btn" style="opacity: 0.5;">•••</div>
+        </div>
+
         <div class="title-bar">
             <div class="title-bar-text">Spotify.exe</div>
             <div class="title-bar-controls">
@@ -589,6 +1118,12 @@
                     <div id="seek-fill" class="seek-fill"></div>
                     <input type="range" id="seek-bar" class="seek-bar" value="0" min="0" max="100" step="0.01">
                 </div>
+                
+                <!-- Time Labels for Mobile -->
+                <div class="time-labels">
+                    <span id="mobile-current-time">0:00</span>
+                    <span id="mobile-total-time">-:--</span>
+                </div>
 
                 <div class="player-controls">
                     <div class="current-track">
@@ -640,10 +1175,144 @@
                 </div>
             </div>
         </div>
+
+        <!-- iOS Mobile Mini Player -->
+        <div class="mobile-mini-player hidden" id="mobile-mini-player" style="display: none;">
+            <img src="" class="mini-cover" id="mini-cover">
+            <div class="mini-info">
+                <div class="mini-title" id="mini-title">Unknown Title</div>
+                <div class="mini-artist" id="mini-artist">Unknown Artist</div>
+            </div>
+            <div class="mini-controls">
+                <button class="mini-play-btn" id="mini-play-btn">
+                    <svg width="12" height="12" viewBox="0 0 10 10">
+                        <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
     
 
     <audio id="audio-player"></audio>
     <script src="js/main.js"></script>
+    <script>
+        // iOS Mobile Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const isMobile = () => window.innerWidth <= 768;
+            const body = document.body;
+            const mobileBackBtn = document.getElementById('mobile-back-btn');
+            const mobileHeaderTitle = document.getElementById('mobile-header-title');
+            const miniPlayer = document.getElementById('mobile-mini-player');
+            const miniCover = document.getElementById('mini-cover');
+            const miniTitle = document.getElementById('mini-title');
+            const miniArtist = document.getElementById('mini-artist');
+            const miniPlayBtn = document.getElementById('mini-play-btn');
+            
+            const mainPlayer = document.getElementById('audio-player');
+            const mainPlayBtn = document.getElementById('play-btn'); // The desktop/full player button
+            
+            // Sync Mini Player with Main Player
+            if (mainPlayer) {
+                // Update Play/Pause State
+                const updatePlayState = () => {
+                    const isPlaying = !mainPlayer.paused;
+                    if (miniPlayBtn) {
+                        miniPlayBtn.innerHTML = isPlaying ? 
+                            `<svg width="12" height="12" viewBox="0 0 10 10"><path d="M2,1 H4 V9 H2 Z M6,1 H8 V9 H6 Z" fill="black"/></svg>` :
+                            `<svg width="12" height="12" viewBox="0 0 10 10"><path d="M2,1 L9,5 L2,9 Z" fill="black"/></svg>`;
+                    }
+                    
+                    // Also ensure Mini Player is visible if we have a source
+                    if (mainPlayer.src && miniPlayer) {
+                        miniPlayer.classList.remove('hidden');
+                    }
+                };
+
+                mainPlayer.addEventListener('play', updatePlayState);
+                mainPlayer.addEventListener('pause', updatePlayState);
+                mainPlayer.addEventListener('ended', updatePlayState);
+
+                // Sync Metadata (Title, Cover)
+                // Since main.js updates the DOM directly (current-title, current-cover),
+                // we can observe those elements or just poll/hook into events.
+                // A MutationObserver on the main player's cover/title is reliable.
+                const currentTitleEl = document.getElementById('current-title');
+                const currentCoverEl = document.getElementById('current-cover');
+                const currentArtistEl = document.getElementById('current-artist');
+
+                const syncMetadata = () => {
+                    if (currentTitleEl && miniTitle) miniTitle.innerText = currentTitleEl.innerText;
+                    if (currentArtistEl && miniArtist) miniArtist.innerText = currentArtistEl.innerText;
+                    if (currentCoverEl && miniCover) miniCover.src = currentCoverEl.src;
+                };
+
+                if (currentTitleEl) {
+                    new MutationObserver(syncMetadata).observe(currentTitleEl, { childList: true, characterData: true, subtree: true });
+                }
+                if (currentCoverEl) {
+                    new MutationObserver(syncMetadata).observe(currentCoverEl, { attributes: true, attributeFilter: ['src'] });
+                }
+            }
+            
+            // Time Labels Logic
+            const currentTimeEl = document.getElementById('mobile-current-time');
+            const totalTimeEl = document.getElementById('mobile-total-time');
+            
+            const formatTime = (seconds) => {
+                if (!seconds || isNaN(seconds)) return "0:00";
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            };
+
+            if (mainPlayer) {
+                const updateTimeLabels = () => {
+                    if (currentTimeEl) currentTimeEl.innerText = formatTime(mainPlayer.currentTime);
+                    if (totalTimeEl && mainPlayer.duration) totalTimeEl.innerText = formatTime(mainPlayer.duration);
+                };
+                
+                mainPlayer.addEventListener('timeupdate', updateTimeLabels);
+                mainPlayer.addEventListener('loadedmetadata', updateTimeLabels);
+                mainPlayer.addEventListener('durationchange', updateTimeLabels);
+            }
+
+            // Mini Player Controls
+            if (miniPlayBtn) {
+                miniPlayBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent opening full player
+                    if (mainPlayer.paused) {
+                        mainPlayer.play();
+                    } else {
+                        mainPlayer.pause();
+                    }
+                });
+            }
+
+            // Open Full Player
+            if (miniPlayer) {
+                miniPlayer.addEventListener('click', () => {
+                    body.classList.add('full-player-active');
+                    if (mobileHeaderTitle) mobileHeaderTitle.innerText = "Now Playing";
+                    if (mobileBackBtn) mobileBackBtn.innerText = "List";
+                });
+            }
+
+            // Back Button Logic
+            if (mobileBackBtn) {
+                mobileBackBtn.addEventListener('click', () => {
+                    if (body.classList.contains('full-player-active')) {
+                        // Go back to List View
+                        body.classList.remove('full-player-active');
+                        if (mobileHeaderTitle) mobileHeaderTitle.innerText = "Audio Projects";
+                        if (mobileBackBtn) mobileBackBtn.innerText = "Back";
+                    } else {
+                        // Go back to Desktop (Home)
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
