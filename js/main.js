@@ -989,15 +989,15 @@ function openProjectModal(id) {
                     <!-- Main Media -->
                     <div id="media-view-${id}" style="
                         width: 100%; 
-                        background: black; 
-                        display: flex; 
-                        justify-content: center; 
-                        align-items: center;
                         height: 350px; /* Fixed height for consistency */
                         max-height: 50vh; /* Don't take up too much vertical space */
+                        min-height: 200px;
                         position: relative;
-                        overflow: hidden;
                         flex-shrink: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background: white; /* Transparent/White background */
                     ">
                         <!-- Media Injected Here -->
                     </div>
@@ -1164,11 +1164,15 @@ function openProjectModal(id) {
         
         // Render Main Media
         if (item.type === 'video') {
-            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
+            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; display:block; margin: 0 auto;"></video>`;
         } else {
             // Check mobile vs desktop for zoom interaction
             const cursorStyle = isMobile ? '' : 'cursor: zoom-in;';
-            mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; ${cursorStyle}" alt="${item.caption || 'Project Image'}">`;
+            const imgStyle = isMobile 
+                ? 'max-height:100%; max-width:100%; width:auto; height:auto; display:block; margin: 0 auto; object-fit: contain;' 
+                : 'max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;';
+            
+            mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="${imgStyle} ${cursorStyle}" alt="${item.caption || 'Project Image'}">`;
             
             if (!isMobile) {
                 const img = mediaView.querySelector('img');
