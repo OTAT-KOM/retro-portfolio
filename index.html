@@ -334,15 +334,82 @@
         </div>
     </div>
 
+    <!-- iOS 4 SMS Interface Container -->
+    <div id="ios-sms-app" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #dce0e6; z-index: 2000; flex-direction: column; font-family: Helvetica, Arial, sans-serif;">
+        <!-- Header -->
+        <div style="height: 44px; background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%); border-bottom: 1px solid #2d3642; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box; padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top));">
+            <button onclick="closeMobileAbout()" style="background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%); border: 1px solid #24354b; border-radius: 4px; color: white; font-weight: bold; padding: 6px 12px; font-size: 13px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);">Menu</button>
+            <div style="color: white; font-weight: bold; font-size: 20px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); padding-top: env(safe-area-inset-top);">About OTAT</div>
+            <div style="width: 50px;"></div> <!-- Spacer for balance -->
+        </div>
+
+        <!-- Messages Area -->
+        <div id="sms-container" style="flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+            <!-- Content injected via JS -->
+        </div>
+
+        <!-- Input Area (Mock) -->
+        <div style="height: 44px; background: url('images/ios-keyboard-bar.png') #dce0e6; border-top: 1px solid #aeb4bf; display: flex; align-items: center; padding: 0 10px; padding-bottom: env(safe-area-inset-bottom); height: calc(44px + env(safe-area-inset-bottom));">
+            <div style="flex: 1; height: 30px; background: white; border: 1px solid #999; border-radius: 15px; margin-right: 10px;"></div>
+            <button style="background: linear-gradient(to bottom, #93a5ce 0%, #6885b6 50%, #5676ad 51%, #7992c1 100%); border: 1px solid #3e5684; border-radius: 15px; color: white; font-weight: bold; padding: 4px 12px; font-size: 14px; text-shadow: 0 -1px 0 rgba(0,0,0,0.3);">Send</button>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
     <script>
-        function showMobileAbout(e) {
+        async function showMobileAbout(e) {
             e.preventDefault();
-            document.getElementById('mobile-menu').style.display = 'none';
-            const win = document.querySelector('.page-window');
-            win.style.display = 'flex';
-            // Ensure window is styled for mobile
-            win.classList.add('mobile-view');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenu) mobileMenu.style.display = 'none';
+            
+            const smsApp = document.getElementById('ios-sms-app');
+            smsApp.style.display = 'flex';
+            
+            const container = document.getElementById('sms-container');
+            container.innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">Loading...</div>';
+
+            try {
+                const response = await fetch('data/about.json?t=' + Date.now());
+                const data = await response.json();
+                
+                // Construct Messages
+                container.innerHTML = `
+                    <div style="text-align: center; font-size: 11px; color: #8e8e93; font-weight: bold; margin-bottom: 5px;">Today 9:41 AM</div>
+                    
+                    <!-- Incoming Question (Gray Bubble) -->
+                    <div style="align-self: flex-start; max-width: 75%; position: relative; margin-left: 10px;">
+                        <div style="background: linear-gradient(#e5e5ea, #d0d0d6); border: 1px solid #c8c8cd; border-radius: 15px; padding: 8px 12px; font-size: 16px; color: black; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative;">
+                            Tell me about OTAT?
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Image (Green Bubble style container or just image) -->
+                    ${data.summary_image ? `
+                    <div style="align-self: flex-end; max-width: 70%; position: relative; margin-right: 10px; margin-top: 5px;">
+                         <div style="background: linear-gradient(#baf068, #86d036); border: 1px solid #7dc32b; border-radius: 15px; padding: 5px; box-shadow: 0 1px 1px rgba(0,0,0,0.1);">
+                            <img src="${data.summary_image}" style="width: 100%; border-radius: 10px; display: block;">
+                         </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Outgoing Response (Green Bubble) - Text -->
+                    <div style="align-self: flex-end; max-width: 80%; position: relative; margin-right: 10px; display: flex; flex-direction: column; align-items: flex-end;">
+                        <div style="background: linear-gradient(#baf068, #86d036); border: 1px solid #7dc32b; border-radius: 15px; padding: 8px 12px; font-size: 16px; color: black; box-shadow: 0 1px 1px rgba(0,0,0,0.1); text-shadow: 0 1px 0 rgba(255,255,255,0.3);">
+                            ${data.summary_text || "About OTAT..."}
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; font-size: 11px; color: #8e8e93; font-weight: bold; margin-top: 10px;">Read 9:42 AM</div>
+                `;
+
+            } catch(err) {
+                container.innerHTML = '<div style="text-align: center; color: red;">Error loading message.</div>';
+            }
+        }
+
+        function closeMobileAbout() {
+            document.getElementById('ios-sms-app').style.display = 'none';
+            document.getElementById('mobile-menu').style.display = 'flex'; // Show menu again? Or just hide app.
         }
 
         async function loadExtraContactLogic() {
