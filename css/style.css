@@ -197,6 +197,9 @@ body.has-overlay-icons .agenda-layout {
             align-items: flex-start; /* Align top */
             font-family: 'VT323', monospace;
             padding: 0 !important; /* Force reset padding */
+            /* Use dynamic viewport height for mobile browsers (iOS Safari address bar) */
+            height: 100dvh;
+            min-height: 100dvh;
         }
 
         /* Reset the persistent icons padding on mobile */
@@ -217,7 +220,11 @@ body.has-overlay-icons .agenda-layout {
             flex-direction: column;
             width: 100%;
             height: 100%;
-            padding: 2vh 4vw;
+            /* Add safe area insets for notched phones and bottom bars */
+            padding: 
+                max(2vh, env(safe-area-inset-top)) 
+                4vw 
+                max(2vh, env(safe-area-inset-bottom));
             box-sizing: border-box;
             color: white;
             font-family: 'VT323', monospace;
@@ -226,23 +233,28 @@ body.has-overlay-icons .agenda-layout {
 
         .mobile-header {
             font-size: 7vw;
-            margin-bottom: 5vh;
+            margin-bottom: 3vh;
             text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
             font-family: 'VT323', monospace;
             letter-spacing: 1px;
             display: flex;
             align-items: center;
             gap: 1vw;
+            /* Ensure header clears any status bar content */
+            margin-top: env(safe-area-inset-top, 0); 
         }
 
         .mobile-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            column-gap: 4vw;
-            row-gap: 4vh;
+            column-gap: 2vw; /* Reduced gap to fit larger icons */
+            row-gap: 3vh;
             flex: 1;
             align-content: flex-start;
-            padding: 0 2vw;
+            padding: 0 1vw; /* Reduced padding to maximize space */
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch;
+            justify-items: center; /* Center icons in their cells */
         }
 
         .mobile-icon {
@@ -253,13 +265,14 @@ body.has-overlay-icons .agenda-layout {
             color: white;
             text-align: center;
             position: relative;
+            width: 100%; /* Ensure full cell width usage */
         }
 
         .mobile-icon img {
-            width: 18vw;
-            height: 18vw;
-            max-width: 80px;
-            max-height: 80px;
+            width: 25vw; /* Increased from 18vw */
+            height: 25vw;
+            max-width: 120px; /* Increased limit */
+            max-height: 120px;
             margin-bottom: 1vh;
             image-rendering: pixelated;
             filter: drop-shadow(0 0.5vh 1vh rgba(0,0,0,0.3));
