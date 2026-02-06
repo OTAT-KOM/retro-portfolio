@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Video Projects</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #008080; /* Teal background */
+            margin: 0;
+            padding: 0;
+            overflow-y: auto; /* Allow scrolling for extended grid */
+            overflow-x: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'MS Sans Serif', monospace;
+        }
+
+        #ios-header {
+            display: none;
+        }
+
+        /* iOS 6 Mobile Theme */
+        @media (max-width: 768px) {
+            body {
+                background-color: #c5ccd4 !important; /* iOS List Background */
+                font-family: Helvetica, Arial, sans-serif !important;
+                padding-top: env(safe-area-inset-top) !important;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            /* Hide Desktop Elements */
+            .desktop-link, 
+            .desktop-icons-overlay {
+                display: none !important;
+            }
+
+            /* iOS Header */
+            #ios-header {
+                display: flex !important;
+                align-items: center;
+                justify-content: space-between;
+                height: 44px;
+                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%);
+                border-bottom: 1px solid #2d3642;
+                padding: 0 8px;
+                position: relative;
+                z-index: 1000;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .ios-title {
+                color: white;
+                font-weight: bold;
+                font-size: 20px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .ios-back-btn {
+                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
+                border: 1px solid #24354b;
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                padding: 6px 12px;
+                font-size: 13px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                cursor: pointer;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+                text-decoration: none;
+                font-family: Helvetica, Arial, sans-serif;
+            }
+
+            .ios-back-btn:active {
+                background: linear-gradient(to bottom, #354a65 0%, #2b3f59 100%);
+            }
+
+            /* Transform Desktop Area to iOS List */
+            #desktop-area {
+                display: flex !important;
+                flex-direction: column !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                gap: 0 !important;
+                background: white;
+                overflow-y: auto;
+                height: calc(100vh - 44px - env(safe-area-inset-top));
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .window {
+                width: 100% !important;
+                display: flex;
+                flex-direction: row;
+                border: none !important;
+                border-bottom: 1px solid #e0e0e0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                padding: 10px !important;
+                background: white !important;
+                box-sizing: border-box;
+                height: auto !important;
+                min-height: 0 !important;
+            }
+
+            .window .title-bar {
+                display: none !important;
+            }
+
+            .window-body {
+                display: grid !important;
+                grid-template-columns: 80px 1fr !important;
+                grid-template-rows: min-content auto !important;
+                column-gap: 15px !important;
+                row-gap: 4px !important;
+                padding: 0 !important;
+                background: transparent !important;
+                width: 100%;
+                align-items: start !important;
+                border: none !important;
+                overflow: visible !important;
+                cursor: pointer; /* Ensure pointer cursor */
+                pointer-events: auto; /* Ensure clickable */
+            }
+
+            /* Thumbnail styling - Target the first div which usually contains the image/video */
+            .window-body > div:first-child {
+                grid-row: 1 / 3;
+                grid-column: 1;
+                width: 80px !important;
+                height: 80px !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: 1px solid #ccc !important;
+                flex-shrink: 0;
+                background: black;
+                position: relative !important;
+                overflow: hidden;
+            }
+            
+            .window-body > div:first-child img, 
+            .window-body > div:first-child video {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                border: none !important;
+            }
+
+            /* Text container */
+            .window-body > div:nth-child(2) {
+                grid-row: 1 / 3;
+                grid-column: 2;
+                display: flex;
+                flex-direction: column;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Title and Date */
+            .window-body h3 {
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 16px !important;
+                font-weight: bold !important;
+                color: black !important;
+                margin: 0 !important;
+                margin-top: 2px !important;
+                line-height: 1.2;
+            }
+
+            .window-body p {
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 13px !important;
+                color: #666 !important;
+                margin: 0 !important;
+                line-height: 1.3;
+            }
+            
+            .window-body p strong {
+                font-weight: normal !important;
+                color: #8e8e93 !important; /* iOS gray for date */
+                font-size: 12px !important;
+            }
+
+            /* Hide Read More button in list view, make whole row clickable? 
+               Or keep it but style it like an arrow? 
+               For now, let's keep it simple or hide it if we want pure list look.
+               Let's hide it and rely on the fact that users might click the image?
+               Actually, main.js binds the click to the button. 
+               We should probably make the whole row clickable or style the button minimally.
+            */
+            .read-more-btn {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                color: #007aff !important; /* iOS Blue */
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-weight: bold !important;
+                padding: 0 !important;
+                margin-top: 5px !important;
+                text-align: left !important;
+                font-size: 14px !important;
+                pointer-events: none; /* Let clicks pass through to container */
+            }
+        }
+        #desktop-area {
+            position: relative;
+            width: 95%;
+            max-width: 1400px;
+            height: auto;
+            min-height: 100%;
+            padding: 20px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-auto-rows: 1px; /* Granular rows for dynamic JS sizing */
+            align-items: start; 
+            row-gap: 0;
+            column-gap: 20px;
+            justify-content: center;
+        }
+
+        /* Force max 3 columns on larger screens with FIXED width */
+        @media (min-width: 1100px) {
+            #desktop-area {
+                grid-template-columns: repeat(3, minmax(300px, 350px));
+            }
+        }
+
+        .window {
+            position: relative;
+            width: 100%;
+            height: auto; /* Allow height to be determined by content */
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            /* min-height removed to allow grid-row to dictate height */
+        }
+
+        /* Window Sizes */
+        .window-large {
+            min-height: auto;
+            z-index: 10;
+        }
+        
+        @media (max-width: 600px) {
+            .window-large {
+                 /* No specific override needed for auto layout */
+            }
+        }
+
+        .window-medium {
+            min-height: 280px; /* Preserve original medium height roughly */
+            z-index: 5;
+        }
+
+        .window-small {
+            min-height: 220px; /* Preserve original small height roughly */
+            z-index: 2;
+        }
+
+        .window-content {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: 100%;
+        }
+
+        .project-media img, .project-media video {
+            width: 100%;
+            height: auto;
+            border: 2px inset #fff;
+            background: black;
+            display: block;
+        }
+        
+        .read-more-btn {
+            margin-top: auto;
+            align-self: flex-start;
+            min-width: 80px;
+        }
+    </style>
+        
+</head>
+<body>
+    <div id="ios-header">
+        <a href="index.html" class="ios-back-btn">Menu</a>
+        <div class="ios-title">Video Projects</div>
+        <div style="width: 40px;"></div> <!-- Spacer for balance -->
+    </div>
+
+    <div id="desktop-area">
+        <!-- Windows will be injected here by main.js -->
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Trigger project loading if we are on this page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof loadProjects === 'function') {
+                loadProjects();
+            }
+        });
+    </script>
+</body>
+</html>

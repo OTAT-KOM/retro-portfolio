@@ -181,7 +181,7 @@ function ensureDesktopIcons() {
     overlay.className = 'desktop-icons-overlay';
     overlay.innerHTML = `
         <div class="desktop-icons">
-            <div class="icon icon-shop" onclick="window.location.href='shop.html'">
+            <div class="icon icon-shop" onclick="window.location.href='videoprojects.html'">
                 <img src="images/icons/directory_favorites-3.png" class="icon-img" alt="Video Project">
                 <div class="icon-label">Video Project</div>
             </div>
@@ -752,7 +752,7 @@ async function loadProjects() {
 
             if (isLarge) {
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openProjectModal('${project.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative; background:black; border: 2px inset white; box-sizing:border-box;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:visible;">
                             ${titleDate}
@@ -764,7 +764,7 @@ async function loadProjects() {
             } else if (isMedium) {
                 // MEDIUM LAYOUT (Vertical Stack, Fixed Image Height)
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openProjectModal('${project.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:100%; height:200px; flex-shrink:0; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -776,7 +776,7 @@ async function loadProjects() {
             } else {
                 // SHORT LAYOUT (Side-by-Side) for Small items
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openProjectModal('${project.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:40%; flex-shrink:0; aspect-ratio:1/1; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -852,8 +852,12 @@ async function loadProjects() {
 }
 
 function openProjectModal(id) {
+    console.log('openProjectModal called for:', id);
     const project = window.allProjects ? window.allProjects.find(p => p.id === id) : null;
-    if (!project) return;
+    if (!project) {
+        console.error('Project not found:', id);
+        return;
+    }
     
     // Check if modal already exists
     const existing = document.getElementById(`modal-${id}`);
@@ -876,85 +880,245 @@ function openProjectModal(id) {
         mediaList.push(...project.gallery);
     }
 
-    const modal = document.createElement('div');
-    modal.className = 'window';
-    modal.id = `modal-${id}`;
-    modal.style.position = 'fixed';
-    modal.style.top = '50%';
-    modal.style.left = '50%';
-    modal.style.transform = 'translate(-50%, -50%)';
-    modal.style.width = '800px';
-    modal.style.maxWidth = '95%';
-    modal.style.height = 'auto';
-    modal.style.maxHeight = '85vh';
-    modal.style.overflow = 'hidden';
-    modal.style.setProperty('display', 'flex', 'important');
-    modal.style.flexDirection = 'column';
-    modal.style.zIndex = 9999;
-    modal.style.padding = '2px';
-    modal.style.background = '#ffffff';
-    modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-
     const descriptionHtml = project.description ? 
         project.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
         '<p>No detailed description available.</p>';
 
-    // Initial Render Structure
-    modal.innerHTML = `
-        <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
-            <div class="title-bar-text" style="color: #e0e0e0;">${project.title}</div>
-            <div class="title-bar-controls">
-                <button aria-label="Close"></button>
+    // Check for Mobile View (iOS 6 Voice Control Theme)
+    const isMobile = window.innerWidth <= 768;
+
+    const modal = document.createElement('div');
+    modal.className = isMobile ? 'ios-voice-modal' : 'window';
+    modal.id = `modal-${id}`;
+    
+    if (isMobile) {
+        // iOS 6 Standard Details View Theme Styles
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.zIndex = 10000;
+        modal.style.background = '#c5ccd4'; // Standard iOS list/detail background
+        modal.style.display = 'flex';
+        modal.style.flexDirection = 'column';
+        modal.style.overflow = 'hidden';
+        modal.style.fontFamily = 'Helvetica, Arial, sans-serif';
+        
+        // Mobile Layout Content
+        modal.innerHTML = `
+            <!-- Top Navigation Bar -->
+            <div style="
+                height: 44px;
+                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%);
+                border-bottom: 1px solid #2d3642;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 8px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                flex-shrink: 0;
+                position: relative;
+                z-index: 10;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top);
+                height: calc(44px + env(safe-area-inset-top));
+            ">
+                <!-- Back Button -->
+                <button id="close-btn-${id}" style="
+                    background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
+                    border: 1px solid #24354b;
+                    border-radius: 4px;
+                    color: white;
+                    font-weight: bold;
+                    padding: 6px 12px;
+                    font-size: 13px;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                    cursor: pointer;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+                    font-family: Helvetica, Arial, sans-serif;
+                    position: relative;
+                    z-index: 20;
+                ">Back</button>
+
+                <!-- Title -->
+                <div style="
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 60%;
+                    padding-top: env(safe-area-inset-top);
+                ">${project.title}</div>
+
+                <!-- Spacer -->
+                <div style="width: 50px;"></div>
             </div>
-        </div>
-        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 8px solid #bdbdbdff; box-sizing: border-box; flex-direction: column;">
-            <!-- Carousel Container -->
-            <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
+
+            <!-- Main Scrollable Content Area -->
+            <div style="
+                flex: 1; 
+                overflow-y: auto; 
+                -webkit-overflow-scrolling: touch; 
+                background: #c5ccd4;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            ">
+                <!-- Media Container (White Box) -->
+                <div style="
+                    background: white;
+                    border-radius: 8px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                    border: 1px solid #a0a0a0;
+                ">
+                    <!-- Main Media -->
+                    <div id="media-view-${id}" style="
+                        width: 100%; 
+                        background: black; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center;
+                        min-height: 200px;
+                    ">
+                        <!-- Media Injected Here -->
+                    </div>
+
+                    <!-- Thumbnails / Carousel Dots -->
+                    <div id="thumbnails-${id}" style="
+                        display: flex; 
+                        gap: 8px; 
+                        padding: 10px; 
+                        overflow-x: auto; 
+                        background: #f0f0f0;
+                        border-top: 1px solid #e0e0e0;
+                        justify-content: center;
+                    ">
+                        <!-- Thumbnails injected here -->
+                    </div>
+                </div>
+
+                <!-- Details Container (Grouped List Style) -->
+                <div style="
+                    background: white;
+                    border-radius: 8px;
+                    border: 1px solid #a0a0a0;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                    padding: 15px;
+                ">
+                    <h2 style="
+                        margin: 0 0 10px 0; 
+                        font-size: 18px; 
+                        color: black;
+                        font-family: Helvetica, Arial, sans-serif;
+                    ">${project.title}</h2>
+                    
+                    <p style="
+                        margin: 0 0 15px 0; 
+                        color: #8e8e93; 
+                        font-size: 14px;
+                    "><strong>Date:</strong> ${project.date}</p>
+                    
+                    <div style="
+                        font-size: 15px; 
+                        line-height: 1.4; 
+                        color: #000;
+                    ">
+                        ${descriptionHtml}
+                    </div>
+                </div>
                 
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <!-- Navigation Buttons (Left) -->
-                    ${mediaList.length > 1 ? `
-                        <button id="prev-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <span style="font-size: 10px;">&#9668;</span> Prev
-                        </button>
-                    ` : ''}
-
-                    <!-- Main Media View -->
-                    <div id="media-view-${id}" style="position: relative; height: 350px; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
-                        <!-- Media will be injected here -->
-                    </div>
-
-                    <!-- Navigation Buttons (Right) -->
-                    ${mediaList.length > 1 ? `
-                        <button id="next-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            Next <span style="font-size: 10px;">&#9658;</span>
-                        </button>
-                    ` : ''}
-                </div>
-
-                <!-- Thumbnails Strip -->
-                ${mediaList.length > 1 ? `
-                    <div id="thumbnails-${id}" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
-                        <!-- Thumbnails will be injected here -->
-                    </div>
-                ` : ''}
-
+                <!-- Bottom Spacer for safe area -->
+                <div style="height: env(safe-area-inset-bottom); width: 100%;"></div>
             </div>
+        `;
+    } else {
+        // Desktop Layout (Existing Windows 98 Style)
+        modal.style.position = 'fixed';
+        modal.style.top = '50%';
+        modal.style.left = '50%';
+        modal.style.transform = 'translate(-50%, -50%)';
+        modal.style.width = '800px';
+        modal.style.maxWidth = '95%';
+        modal.style.height = 'auto';
+        modal.style.maxHeight = '85vh';
+        modal.style.overflow = 'hidden';
+        modal.style.setProperty('display', 'flex', 'important');
+        modal.style.flexDirection = 'column';
+        modal.style.zIndex = 9999;
+        modal.style.padding = '2px';
+        modal.style.background = '#ffffff';
+        modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
 
-            <div style="background: #e0e0e0; padding: 15px; flex: 1;">
-                <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${project.title}</h2>
-                <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${project.date}</p>
-                <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
-                    ${descriptionHtml}
+        modal.innerHTML = `
+            <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
+                <div class="title-bar-text" style="color: #e0e0e0;">${project.title}</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Close"></button>
                 </div>
             </div>
-        </div>
-    `;
+            <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 8px solid #bdbdbdff; box-sizing: border-box; flex-direction: column;">
+                <!-- Carousel Container -->
+                <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
+                    
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <!-- Navigation Buttons (Left) -->
+                        ${mediaList.length > 1 ? `
+                            <button id="prev-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <span style="font-size: 10px;">&#9668;</span> Prev
+                            </button>
+                        ` : ''}
+
+                        <!-- Main Media View -->
+                        <div id="media-view-${id}" style="position: relative; height: 350px; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
+                            <!-- Media will be injected here -->
+                        </div>
+
+                        <!-- Navigation Buttons (Right) -->
+                        ${mediaList.length > 1 ? `
+                            <button id="next-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                Next <span style="font-size: 10px;">&#9658;</span>
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <!-- Thumbnails Strip -->
+                    ${mediaList.length > 1 ? `
+                        <div id="thumbnails-${id}" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+                            <!-- Thumbnails will be injected here -->
+                        </div>
+                    ` : ''}
+
+                </div>
+
+                <div style="background: #e0e0e0; padding: 15px; flex: 1;">
+                    <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${project.title}</h2>
+                    <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${project.date}</p>
+                    <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
+                        ${descriptionHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     document.body.appendChild(modal);
     
     // Close button functionality
-    modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
+    if (isMobile) {
+        document.getElementById(`close-btn-${id}`).onclick = () => modal.remove();
+    } else {
+        modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
+    }
     
     // Logic for Carousel
     let currentIndex = 0;
@@ -965,7 +1129,7 @@ function openProjectModal(id) {
 
     function updateCarousel() {
         if (mediaList.length === 0) {
-            mediaView.innerHTML = '<p>No media available</p>';
+            mediaView.innerHTML = '<p style="color:white;">No media available</p>';
             return;
         }
 
@@ -973,13 +1137,16 @@ function openProjectModal(id) {
         
         // Render Main Media
         if (item.type === 'video') {
-                mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
-            } else {
-                mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; cursor: zoom-in;" alt="${item.caption || 'Project Image'}">`;
-                
+            mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;"></video>`;
+        } else {
+            // Check mobile vs desktop for zoom interaction
+            const cursorStyle = isMobile ? '' : 'cursor: zoom-in;';
+            mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; ${cursorStyle}" alt="${item.caption || 'Project Image'}">`;
+            
+            if (!isMobile) {
                 const img = mediaView.querySelector('img');
                 img.addEventListener('click', function() {
-                    // Create full-screen overlay
+                    // Create full-screen overlay (Desktop Only)
                     const overlay = document.createElement('div');
                     overlay.style.position = 'fixed';
                     overlay.style.top = '0';
@@ -1008,17 +1175,20 @@ function openProjectModal(id) {
                     });
                 });
             }
+        }
 
-        // Render Thumbnails (Highlight active)
+        // Render Thumbnails (Both Desktop and Mobile)
         if (thumbContainer) {
             thumbContainer.innerHTML = mediaList.map((m, idx) => {
                 const isActive = idx === currentIndex;
+                // Adjust styles for mobile if needed
+                const size = isMobile ? '50px' : '60px';
                 const borderStyle = isActive ? 'border: 2px solid blue;' : 'border: 2px outset white;';
                 
                 if (m.type === 'video') {
                     return `
                         <div onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))" 
-                             style="width: 60px; height: 60px; background: black; ${borderStyle} display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                             style="width: ${size}; height: ${size}; flex-shrink: 0; background: black; ${borderStyle} display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
                             ▶
                         </div>
                     `;
@@ -1026,7 +1196,7 @@ function openProjectModal(id) {
                     return `
                         <img src="${m.src}" 
                              onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))"
-                             style="width: 60px; height: 60px; object-fit: cover; ${borderStyle} cursor: pointer;"
+                             style="width: ${size}; height: ${size}; flex-shrink: 0; object-fit: cover; ${borderStyle} cursor: pointer;"
                         >
                     `;
                 }
