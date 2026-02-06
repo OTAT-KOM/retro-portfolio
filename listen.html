@@ -704,21 +704,38 @@
                 display: none !important; /* Hidden by default in List View */
             }
 
-            /* --- Mini Player Bar --- */
+            /* --- Mini Player Bar (Fixed at Bottom) --- */
             .mobile-mini-player {
                 display: flex !important;
+                /* Use Fixed positioning to stick to viewport bottom */
+                position: fixed !important; 
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                
                 height: 50px;
                 background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
                 border-top: 1px solid #a0a0a0;
                 align-items: center;
                 padding: 0 10px;
-                flex-shrink: 0;
                 cursor: pointer;
-                position: relative;
-                z-index: 200;
+                z-index: 9999; /* Highest Z-Index */
+                
+                /* Handle Safe Areas for iPhone X+ and Browser Bars */
                 padding-bottom: env(safe-area-inset-bottom);
                 height: calc(50px + env(safe-area-inset-bottom));
                 box-sizing: border-box;
+                box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
+            }
+            
+            /* Add padding to the list container so the last item isn't hidden behind the fixed player */
+            .playlists-section {
+                padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important;
+            }
+            
+            /* Ensure Full Player covers the mini player when active */
+            body.full-player-active .mobile-mini-player {
+                display: none !important;
             }
             
             .mobile-mini-player.hidden {
