@@ -967,11 +967,14 @@ function openProjectModal(id) {
                 flex: 1; 
                 overflow-y: auto; 
                 -webkit-overflow-scrolling: touch; 
+                overscroll-behavior: contain;
                 background: #c5ccd4;
                 padding: 15px;
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
+                box-sizing: border-box;
+                width: 100%;
             ">
                 <!-- Media Container (White Box) -->
                 <div style="
