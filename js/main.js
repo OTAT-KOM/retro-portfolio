@@ -988,10 +988,27 @@ function openProjectModal(id) {
                         display: flex; 
                         justify-content: center; 
                         align-items: center;
-                        min-height: 200px;
+                        height: 350px; /* Fixed height for consistency */
+                        max-height: 50vh; /* Don't take up too much vertical space */
+                        position: relative;
+                        overflow: hidden;
                     ">
                         <!-- Media Injected Here -->
                     </div>
+
+                    <!-- Counter Overlay -->
+                    ${mediaList.length > 1 ? `
+                    <div id="counter-${id}" style="
+                        text-align: center;
+                        padding: 5px;
+                        font-size: 12px;
+                        color: #666;
+                        background: #f0f0f0;
+                        border-bottom: 1px solid #e0e0e0;
+                    ">
+                        Image 1 of ${mediaList.length}
+                    </div>
+                    ` : ''}
 
                     <!-- Thumbnails / Carousel Dots -->
                     <div id="thumbnails-${id}" style="
@@ -1212,6 +1229,41 @@ function openProjectModal(id) {
         currentIndex = e.detail;
         updateCarousel();
     });
+
+    // Mobile Swipe Support
+    if (isMobile) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const mediaContainer = document.getElementById(`media-view-${id}`);
+        
+        if (mediaContainer) {
+            mediaContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            mediaContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+        }
+
+        function handleSwipe() {
+            const threshold = 50; // min distance for swipe
+            if (touchEndX < touchStartX - threshold) {
+                // Swiped Left -> Next
+                if (mediaList.length > 1) {
+                    currentIndex = (currentIndex + 1) % mediaList.length;
+                    updateCarousel();
+                }
+            } else if (touchEndX > touchStartX + threshold) {
+                // Swiped Right -> Prev
+                if (mediaList.length > 1) {
+                    currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
+                    updateCarousel();
+                }
+            }
+        }
+    }
 
     if (prevBtn) {
         prevBtn.onclick = () => {
