@@ -983,6 +983,8 @@ function openProjectModal(id) {
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                     overflow: hidden;
                     border: 1px solid #a0a0a0;
+                    display: flex;
+                    flex-direction: column;
                 ">
                     <!-- Main Media -->
                     <div id="media-view-${id}" style="
@@ -995,6 +997,7 @@ function openProjectModal(id) {
                         max-height: 50vh; /* Don't take up too much vertical space */
                         position: relative;
                         overflow: hidden;
+                        flex-shrink: 0;
                     ">
                         <!-- Media Injected Here -->
                     </div>
@@ -1008,6 +1011,7 @@ function openProjectModal(id) {
                         color: #666;
                         background: #f0f0f0;
                         border-bottom: 1px solid #e0e0e0;
+                        flex-shrink: 0;
                     ">
                         Image 1 of ${mediaList.length}
                     </div>
@@ -1021,7 +1025,10 @@ function openProjectModal(id) {
                         overflow-x: auto; 
                         background: #f0f0f0;
                         border-top: 1px solid #e0e0e0;
-                        justify-content: center;
+                        justify-content: flex-start; /* Changed from center to allow scrolling start */
+                        flex-shrink: 0;
+                        -webkit-overflow-scrolling: touch;
+                        min-height: 70px; /* Ensure space for thumbnails */
                     ">
                         <!-- Thumbnails injected here -->
                     </div>
