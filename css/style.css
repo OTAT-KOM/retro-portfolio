@@ -220,11 +220,11 @@ body.has-overlay-icons .agenda-layout {
             flex-direction: column;
             width: 100%;
             height: 100%;
-            /* Add safe area insets for notched phones and bottom bars */
+            /* Add extra safe area padding for browser bars */
             padding: 
-                max(2vh, env(safe-area-inset-top)) 
+                max(4vh, env(safe-area-inset-top)) 
                 4vw 
-                max(2vh, env(safe-area-inset-bottom));
+                max(8vh, env(safe-area-inset-bottom)); /* Increased bottom padding */
             box-sizing: border-box;
             color: white;
             font-family: 'VT323', monospace;
@@ -247,14 +247,14 @@ body.has-overlay-icons .agenda-layout {
         .mobile-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            column-gap: 2vw; /* Reduced gap to fit larger icons */
+            column-gap: 2vw; 
             row-gap: 3vh;
             flex: 1;
             align-content: flex-start;
-            padding: 0 1vw; /* Reduced padding to maximize space */
+            padding: 0 1vw; 
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
-            justify-items: center; /* Center icons in their cells */
+            justify-items: center; 
         }
 
         .mobile-icon {
@@ -265,14 +265,14 @@ body.has-overlay-icons .agenda-layout {
             color: white;
             text-align: center;
             position: relative;
-            width: 100%; /* Ensure full cell width usage */
+            width: 100%; 
         }
 
         .mobile-icon img {
-            width: 25vw; /* Increased from 18vw */
-            height: 25vw;
-            max-width: 120px; /* Increased limit */
-            max-height: 120px;
+            width: 20vw; /* Reduced from 25vw */
+            height: 20vw;
+            max-width: 100px; /* Reduced limit */
+            max-height: 100px;
             margin-bottom: 1vh;
             image-rendering: pixelated;
             filter: drop-shadow(0 0.5vh 1vh rgba(0,0,0,0.3));
