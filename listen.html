@@ -781,14 +781,18 @@
             .mini-controls {
                 display: flex;
                 align-items: center;
+                gap: 5px; /* Spacing between buttons */
                 margin-bottom: env(safe-area-inset-bottom);
             }
 
-            .mini-play-btn {
+            .mini-control-btn {
                 background: transparent;
                 border: none;
                 padding: 10px;
                 cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             /* --- Full Player Mode (Activated via Class on Body or Window) --- */
@@ -1201,9 +1205,19 @@
                 <div class="mini-artist" id="mini-artist">Unknown Artist</div>
             </div>
             <div class="mini-controls">
-                <button class="mini-play-btn" id="mini-play-btn">
+                <button class="mini-control-btn" id="mini-prev-btn">
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <path d="M1,1 V9 H3 V1 Z M9,1 L4,5 L9,9 V1 Z" fill="black"/>
+                    </svg>
+                </button>
+                <button class="mini-control-btn" id="mini-play-btn">
                     <svg width="12" height="12" viewBox="0 0 10 10">
                         <path d="M2,1 L9,5 L2,9 Z" fill="black"/>
+                    </svg>
+                </button>
+                <button class="mini-control-btn" id="mini-next-btn">
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                        <path d="M1,1 L6,5 L1,9 V1 Z M7,1 V9 H9 V1 Z" fill="black"/>
                     </svg>
                 </button>
             </div>
@@ -1225,9 +1239,13 @@
             const miniTitle = document.getElementById('mini-title');
             const miniArtist = document.getElementById('mini-artist');
             const miniPlayBtn = document.getElementById('mini-play-btn');
+            const miniPrevBtn = document.getElementById('mini-prev-btn');
+            const miniNextBtn = document.getElementById('mini-next-btn');
             
             const mainPlayer = document.getElementById('audio-player');
             const mainPlayBtn = document.getElementById('play-btn'); // The desktop/full player button
+            const mainPrevBtn = document.getElementById('prev-btn');
+            const mainNextBtn = document.getElementById('next-btn');
             
             // Sync Mini Player with Main Player
             if (mainPlayer) {
@@ -1243,6 +1261,13 @@
                     // Also ensure Mini Player is visible if we have a source
                     if (mainPlayer.src && miniPlayer) {
                         miniPlayer.classList.remove('hidden');
+                    }
+
+                    // Auto-open Full Player on Play (Mobile Only)
+                    if (isPlaying && isMobile() && !body.classList.contains('full-player-active')) {
+                         body.classList.add('full-player-active');
+                         if (mobileHeaderTitle) mobileHeaderTitle.innerText = "Now Playing";
+                         if (mobileBackBtn) mobileBackBtn.innerText = "List";
                     }
                 };
 
@@ -1303,6 +1328,20 @@
                     } else {
                         mainPlayer.pause();
                     }
+                });
+            }
+
+            if (miniPrevBtn) {
+                miniPrevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    if (mainPrevBtn) mainPrevBtn.click();
+                });
+            }
+
+            if (miniNextBtn) {
+                miniNextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    if (mainNextBtn) mainNextBtn.click();
                 });
             }
 
