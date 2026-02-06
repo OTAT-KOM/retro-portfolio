@@ -176,9 +176,133 @@ body.has-overlay-icons .agenda-layout {
 
 }
 
+    /* Mobile Menu Styles */
+    #mobile-menu {
+        display: none;
+    }
 
+    @media (max-width: 768px) {
+        /* Hide desktop elements */
+        .desktop-link, 
+        .page-window,
+        .desktop-icons,
+        .recycle-bin,
+        body::before { 
+            display: none !important;
+        }
 
+        body {
+            background: linear-gradient(180deg, #004d4d 0%, #008080 30%, #00cc99 100%);
+            overflow: hidden;
+            align-items: flex-start; /* Align top */
+            font-family: 'VT323', monospace;
+            padding: 0 !important; /* Force reset padding */
+        }
 
+        /* Reset the persistent icons padding on mobile */
+        body.has-overlay-icons {
+            padding-left: 0 !important;
+        }
+        
+        body.has-overlay-icons .listen-grid,
+        body.has-overlay-icons .watch-grid,
+        body.has-overlay-icons .shop-grid,
+        body.has-overlay-icons .agenda-container,
+        body.has-overlay-icons .agenda-layout {
+            padding-left: 0 !important;
+        }
+
+        #mobile-menu {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 2vh 4vw;
+            box-sizing: border-box;
+            color: white;
+            font-family: 'VT323', monospace;
+            position: relative;
+        }
+
+        .mobile-header {
+            font-size: 7vw;
+            margin-bottom: 5vh;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+            font-family: 'VT323', monospace;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        .mobile-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 4vw;
+            row-gap: 4vh;
+            flex: 1;
+            align-content: flex-start;
+            padding: 0 2vw;
+        }
+
+        .mobile-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .mobile-icon img {
+            width: 18vw;
+            height: 18vw;
+            max-width: 80px;
+            max-height: 80px;
+            margin-bottom: 1vh;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0.5vh 1vh rgba(0,0,0,0.3));
+            transition: transform 0.1s;
+        }
+        
+        .mobile-icon:active img {
+            transform: scale(0.95);
+        }
+
+        .mobile-icon span {
+            font-size: 4.5vw;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            font-family: 'VT323', monospace;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .mobile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            padding-bottom: 2vh;
+            font-size: 8vw;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-family: 'VT323', monospace;
+            width: 100%;
+        }
+
+        /* Style page-window when shown on mobile (via JS) */
+        .page-window.mobile-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            margin: 0;
+            z-index: 1000;
+            display: flex !important; /* Override display: none from media query */
+        }
+    }
 
 
 .event-item {
@@ -209,5 +333,3 @@ body.has-overlay-icons .agenda-layout {
     line-height: 1.4;
     margin-bottom: 10px;
 }
-
-

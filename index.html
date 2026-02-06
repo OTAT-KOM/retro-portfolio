@@ -246,6 +246,49 @@
         <div>Desktop</div>
     </div>
 
+    <!-- Mobile Menu Container -->
+    <div id="mobile-menu">
+        <div class="mobile-header">▼ MENU</div>
+        <div class="mobile-grid">
+            <a href="pictures.html" class="mobile-icon">
+                <img src="images/icons/directory_open_file_mydocs-5.png" alt="Pictures">
+                <span>Pictures</span>
+            </a>
+            <a href="agenda.html" class="mobile-icon">
+                <img src="images/icons/calendar-1.png" alt="Agenda">
+                <span>Agenda</span>
+            </a>
+            <a href="shop.html" class="mobile-icon">
+                <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="The Shop">
+                <span>The Shop</span>
+            </a>
+            <a href="folder.html" class="mobile-icon">
+                <img src="images/icons/directory_favorites-2.png" alt="New Folder">
+                <span>New Folder</span>
+            </a>
+            <a href="watch.html" class="mobile-icon">
+                <img src="images/icons/camera3_vid-4.png" alt="Watch">
+                <span>Watch</span>
+            </a>
+            <a href="listen.html" class="mobile-icon">
+                <img src="images/icons/loudspeaker_rays_green-0.png" alt="Listen">
+                <span>Listen</span>
+            </a>
+            <a href="#" class="mobile-icon" onclick="showMobileAbout(event)">
+                <img src="images/icons/face.svg" alt="??">
+                <span>??</span>
+            </a>
+            <a href="note.html" class="mobile-icon">
+                <img src="images/icons/notepad_file-2.png" alt="Note">
+                <span>Note</span>
+            </a>
+        </div>
+        <div class="mobile-footer">
+            <span>Menu</span>
+            <span>Exit</span>
+        </div>
+    </div>
+
     <div class="window page-window">
         <div class="title-bar">
             <div class="title-bar-text">About</div>
@@ -293,10 +336,15 @@
 
     <script src="js/main.js"></script>
     <script>
-         
-         
-         
-        
+        function showMobileAbout(e) {
+            e.preventDefault();
+            document.getElementById('mobile-menu').style.display = 'none';
+            const win = document.querySelector('.page-window');
+            win.style.display = 'flex';
+            // Ensure window is styled for mobile
+            win.classList.add('mobile-view');
+        }
+
         async function loadExtraContactLogic() {
             try {
                 // Check URL params to switch tabs

@@ -629,16 +629,26 @@ async function loadAbout() {
             const btn = document.getElementById(id);
             if (btn && url) {
                 btn.onclick = () => window.open(url, '_blank');
+                btn.disabled = false;
+                btn.style.display = 'inline-block';
             } else if (btn) {
                 btn.disabled = true;
                 btn.style.display = 'none'; 
             }
         };
-        setBtn('btn-insta', data.instagram_url);
-        setBtn('btn-tiktok', data.tiktok_url);
-        setBtn('btn-twitter', data.linkedin_url); // Mapping LinkedIn URL to Twitter button for now, or use a new field
-        setBtn('btn-youtube', data.youtube_url);
-        setBtn('btn-spotify', data.spotify_url);
+
+        // Map social media list to specific buttons if they exist
+        const social = Array.isArray(data.social_media) ? data.social_media : [];
+        const findUrl = (name) => {
+            const item = social.find(s => s.name && s.name.toLowerCase().includes(name.toLowerCase()));
+            return item ? item.url : null;
+        };
+
+        setBtn('btn-insta', findUrl('instagram'));
+        setBtn('btn-tiktok', findUrl('tiktok'));
+        setBtn('btn-twitter', findUrl('twitter') || findUrl('x.com') || findUrl('linkedin'));
+        setBtn('btn-youtube', findUrl('youtube'));
+        setBtn('btn-spotify', findUrl('spotify'));
 
     } catch (e) {
         console.error('Error loading about:', e);
