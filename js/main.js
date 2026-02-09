@@ -854,37 +854,11 @@ async function loadProjects() {
     }
 }
 
-function openProjectModal(id) {
-    console.log('openProjectModal called for:', id);
-    const project = window.allProjects ? window.allProjects.find(p => p.id === id) : null;
-    if (!project) {
-        console.error('Project not found:', id);
-        return;
-    }
+function renderModal(item, mediaList) {
+    const id = item.id;
     
-    // Check if modal already exists
-    const existing = document.getElementById(`modal-${id}`);
-    if (existing) {
-        existing.style.display = 'block';
-        bringToFront(existing);
-        return;
-    }
-
-    // Collect all media items (Cover + Gallery)
-    const mediaList = [];
-    if (project.media_src) {
-        mediaList.push({
-            type: project.media_type || 'image',
-            src: project.media_src,
-            caption: 'Main Cover'
-        });
-    }
-    if (project.gallery && Array.isArray(project.gallery)) {
-        mediaList.push(...project.gallery);
-    }
-
-    const descriptionHtml = project.description ? 
-        project.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
+    const descriptionHtml = item.description ? 
+        item.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
         '<p>No detailed description available.</p>';
 
     // Check for Mobile View (iOS 6 Voice Control Theme)
@@ -959,7 +933,7 @@ function openProjectModal(id) {
                     text-overflow: ellipsis;
                     max-width: 60%;
                     padding-top: env(safe-area-inset-top);
-                ">${project.title}</div>
+                ">${item.title}</div>
 
                 <!-- Spacer -->
                 <div style="width: 50px;"></div>
@@ -1050,13 +1024,13 @@ function openProjectModal(id) {
                         font-size: 18px; 
                         color: black;
                         font-family: Helvetica, Arial, sans-serif;
-                    ">${project.title}</h2>
+                    ">${item.title}</h2>
                     
                     <p style="
                         margin: 0 0 15px 0; 
                         color: #8e8e93; 
                         font-size: 14px;
-                    "><strong>Date:</strong> ${project.date}</p>
+                    "><strong>Date:</strong> ${item.date}</p>
                     
                     <div style="
                         font-size: 15px; 
@@ -1091,7 +1065,7 @@ function openProjectModal(id) {
 
         modal.innerHTML = `
             <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
-                <div class="title-bar-text" style="color: #e0e0e0;">${project.title}</div>
+                <div class="title-bar-text" style="color: #e0e0e0;">${item.title}</div>
                 <div class="title-bar-controls">
                     <button aria-label="Close"></button>
                 </div>
@@ -1131,8 +1105,8 @@ function openProjectModal(id) {
                 </div>
 
                 <div style="background: #e0e0e0; padding: 15px; flex: 1;">
-                    <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${project.title}</h2>
-                    <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${project.date}</p>
+                    <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${item.title}</h2>
+                    <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${item.date}</p>
                     <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
                         ${descriptionHtml}
                     </div>
@@ -1170,45 +1144,43 @@ function openProjectModal(id) {
             mediaView.innerHTML = `<video src="${item.src}" controls autoplay style="max-height:100%; max-width:100%; width:auto; height:auto; display:block; margin: 0 auto;"></video>`;
         } else {
             // Check mobile vs desktop for zoom interaction
-            const cursorStyle = isMobile ? '' : 'cursor: zoom-in;';
+            const cursorStyle = 'cursor: zoom-in;';
             const imgStyle = isMobile 
                 ? 'max-height:100%; max-width:100%; width:auto; height:auto; display:block; margin: 0 auto; object-fit: contain;' 
                 : 'max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain;';
             
             mediaView.innerHTML = `<img src="${item.src}" class="zoomable-image" style="${imgStyle} ${cursorStyle}" alt="${item.caption || 'Project Image'}">`;
             
-            if (!isMobile) {
-                const img = mediaView.querySelector('img');
-                img.addEventListener('click', function() {
-                    // Create full-screen overlay (Desktop Only)
-                    const overlay = document.createElement('div');
-                    overlay.style.position = 'fixed';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100vw';
-                    overlay.style.height = '100vh';
-                    overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
-                    overlay.style.zIndex = '10000';
-                    overlay.style.display = 'flex';
-                    overlay.style.alignItems = 'center';
-                    overlay.style.justifyContent = 'center';
-                    overlay.style.cursor = 'zoom-out';
-                    
-                    const fullImg = document.createElement('img');
-                    fullImg.src = this.src;
-                    fullImg.style.maxWidth = '95%';
-                    fullImg.style.maxHeight = '95%';
-                    fullImg.style.objectFit = 'contain';
-                    fullImg.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-                    
-                    overlay.appendChild(fullImg);
-                    document.body.appendChild(overlay);
-                    
-                    overlay.addEventListener('click', () => {
-                        overlay.remove();
-                    });
+            const img = mediaView.querySelector('img');
+            img.addEventListener('click', function() {
+                // Create full-screen overlay
+                const overlay = document.createElement('div');
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.backgroundColor = 'rgba(0,0,0,0.95)';
+                overlay.style.zIndex = '20000'; // Higher than mobile modal (10000)
+                overlay.style.display = 'flex';
+                overlay.style.alignItems = 'center';
+                overlay.style.justifyContent = 'center';
+                overlay.style.cursor = 'zoom-out';
+                
+                const fullImg = document.createElement('img');
+                fullImg.src = this.src;
+                fullImg.style.maxWidth = '100%';
+                fullImg.style.maxHeight = '100%';
+                fullImg.style.objectFit = 'contain';
+                fullImg.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                
+                overlay.appendChild(fullImg);
+                document.body.appendChild(overlay);
+                
+                overlay.addEventListener('click', () => {
+                    overlay.remove();
                 });
-            }
+            });
         }
 
         // Render Thumbnails (Both Desktop and Mobile)
@@ -1300,6 +1272,38 @@ function openProjectModal(id) {
     // makeDraggable(modal); // Disabled dragging for Read More modal
 }
 
+function openProjectModal(id) {
+    console.log('openProjectModal called for:', id);
+    const project = window.allProjects ? window.allProjects.find(p => p.id === id) : null;
+    if (!project) {
+        console.error('Project not found:', id);
+        return;
+    }
+    
+    // Check if modal already exists
+    const existing = document.getElementById(`modal-${id}`);
+    if (existing) {
+        existing.style.display = 'block';
+        bringToFront(existing);
+        return;
+    }
+
+    // Collect all media items (Cover + Gallery)
+    const mediaList = [];
+    if (project.media_src) {
+        mediaList.push({
+            type: project.media_type || 'image',
+            src: project.media_src,
+            caption: 'Main Cover'
+        });
+    }
+    if (project.gallery && Array.isArray(project.gallery)) {
+        mediaList.push(...project.gallery);
+    }
+
+    renderModal(project, mediaList);
+}
+
 async function loadPictures() {
     const desktop = document.getElementById('desktop-area');
     if (!desktop) return;
@@ -1361,7 +1365,7 @@ async function loadPictures() {
 
             if (isLarge) {
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openPictureModal('${item.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:100%; aspect-ratio:1/1; flex-shrink:0; overflow:hidden; position:relative; background:black; border: 2px inset white; box-sizing:border-box;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:visible;">
                             ${titleDate}
@@ -1373,7 +1377,7 @@ async function loadPictures() {
             } else if (isMedium) {
                 // MEDIUM LAYOUT (Vertical Stack, Fixed Image Height) - COPIED FROM PROJECTS
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openPictureModal('${item.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:column; overflow:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:100%; height:200px; flex-shrink:0; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -1385,7 +1389,7 @@ async function loadPictures() {
             } else {
                 // SHORT LAYOUT (Side-by-Side) for Small items - COPIED FROM PROJECTS
                 internalContent = `
-                    <div class="window-body" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0;">
+                    <div class="window-body" onclick="openPictureModal('${item.id}')" style="background-color:#fff; flex:1; display:flex; flex-direction:row; overflow:hidden; padding:6px; gap:6px; margin:0; cursor: pointer;">
                         ${mediaEl ? `<div style="width:40%; flex-shrink:0; aspect-ratio:1/1; border: 2px inset white;">${mediaEl}</div>` : ''}
                         <div style="flex:1; padding:0; display:flex; flex-direction:column; overflow:hidden;">
                             ${titleDate}
@@ -1480,171 +1484,5 @@ function openPictureModal(id) {
         mediaList.push(...item.gallery);
     }
 
-    const modal = document.createElement('div');
-    modal.className = 'window';
-    modal.id = `modal-${id}`;
-    modal.style.position = 'fixed';
-    modal.style.top = '50%';
-    modal.style.left = '50%';
-    modal.style.transform = 'translate(-50%, -50%)';
-    modal.style.width = '800px';
-    modal.style.maxWidth = '95%';
-    modal.style.height = 'auto';
-    modal.style.maxHeight = '85vh';
-    modal.style.overflow = 'hidden';
-    modal.style.setProperty('display', 'flex', 'important');
-    modal.style.flexDirection = 'column';
-    modal.style.zIndex = 9999;
-    modal.style.padding = '2px';
-    modal.style.background = '#ffffff';
-    modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-
-    const descriptionHtml = item.description ? 
-        item.description.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') : 
-        '<p>No detailed description available.</p>';
-
-    // Initial Render Structure
-    modal.innerHTML = `
-        <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
-            <div class="title-bar-text" style="color: #e0e0e0;">${item.title}</div>
-            <div class="title-bar-controls">
-                <button aria-label="Close"></button>
-            </div>
-        </div>
-        <div class="window-body" style="flex: 1; overflow-y: auto; overflow-x: hidden; background: white; margin: 0; border: 8px solid #bdbdbdff; box-sizing: border-box; flex-direction: column;">
-            <!-- Carousel Container -->
-            <div id="carousel-${id}" style="padding: 15px; margin-bottom: 0; text-align: center; position: relative; width: 100%; box-sizing: border-box;">
-                
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <!-- Navigation Buttons (Left) -->
-                    ${mediaList.length > 1 ? `
-                        <button id="prev-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <span style="font-size: 10px;">&#9668;</span> Prev
-                        </button>
-                    ` : ''}
-
-                    <!-- Main Media View -->
-                    <div id="media-view-${id}" style="position: relative; height: 350px; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent;">
-                        <!-- Media will be injected here -->
-                    </div>
-
-                    <!-- Navigation Buttons (Right) -->
-                    ${mediaList.length > 1 ? `
-                        <button id="next-btn-${id}" style="min-width: 80px; height: 30px; font-family: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            Next <span style="font-size: 10px;">&#9658;</span>
-                        </button>
-                    ` : ''}
-                </div>
-
-                <!-- Thumbnails Strip -->
-                ${mediaList.length > 1 ? `
-                    <div id="thumbnails-${id}" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
-                        <!-- Thumbnails will be injected here -->
-                    </div>
-                ` : ''}
-
-            </div>
-
-            <div style="background: #e0e0e0; padding: 15px; flex: 1;">
-                <h2 style="margin-top: 0; font-size: 22px; text-align:left;">${item.title}</h2>
-                <p style="margin-bottom: 10px; color: #555; text-align:left;"><strong>Date:</strong> ${item.date || 'N/A'}</p>
-                <div class="project-description" style="line-height: 1.5; font-size: 15px;  margin: 0 auto;">
-                    ${descriptionHtml}
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-    
-    // Close button functionality
-    modal.querySelector('button[aria-label="Close"]').onclick = () => modal.remove();
-    
-    // Logic for Carousel
-    let currentIndex = 0;
-    const mediaView = document.getElementById(`media-view-${id}`);
-    const thumbContainer = document.getElementById(`thumbnails-${id}`);
-    const prevBtn = document.getElementById(`prev-btn-${id}`);
-    const nextBtn = document.getElementById(`next-btn-${id}`);
-
-    function updateCarousel() {
-        if (mediaList.length === 0) {
-            mediaView.innerHTML = '<p>No media available</p>';
-            return;
-        }
-
-        const mItem = mediaList[currentIndex];
-        
-        // Render Main Media
-        mediaView.innerHTML = `<img src="${mItem.src}" class="zoomable-image" style="max-height:100%; max-width:100%; width:auto; height:auto; border:none; display:block; margin: 0 auto; object-fit: contain; cursor: zoom-in;" alt="${mItem.caption || 'Image'}">`;
-        
-        const img = mediaView.querySelector('img');
-        img.addEventListener('click', function() {
-            // Create full-screen overlay
-            const overlay = document.createElement('div');
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100vw';
-            overlay.style.height = '100vh';
-            overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
-            overlay.style.zIndex = '10000';
-            overlay.style.display = 'flex';
-            overlay.style.alignItems = 'center';
-            overlay.style.justifyContent = 'center';
-            overlay.style.cursor = 'zoom-out';
-            
-            const fullImg = document.createElement('img');
-            fullImg.src = this.src;
-            fullImg.style.maxWidth = '95%';
-            fullImg.style.maxHeight = '95%';
-            fullImg.style.objectFit = 'contain';
-            fullImg.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-            
-            overlay.appendChild(fullImg);
-            document.body.appendChild(overlay);
-            
-            overlay.addEventListener('click', () => {
-                overlay.remove();
-            });
-        });
-
-        // Render Thumbnails (Highlight active)
-        if (thumbContainer) {
-            thumbContainer.innerHTML = mediaList.map((m, idx) => {
-                const isActive = idx === currentIndex;
-                const borderStyle = isActive ? 'border: 2px solid blue;' : 'border: 2px outset white;';
-                
-                return `
-                    <img src="${m.src}" 
-                            onclick="document.getElementById('modal-${id}').dispatchEvent(new CustomEvent('changeSlide', {detail: ${idx}}))"
-                            style="width: 60px; height: 60px; object-fit: cover; ${borderStyle} cursor: pointer;"
-                    >
-                `;
-            }).join('');
-        }
-    }
-
-    // Initial Render
-    updateCarousel();
-
-    // Event Listeners
-    modal.addEventListener('changeSlide', (e) => {
-        currentIndex = e.detail;
-        updateCarousel();
-    });
-
-    if (prevBtn) {
-        prevBtn.onclick = () => {
-            currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
-            updateCarousel();
-        };
-    }
-
-    if (nextBtn) {
-        nextBtn.onclick = () => {
-            currentIndex = (currentIndex + 1) % mediaList.length;
-            updateCarousel();
-        };
-    }
+    renderModal(item, mediaList);
 }
