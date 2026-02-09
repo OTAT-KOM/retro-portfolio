@@ -962,19 +962,21 @@ function renderModal(item, mediaList) {
                     border: 1px solid #a0a0a0;
                     display: flex;
                     flex-direction: column;
+                    flex-shrink: 0; /* Prevent container shrinking */
                 ">
                     <!-- Main Media -->
                     <div id="media-view-${id}" style="
                         width: 100%; 
-                        height: 350px; /* Fixed height for consistency */
-                        max-height: 50vh; /* Don't take up too much vertical space */
-                        min-height: 200px;
+                        min-height: 250px; /* Reduced from fixed 350px */
+                        max-height: 45vh;  /* Reduced from 50vh */
+                        aspect-ratio: 4/3; /* Responsive aspect ratio */
                         position: relative;
                         flex-shrink: 0;
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        background: white; /* Transparent/White background */
+                        background: white;
+                        z-index: 1; /* Ensure distinct layer */
                     ">
                         <!-- Media Injected Here -->
                     </div>
@@ -983,12 +985,15 @@ function renderModal(item, mediaList) {
                     ${mediaList.length > 1 ? `
                     <div id="counter-${id}" style="
                         text-align: center;
-                        padding: 5px;
-                        font-size: 12px;
-                        color: #666;
-                        background: #f0f0f0;
+                        padding: 8px 0;
+                        font-size: 13px;
+                        color: #555;
+                        background: #f4f4f4;
+                        border-top: 1px solid #e0e0e0;
                         border-bottom: 1px solid #e0e0e0;
                         flex-shrink: 0;
+                        position: relative;
+                        z-index: 2;
                     ">
                         Image 1 of ${mediaList.length}
                     </div>
@@ -997,15 +1002,16 @@ function renderModal(item, mediaList) {
                     <!-- Thumbnails / Carousel Dots -->
                     <div id="thumbnails-${id}" style="
                         display: flex; 
-                        gap: 8px; 
-                        padding: 10px; 
+                        gap: 12px; 
+                        padding: 12px; 
                         overflow-x: auto; 
                         background: #f0f0f0;
-                        border-top: 1px solid #e0e0e0;
-                        justify-content: flex-start; /* Changed from center to allow scrolling start */
+                        justify-content: flex-start;
                         flex-shrink: 0;
                         -webkit-overflow-scrolling: touch;
-                        min-height: 70px; /* Ensure space for thumbnails */
+                        min-height: 80px; /* Increased for better visibility */
+                        position: relative;
+                        z-index: 2;
                     ">
                         <!-- Thumbnails injected here -->
                     </div>
