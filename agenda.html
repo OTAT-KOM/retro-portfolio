@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Agenda & Booking</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
+        /* Desktop Defaults (Windows 98) */
         body {
             background-color: #d866c2;
             background-image: none;
@@ -67,14 +68,157 @@
             overflow: hidden;
         }
 
-        /* Mobile adjustments */
+        /* Mobile iOS 4 Calendar/Agenda Style */
         @media (max-width: 768px) {
-            .agenda-layout {
-                padding-left: 0;
+            html, body {
+                background: #c5ccd4 !important; /* iOS List Background Gray */
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100vh !important;
+                width: 100vw !important;
+                overflow: hidden !important;
+                font-family: Helvetica, Arial, sans-serif !important;
             }
+
+            /* Hide Desktop-only elements */
+            .desktop-link, 
+            .desktop-icons-overlay,
+            .title-bar-controls {
+                display: none !important;
+            }
+
+            /* Reset Layout */
+            .agenda-layout {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                max-width: none !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0 !important;
+            }
+
             body.has-overlay-icons .agenda-layout {
-                padding-left: 0 !important;
-                padding-top: 100px; /* Space for top icons on mobile if needed */
+                padding: 0 !important;
+            }
+
+            /* Navigation Bar (iOS 4 Style) */
+            .window.booking-window:first-child .title-bar {
+                display: flex !important;
+                height: 44px !important;
+                min-height: 44px !important;
+                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%) !important;
+                border-bottom: 1px solid #2d3642 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 0 8px !important;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+                position: relative !important;
+                z-index: 1000 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                padding-top: env(safe-area-inset-top) !important;
+                height: calc(44px + env(safe-area-inset-top)) !important;
+            }
+
+            /* Title Text */
+            .window.booking-window:first-child .title-bar-text {
+                color: white !important;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                font-weight: bold !important;
+                font-size: 20px !important;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5) !important;
+                padding-top: env(safe-area-inset-top) !important;
+            }
+
+            /* Add Back Button via Pseudo-element */
+            .window.booking-window:first-child .title-bar::before {
+                content: 'Menu';
+                font-family: Helvetica, Arial, sans-serif;
+                font-weight: bold;
+                font-size: 13px;
+                color: white;
+                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
+                padding: 6px 12px;
+                border-radius: 4px;
+                border: 1px solid #24354b;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+                position: absolute;
+                left: 10px;
+                top: calc(50% + env(safe-area-inset-top) / 2); 
+                transform: translateY(-50%);
+                cursor: pointer;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                z-index: 2;
+            }
+
+            /* Info Area (Instructions) - Style like a List Header */
+            .window.booking-window:first-child {
+                flex-shrink: 0;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+            }
+
+            .info-content {
+                background: #e0e0e0 !important;
+                border: none !important;
+                border-bottom: 1px solid #bcbcbc !important;
+                padding: 10px 15px !important;
+            }
+
+            .booking-instructions {
+                font-family: Helvetica, Arial, sans-serif !important;
+                font-size: 14px !important;
+                color: #4c566c !important;
+                text-align: left !important;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.8) !important;
+                padding: 0 !important;
+            }
+
+            /* Hide the second title bar (the one on the iframe container) */
+            #booking-container .title-bar {
+                display: none !important;
+            }
+
+            /* Main Booking Iframe Area */
+            #booking-container {
+                flex: 1 !important;
+                width: 100% !important;
+                height: 100% !important; /* Force full height */
+                min-height: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                background: white !important;
+                overflow-y: auto !important; 
+                -webkit-overflow-scrolling: touch;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .booking-content {
+                border: none !important;
+                flex: 1 !important; /* Grow to fill container */
+                height: auto !important;
+                background: white !important;
+                overflow: visible !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            #booking-iframe-container {
+                flex: 1 !important; /* Grow to fill content area */
+                height: auto !important;
+                min-height: 900px !important; 
+                overflow: visible !important; 
+                display: block !important;
+            }
+            
+            iframe {
+                height: 100% !important;
+                min-height: 900px !important; /* Match container min-height */
+                width: 100% !important;
+                display: block !important;
             }
         }
     </style>
@@ -122,6 +266,22 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Back Button Logic
+            if (window.innerWidth <= 768) {
+                const navBar = document.querySelector('.window.booking-window:first-child .title-bar');
+                if (navBar) {
+                    navBar.addEventListener('click', (e) => {
+                        // If click is on the left side (where the back button is)
+                        if (e.clientX < 80) {
+                            window.location.href = 'index.html';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
     <script src="js/main.js"></script>
 </body>
 </html>
