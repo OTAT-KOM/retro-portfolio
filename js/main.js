@@ -508,9 +508,22 @@ async function loadListen() {
             if (currentIndex < items.length - 1) loadTrack(currentIndex + 1);
         };
 
-        if (volumeBar) volumeBar.oninput = (e) => {
-            player.volume = e.target.value;
-        };
+        if (volumeBar) {
+            const updateVolume = (e) => {
+                player.volume = e.target.value;
+            };
+            
+            volumeBar.addEventListener('input', updateVolume);
+            
+            // Ensure touch events don't bubble to the scrollable container
+            volumeBar.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+            }, { passive: true });
+            
+            volumeBar.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            }, { passive: true });
+        }
 
         if (player) {
             // Removed ontimeupdate UI logic to prevent conflict with rAF
