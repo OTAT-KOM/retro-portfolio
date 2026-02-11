@@ -118,8 +118,7 @@ async function loadBooking() {
                 iframeContainer.innerHTML = `
                     <div style="padding: 20px; text-align: center; background: #fff; border: 2px inset #fff;">
                         <p><strong>Booking System Not Configured</strong></p>
-                        <p>Please update the Booking URL in the CMS (admin panel).</p>
-                        <p>If you are the admin, go to /admin/ and edit "Booking Settings".</p>
+                        <p>Please update the Booking URL.</p>
                     </div>
                 `;
             }

@@ -270,10 +270,10 @@ body.has-overlay-icons .agenda-layout {
         }
 
         .mobile-icon img {
-            width: 20vw;
-            height: 20vw;
-            max-width: 100px;
-            max-height: 100px;
+            width: 18vw;
+            height: 18vw;
+            max-width: 90px;
+            max-height: 90px;
             margin-bottom: 1vh;
             image-rendering: pixelated;
             filter: drop-shadow(0 0.5vh 1vh rgba(0,0,0,0.3));
@@ -321,6 +321,90 @@ body.has-overlay-icons .agenda-layout {
             margin: 0;
             z-index: 1000;
             display: flex !important; /* Override display: none from media query */
+            background: #c5ccd4 !important; /* iOS List Background */
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* Hide Desktop Elements in Mobile View */
+        .page-window.mobile-view .title-bar,
+        .page-window.mobile-view menu[role=tablist],
+        .page-window.mobile-view .footer-buttons {
+            display: none !important;
+        }
+
+        /* Show Mobile Header */
+        .page-window.mobile-view .mobile-ios-header {
+            display: flex !important;
+        }
+
+        /* Adjust Content Container for Mobile */
+        .page-window.mobile-view .window-body {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+        }
+
+        .page-window.mobile-view .tab-content-container {
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+
+        /* Mobile Contact Grid Transformation -> iOS List */
+        .page-window.mobile-view .contact-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0 !important;
+            padding: 20px 0 !important;
+            background: transparent !important;
+            width: 100% !important;
+        }
+
+        .page-window.mobile-view .contact-item {
+            background: white !important;
+            border: none !important;
+            border-bottom: 1px solid #ababab !important;
+            border-top: 1px solid #ababab !important; /* Top border for first item logic needed or just stack */
+            margin-bottom: -1px !important; /* Collapse borders */
+            padding: 15px 20px !important;
+            flex-direction: row !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-height: 60px !important;
+        }
+        
+        /* First item top border */
+        .page-window.mobile-view .contact-item:first-child {
+            border-top: 1px solid #ababab !important;
+        }
+
+        .page-window.mobile-view .contact-item img {
+            width: 32px !important;
+            height: 32px !important;
+            margin-bottom: 0 !important;
+            margin-right: 15px !important;
+        }
+
+        .page-window.mobile-view .contact-item span {
+            font-family: Helvetica, Arial, sans-serif !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: black !important;
+            flex: 1 !important;
+            text-align: left !important;
+        }
+
+        /* Add Arrow to list items */
+        .page-window.mobile-view .contact-item::after {
+            content: '›';
+            color: #c7c7cc;
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
         }
     }
 

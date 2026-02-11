@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* Desktop Defaults (Windows 98) */
         body {
             background-color: #d866c2;
             background-image: none;
@@ -70,37 +69,25 @@
 
         /* Mobile iOS 4 Calendar/Agenda Style */
         @media (max-width: 768px) {
-            html, body {
-                background: #c5ccd4 !important; /* iOS List Background Gray */
-                margin: 0 !important;
-                padding: 0 !important;
-                height: 100vh !important;
-                width: 100vw !important;
-                overflow: hidden !important;
-                font-family: Helvetica, Arial, sans-serif !important;
+        html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden; /* Prevent double scrollbars */
+                background: #ffffff !important; /* Change to white so gaps disappear */
+                -webkit-overflow-scrolling: touch;
             }
 
-            /* Hide Desktop-only elements */
-            .desktop-link, 
-            .desktop-icons-overlay,
-            .title-bar-controls {
-                display: none !important;
-            }
 
-            /* Reset Layout */
+            /* Main app container */
             .agenda-layout {
+                height: 100dvh !important; /* IMPORTANT: dynamic viewport for iOS */
+                display: flex !important;
+                flex-direction: column !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 100% !important;
-                height: 100% !important;
                 max-width: none !important;
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 0 !important;
-            }
-
-            body.has-overlay-icons .agenda-layout {
-                padding: 0 !important;
             }
 
             /* Navigation Bar (iOS 4 Style) */
@@ -154,12 +141,6 @@
             }
 
             /* Info Area (Instructions) - Style like a List Header */
-            .window.booking-window:first-child {
-                flex-shrink: 0;
-                margin-bottom: 0 !important;
-                box-shadow: none !important;
-            }
-
             .info-content {
                 background: #e0e0e0 !important;
                 border: none !important;
@@ -180,45 +161,50 @@
             #booking-container .title-bar {
                 display: none !important;
             }
+            
+            /* Hide Desktop-only elements */
+            .desktop-link, 
+            .desktop-icons-overlay,
+            .title-bar-controls {
+                display: none !important;
+            }
+            
+            body.has-overlay-icons .agenda-layout {
+                padding: 0 !important;
+            }
 
-            /* Main Booking Iframe Area */
+            /* SCROLLABLE agenda area */
             #booking-container {
                 flex: 1 !important;
                 width: 100% !important;
-                height: 100% !important; /* Force full height */
+                height: auto !important; /* Let flex control height */
                 min-height: 0 !important;
                 margin: 0 !important;
                 box-shadow: none !important;
                 background: white !important;
                 overflow-y: auto !important; 
                 -webkit-overflow-scrolling: touch;
-                display: flex !important;
-                flex-direction: column !important;
+                display: block !important;
             }
 
+            /* Content wrapper */
             .booking-content {
                 border: none !important;
-                flex: 1 !important; /* Grow to fill container */
+                width: 100% !important;
                 height: auto !important;
                 background: white !important;
                 overflow: visible !important;
-                display: flex !important;
-                flex-direction: column !important;
+                display: block !important;
             }
 
-            #booking-iframe-container {
-                flex: 1 !important; /* Grow to fill content area */
-                height: auto !important;
-                min-height: 900px !important; 
-                overflow: visible !important; 
-                display: block !important;
-            }
-            
-            iframe {
-                height: 100% !important;
-                min-height: 900px !important; /* Match container min-height */
+            /* iframe must NOT control scroll */
+            #booking-iframe-container, iframe {
                 width: 100% !important;
+                height: 100% !important; /* Increased fixed height to prevent cutoff */
+                min-height: 1600px !important;
+                border: none !important;
                 display: block !important;
+                overflow: hidden !important;
             }
         }
     </style>

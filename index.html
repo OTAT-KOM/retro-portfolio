@@ -251,35 +251,31 @@
         <div class="mobile-header">▼ MENU</div>
         <div class="mobile-grid">
             <a href="pictures.html" class="mobile-icon">
-                <img src="images/icons/directory_open_file_mydocs-5.png" alt="Pictures">
+                <img src="images/icons/ios 4/Photos.png" alt="Pictures">
                 <span>Pictures</span>
             </a>
             <a href="agenda.html" class="mobile-icon">
-                <img src="images/icons/calendar-1.png" alt="Agenda">
+                <img src="images/icons/ios 4/Calendar.png" alt="Agenda">
                 <span>Agenda</span>
             </a>
             <a href="videoprojects.html" class="mobile-icon">
-                <img src="images/icons/directory_favorites-3.png" alt="Video Project">
+                <img src="images/icons/ios 4/Videos.png" alt="Video Project">
                 <span>Video Project</span>
             </a>
-            <a href="folder.html" class="mobile-icon">
-                <img src="images/icons/directory_favorites-2.png" alt="New Folder">
-                <span>New Folder</span>
-            </a>
-            <a href="watch.html" class="mobile-icon">
-                <img src="images/icons/camera3_vid-4.png" alt="Watch">
-                <span>Watch</span>
+            <a href="#" class="mobile-icon" onclick="goToContact(event)">
+                <img src="images/icons/ios 4/Contacts.png" alt="Contact OTAT">
+                <span>Contact OTAT</span>
             </a>
             <a href="listen.html" class="mobile-icon">
-                <img src="images/icons/loudspeaker_rays_green-0.png" alt="Listen">
+                <img src="images/icons/ios 4/iTunes.png" alt="Listen">
                 <span>Listen</span>
             </a>
             <a href="#" class="mobile-icon" onclick="showMobileAbout(event)">
-                <img src="images/icons/face.svg" alt="??">
-                <span>??</span>
+                <img src="images/icons/ios 4/YouTube.png" alt="About OTAT">
+                <span>About OTAT</span>
             </a>
             <a href="note.html" class="mobile-icon">
-                <img src="images/icons/notepad_file-2.png" alt="Note">
+                <img src="images/icons/ios 4/Notes.png" alt="Note">
                 <span>Note</span>
             </a>
         </div>
@@ -289,13 +285,20 @@
         </div>
     </div>
 
-    <div class="window page-window">
+    <div class="window page-window" id="main-window">
+        <!-- Mobile iOS Header (Hidden on Desktop) -->
+        <div class="mobile-ios-header" style="display:none; height: 44px; background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%); border-bottom: 1px solid #2d3642; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box; padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); flex-shrink: 0;">
+            <button onclick="closeMainWindow()" style="background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%); border: 1px solid #24354b; border-radius: 4px; color: white; font-weight: bold; padding: 6px 12px; font-size: 13px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);">Back</button>
+            <div style="color: white; font-weight: bold; font-size: 20px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); padding-top: env(safe-area-inset-top);">Contacts</div>
+            <div style="width: 50px;"></div>
+        </div>
+
         <div class="title-bar">
             <div class="title-bar-text">About</div>
             <div class="title-bar-controls">
                 <button aria-label="Minimize"></button>
                 <button aria-label="Maximize"></button>
-                <button aria-label="Close" onclick=""></button>
+                <button aria-label="Close" onclick="closeMainWindow()"></button>
             </div>
         </div>
         <div class="window-body">
@@ -350,15 +353,29 @@
 
         <!-- Input Area (Mock) -->
         <div style="height: 44px; background: url('images/ios-keyboard-bar.png') #dce0e6; border-top: 1px solid #aeb4bf; display: flex; align-items: center; padding: 0 10px; padding-bottom: env(safe-area-inset-bottom); height: calc(44px + env(safe-area-inset-bottom));">
-            <div style="flex: 1; height: 30px; background: white; border: 1px solid #999; border-radius: 15px; margin-right: 10px;"></div>
-            <button style="background: linear-gradient(to bottom, #93a5ce 0%, #6885b6 50%, #5676ad 51%, #7992c1 100%); border: 1px solid #3e5684; border-radius: 15px; color: white; font-weight: bold; padding: 4px 12px; font-size: 14px; text-shadow: 0 -1px 0 rgba(0,0,0,0.3);">Send</button>
+            <div onclick="showContactAlert()" style="flex: 1; height: 30px; background: white; border: 1px solid #999; border-radius: 15px; margin-right: 10px; cursor: text;"></div>
+            <button onclick="showContactAlert()" style="background: linear-gradient(to bottom, #93a5ce 0%, #6885b6 50%, #5676ad 51%, #7992c1 100%); border: 1px solid #3e5684; border-radius: 15px; color: white; font-weight: bold; padding: 4px 12px; font-size: 14px; text-shadow: 0 -1px 0 rgba(0,0,0,0.3); cursor: pointer;">Send</button>
         </div>
+    </div>
+
+    <!-- Custom iOS Alert Overlay -->
+    <div id="ios-alert" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; font-family: Helvetica, Arial, sans-serif;">
+       <div style="background:rgba(255,255,255,0.95); width:270px; border-radius:15px; text-align:center; backdrop-filter:blur(10px);">
+           <div style="padding:20px 15px;">
+               <h3 style="margin:0 0 5px; font-size:17px; font-weight:600; color:black;">Contact OTAT</h3>
+               <p style="margin:0; font-size:13px; color:black;">Would you like to open the contact details?</p>
+           </div>
+           <div style="border-top:1px solid #b5b5b5; display:flex;">
+               <button onclick="closeAlert()" style="flex:1; background:transparent; border:none; border-right:1px solid #b5b5b5; padding:12px; font-size:17px; color:#007aff; cursor:pointer; border-bottom-left-radius: 15px;">Cancel</button>
+               <button onclick="goToContact()" style="flex:1; background:transparent; border:none; padding:12px; font-size:17px; font-weight:600; color:#007aff; cursor:pointer; border-bottom-right-radius: 15px;">Open</button>
+           </div>
+       </div>
     </div>
 
     <script src="js/main.js"></script>
     <script>
         async function showMobileAbout(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             const mobileMenu = document.getElementById('mobile-menu');
             if(mobileMenu) mobileMenu.style.display = 'none';
             
@@ -366,7 +383,16 @@
             smsApp.style.display = 'flex';
             
             const container = document.getElementById('sms-container');
-            container.innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">Loading...</div>';
+            
+            // Clear content if it's just whitespace or the initial comment
+            if (container.innerHTML.trim().length < 50) { // arbitrary small length to catch empty/comments
+                 container.innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">Loading...</div>';
+            } else if (container.innerHTML.includes('Loading...')) {
+                 // Keep loading state
+            } else {
+                 // Content already loaded, don't fetch again
+                 return;
+            }
 
             try {
                 const response = await fetch('data/about.json?t=' + Date.now());
@@ -409,7 +435,43 @@
 
         function closeMobileAbout() {
             document.getElementById('ios-sms-app').style.display = 'none';
-            document.getElementById('mobile-menu').style.display = 'flex'; // Show menu again? Or just hide app.
+            document.getElementById('mobile-menu').style.display = 'flex'; 
+        }
+
+        // --- Notification Logic ---
+        function showContactAlert() {
+            document.getElementById('ios-alert').style.display = 'flex';
+        }
+
+        function closeAlert() {
+            document.getElementById('ios-alert').style.display = 'none';
+        }
+
+        function goToContact(e) {
+            if (e) e.preventDefault();
+            closeAlert();
+            // Hide SMS app
+            document.getElementById('ios-sms-app').style.display = 'none';
+            // Hide Mobile Menu (if called from there)
+            document.getElementById('mobile-menu').style.display = 'none';
+            
+            // Show Main Window in Mobile View
+            const mainWindow = document.getElementById('main-window');
+            if (mainWindow) {
+                mainWindow.classList.add('mobile-view');
+                // Switch to Contact Tab
+                const contactTab = mainWindow.querySelector('.tab-link[data-tab="contact"]');
+                if (contactTab) contactTab.click();
+            }
+        }
+
+        function closeMainWindow() {
+            const mainWindow = document.getElementById('main-window');
+            if (mainWindow) {
+                mainWindow.classList.remove('mobile-view');
+                // Show Mobile Menu
+                document.getElementById('mobile-menu').style.display = 'flex';
+            }
         }
 
         async function loadExtraContactLogic() {
@@ -514,7 +576,19 @@
         }
         
          
-        document.addEventListener('DOMContentLoaded', loadExtraContactLogic);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadExtraContactLogic();
+            
+            // On Mobile: Open About (SMS App) ONLY on first visit of the session
+            if (window.innerWidth <= 768) {
+                const hasSeenIntro = sessionStorage.getItem('hasSeenIntro');
+                
+                if (!hasSeenIntro) {
+                    showMobileAbout();
+                    sessionStorage.setItem('hasSeenIntro', 'true');
+                }
+            }
+        });
     </script>
 </body>
 </html>
