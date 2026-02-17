@@ -750,7 +750,7 @@ async function loadProjects() {
                 `<p style="${summaryStyle}">${project.summary}</p>` : 
                 (isLarge ? '' : '<div style="flex:1;"></div>');
                 
-            const readMoreBtn = `<button class="read-more-btn" onclick="openProjectModal('${project.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
+            const readMoreBtn = `<button class="read-more-btn" onclick="event.stopPropagation(); openProjectModal('${project.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
 
             // Media Generation
             let mediaEl = '';
@@ -899,10 +899,6 @@ function renderModal(item, mediaList) {
         modal.style.overflow = 'hidden';
         modal.style.fontFamily = isDarkTheme ? 'VT323, monospace' : 'Helvetica, Arial, sans-serif';
         
-        const headerBg = isDarkTheme 
-            ? 'linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%)' 
-            : 'linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%)';
-            
         const headerBorder = isDarkTheme ? '#333' : '#2d3642';
         const textColor = isDarkTheme ? '#fff' : '#000';
         const subTextColor = isDarkTheme ? '#aaa' : '#8e8e93';
@@ -910,63 +906,159 @@ function renderModal(item, mediaList) {
         const containerBorder = isDarkTheme ? '#333' : '#a0a0a0';
         
         let headerContent = '';
+        let footerContent = '';
         
-        // iOS Header
-        headerContent = `
-        <div style="
-            height: 44px;
-            background: ${headerBg};
-            border-bottom: 1px solid ${headerBorder};
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            flex-shrink: 0;
-            position: relative;
-            z-index: 10;
-            box-sizing: border-box;
-            padding-top: env(safe-area-inset-top);
-            height: calc(44px + env(safe-area-inset-top));
-        ">
-            <!-- Back Button -->
-            <button id="close-btn-${id}" style="
-                background: ${headerBg};
-                border: 1px solid ${isDarkTheme ? '#666' : '#24354b'};
-                border-radius: 4px;
-                color: white;
-                font-weight: bold;
-                padding: 6px 12px;
-                font-size: 13px;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                cursor: pointer;
-                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
-                font-family: inherit;
-                position: relative;
-                z-index: 20;
-            ">Back</button>
-
-            <!-- Title -->
+        if (isDarkTheme) {
+            // Nokia S60 Top Bar
+            headerContent = `
             <div style="
-                color: white;
-                font-weight: bold;
-                font-size: 20px;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 60%;
+                height: 44px;
+                background: #000;
+                border-bottom: 1px solid #333;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 8px;
+                flex-shrink: 0;
+                box-sizing: border-box;
                 padding-top: env(safe-area-inset-top);
-            ">${item.title}</div>
+                height: calc(44px + env(safe-area-inset-top));
+                color: white;
+                font-family: 'VT323', monospace;
+            ">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; align-items: flex-end; gap: 2px; height: 16px;">
+                        <span style="width: 3px; background: #fff; display: block; height: 20%;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 35%;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 50%;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 65%;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 80%;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%;"></span>
+                    </div>
+                    <div style="font-weight: bold; font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${item.title}</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="font-weight: bold;">12:00</div>
+                    <div style="display: flex; align-items: flex-end; gap: 2px; height: 16px;">
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                        <span style="width: 3px; background: #fff; display: block; height: 100%; border: 1px solid #000;"></span>
+                    </div>
+                </div>
+            </div>
+            `;
 
-            <!-- Spacer -->
-            <div style="width: 50px;"></div>
-        </div>
-        `;
+            // Nokia S60 Bottom Bar
+            footerContent = `
+            <div style="
+                display: flex;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                background: #000;
+                border-top: 1px solid #333;
+                z-index: 1000;
+                padding-bottom: env(safe-area-inset-bottom);
+                justify-content: space-between;
+                box-sizing: content-box;
+            ">
+                <button style="
+                    flex: 1;
+                    background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+                    border: none;
+                    border-right: 1px solid #222;
+                    color: white;
+                    font-size: 18px;
+                    font-weight: bold;
+                    font-family: 'VT323', monospace;
+                    cursor: pointer;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+                    height: 50px;
+                    line-height: 50px;
+                    padding: 0 20px;
+                    text-align: left;
+                ">Options</button>
+                <button id="close-btn-${id}" style="
+                    flex: 1;
+                    background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+                    border: none;
+                    border-left: 1px solid #222;
+                    color: white;
+                    font-size: 18px;
+                    font-weight: bold;
+                    font-family: 'VT323', monospace;
+                    cursor: pointer;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+                    height: 50px;
+                    line-height: 50px;
+                    padding: 0 20px;
+                    text-align: right;
+                ">Back</button>
+            </div>
+            `;
+        } else {
+            // iOS Header
+            headerContent = `
+            <div style="
+                height: 44px;
+                background: ${headerBg};
+                border-bottom: 1px solid ${headerBorder};
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 8px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                flex-shrink: 0;
+                position: relative;
+                z-index: 10;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top);
+                height: calc(44px + env(safe-area-inset-top));
+            ">
+                <!-- Back Button -->
+                <button id="close-btn-${id}" style="
+                    background: ${headerBg};
+                    border: 1px solid ${isDarkTheme ? '#666' : '#24354b'};
+                    border-radius: 4px;
+                    color: white;
+                    font-weight: bold;
+                    padding: 6px 12px;
+                    font-size: 13px;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                    cursor: pointer;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+                    font-family: inherit;
+                    position: relative;
+                    z-index: 20;
+                ">Back</button>
+
+                <!-- Title -->
+                <div style="
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 60%;
+                    padding-top: env(safe-area-inset-top);
+                ">${item.title}</div>
+
+                <!-- Spacer -->
+                <div style="width: 50px;"></div>
+            </div>
+            `;
+        }
         
         // Mobile Layout Content
         modal.innerHTML = `
@@ -985,6 +1077,7 @@ function renderModal(item, mediaList) {
                 gap: 15px;
                 box-sizing: border-box;
                 width: 100%;
+                padding-bottom: ${isDarkTheme ? '70px' : '15px'}; /* Add padding for bottom bar if dark theme */
             ">
                 <!-- Media Container (Box) -->
                 <div style="
@@ -1084,7 +1177,7 @@ function renderModal(item, mediaList) {
                 <div style="height: env(safe-area-inset-bottom); width: 100%;"></div>
             </div>
 
-
+            ${footerContent}
         `;
     } else {
         // Desktop Layout (Existing Windows 98 Style)
@@ -1393,7 +1486,7 @@ async function loadPictures() {
                 `<p style="${summaryStyle}">${item.summary}</p>` : 
                 (isLarge ? '' : '<div style="flex:1;"></div>');
                 
-            const readMoreBtn = `<button class="read-more-btn" onclick="openPictureModal('${item.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
+            const readMoreBtn = `<button class="read-more-btn" onclick="event.stopPropagation(); openPictureModal('${item.id}')" style="margin-top:5px; flex-shrink:0; align-self: flex-start;">Read More</button>`;
 
             // Media Generation
             let mediaEl = '';
