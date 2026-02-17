@@ -955,7 +955,7 @@ function renderModal(item, mediaList) {
             footerContent = `
             <div style="
                 display: flex;
-                position: absolute;
+                position: fixed;
                 bottom: 0;
                 left: 0;
                 width: 100%;
