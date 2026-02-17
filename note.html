@@ -80,147 +80,198 @@
             font-size: 1.1em;
         }
 
-        /* Mobile iOS 4/6 Note Style */
+        /* Mobile Nokia Theme (Dark) */
         @media (max-width: 768px) {
             html, body {
-                background-color: #f8f8f8 !important; /* Light off-white paper */
-                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=') !important; /* Fallback */
-                background-image: none !important; 
+                background-color: #000 !important;
+                background-image: none !important;
                 display: block !important;
                 padding: 0 !important;
                 height: 100% !important;
                 width: 100% !important;
                 overflow: hidden !important;
-                position: fixed !important; /* Prevent scroll bounce on body */
-                -webkit-tap-highlight-color: transparent;
+                font-family: 'VT323', monospace !important;
             }
 
             /* Hide Desktop Elements */
-            .desktop-icons-overlay, 
-            .desktop-link,
+            .desktop-link, 
             .title-bar,
-            .window {
-                box-shadow: none !important;
-                border: none !important;
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                position: static !important;
-                transform: none !important;
-                background: transparent !important;
-            }
-
-            /* Main Container */
-            .page-window {
-                display: flex !important;
-                flex-direction: column !important;
-                height: 100% !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                background: transparent !important;
-            }
-
-            /* iOS 4 Header (Blue Gradient) */
-            .title-bar {
-                display: flex !important;
-                height: 44px !important;
-                min-height: 44px !important;
-                /* Classic iOS 4 Blue Gradient */
-                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%) !important;
-                border-bottom: 1px solid #2d3642 !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                padding: 0 8px !important;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-                z-index: 1000 !important;
-                padding-top: env(safe-area-inset-top) !important;
-                height: calc(44px + env(safe-area-inset-top)) !important;
-                box-sizing: border-box !important;
-            }
-
-            /* Hide default 98 buttons */
             .title-bar-controls {
                 display: none !important;
             }
 
-            /* Custom iOS Title */
-            .title-bar-text {
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                font-weight: bold !important;
-                font-size: 20px !important;
-                color: white !important;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5) !important;
-                flex: 1;
-                text-align: center;
-                padding-top: env(safe-area-inset-top);
-                position: absolute;
+            /* Nokia Top Bar */
+            .nokia-top-bar {
+                display: flex !important;
+                height: 44px;
+                background: #000;
+                border-bottom: 1px solid #333;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 8px;
+                position: fixed;
+                top: 0;
                 left: 0;
-                right: 0;
-                pointer-events: none;
+                width: 100%;
+                z-index: 1000;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top);
+                height: calc(44px + env(safe-area-inset-top));
             }
 
-            /* Back Button (Left) */
-            .title-bar::before {
-                content: 'Back';
-                font-family: Helvetica, Arial, sans-serif;
-                font-weight: bold;
-                font-size: 13px;
+            .bar-left, .bar-right {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .signal-bars, .battery-bars {
+                display: flex;
+                align-items: flex-end;
+                gap: 2px;
+                height: 16px;
+            }
+
+            .signal-bars span, .battery-bars span {
+                width: 3px;
+                background: #fff;
+                display: block;
+            }
+
+            .signal-bars span:nth-child(1) { height: 20%; }
+            .signal-bars span:nth-child(2) { height: 35%; }
+            .signal-bars span:nth-child(3) { height: 50%; }
+            .signal-bars span:nth-child(4) { height: 65%; }
+            .signal-bars span:nth-child(5) { height: 80%; }
+            .signal-bars span:nth-child(6) { height: 100%; }
+
+            .battery-bars span {
+                height: 100%;
+                border: 1px solid #000;
+            }
+
+            .menu-title {
                 color: white;
-                /* Glossy Button Gradient */
-                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
-                padding: 6px 12px;
-                border-radius: 4px;
-                border: 1px solid #24354b;
-                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
-                margin-top: env(safe-area-inset-top);
-                cursor: pointer;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                position: relative;
-                z-index: 2;
+                font-weight: bold;
+                font-size: 20px;
             }
 
-            /* Notepad Body - Clean Paper Look */
+            .nokia-clock {
+                color: white;
+                font-weight: bold;
+            }
+
+            /* Main Content Container */
+            .page-window {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                background: transparent !important;
+                border: none !important;
+                padding-top: calc(44px + env(safe-area-inset-top)) !important;
+                padding-bottom: 50px !important; /* Bottom bar space */
+                box-sizing: border-box !important;
+                position: relative !important;
+                z-index: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* Note Content Area */
             .window-body {
-                background-color: #fdfdfd !important; /* Off-white */
-                background-image: none !important;
+                background-color: #111 !important;
+                color: #fff !important;
                 border: none !important;
                 margin: 0 !important;
-                padding: 20px !important;
-                padding-top: 15px !important;
-                padding-bottom: 50px !important; /* Add bottom padding for scrolling */
-                box-sizing: border-box !important;
-                /* System Font */
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                font-size: 16px !important;
+                padding: 15px !important;
+                flex: 1 !important; /* Use flex grow instead of height 100% */
+                height: auto !important;
+                font-family: 'Courier New', Courier, monospace, sans-serif !important; /* Prioritize Courier for notes */
+                font-size: 18px !important;
                 line-height: 1.5 !important;
-                color: #333 !important;
-                text-shadow: none !important;
-                flex: 1 !important;
+                border-radius: 0 !important;
+                text-align: right !important; 
+                direction: rtl !important;
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important; /* Firefox */
+                -ms-overflow-style: none !important; /* IE 10+ */
+            }
+
+            /* Hide Scrollbar for Chrome/Safari/Opera */
+            .window-body::-webkit-scrollbar {
+                display: none !important;
             }
 
             .window-body h2 {
-                font-family: inherit !important;
-                font-size: 22px !important;
-                color: black !important;
-                border-bottom: none;
-                padding-bottom: 5px;
-                margin-bottom: 10px;
-                background: transparent;
+                color: #4cd964 !important;
+                border-bottom: 1px solid #333 !important;
+                padding-bottom: 10px !important;
+                margin-bottom: 15px !important;
+                font-size: 24px !important;
                 font-weight: bold !important;
+                font-family: inherit !important;
             }
 
-            /* Native scrolling */
-            .window-body::-webkit-scrollbar {
-                display: none;
+            .window-body p {
+                color: #fff !important;
+                margin-bottom: 15px !important;
+                font-family: inherit !important;
             }
+
+            /* Nokia Bottom Bar */
+            .nokia-bottom-bar {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                background: #000;
+                border-top: 1px solid #333;
+                z-index: 1000;
+                padding-bottom: env(safe-area-inset-bottom);
+                justify-content: space-between;
+            }
+
+            .softkey-btn {
+                flex: 1;
+                background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+                border: none;
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                font-family: 'VT323', monospace;
+                cursor: pointer;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+                height: 50px;
+                line-height: 50px;
+                padding: 0 20px;
+            }
+            
+            .softkey-btn:first-child { border-right: 1px solid #222; text-align: left; }
+            .softkey-btn:last-child { border-left: 1px solid #222; text-align: right; }
         }
     </style>
 </head>
 <body>
+    <!-- Nokia Top Bar -->
+    <div class="nokia-top-bar">
+        <div class="bar-left">
+            <div class="signal-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="menu-title">Note</div>
+        </div>
+        <div class="bar-right">
+            <div class="nokia-clock" id="nokia-clock">12:00</div>
+            <div class="battery-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
     <div class="desktop-link" onclick="window.location.href='index.html'">
         <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
         <div>Desktop</div>
@@ -239,8 +290,25 @@
             <p>Loading note...</p>
         </div>
     </div>
+    <div class="nokia-bottom-bar">
+        <button class="softkey-btn" onclick="window.location.href='index.html'">Menu</button>
+        <button class="softkey-btn" onclick="history.back()">Back</button>
+    </div>
+
     <script src="js/main.js"></script>
     <script>
+        function updateNokiaClock() {
+            const clock = document.getElementById('nokia-clock');
+            if (clock) {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                clock.textContent = `${hours}:${minutes}`;
+            }
+        }
+        setInterval(updateNokiaClock, 1000);
+        updateNokiaClock();
+
         document.addEventListener('DOMContentLoaded', () => {
             // Back button functionality for mobile custom header
             const titleBar = document.querySelector('.title-bar');

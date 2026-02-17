@@ -437,3 +437,205 @@ body.has-overlay-icons .agenda-layout {
     line-height: 1.4;
     margin-bottom: 10px;
 }
+
+/* --- Nokia 5800 Grid Menu Styles --- */
+
+#mobile-menu {
+    background-color: #000;
+    color: white;
+    font-family: sans-serif; /* Symbian font */
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+    position: relative;
+    padding: 0 !important;
+}
+
+/* Top Bar */
+.nokia-top-bar {
+    height: 44px; /* Slightly taller to match status bar feel */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    background: #000;
+    z-index: 10;
+    margin-top: env(safe-area-inset-top);
+    border-bottom: 1px solid #222; /* Subtle separation */
+}
+
+.bar-left, .bar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 5px;
+}
+
+.nokia-clock {
+    font-size: 16px;
+    color: #fff;
+    font-weight: normal;
+}
+
+/* Signal/Battery Bars - Thicker and segmented */
+.signal-bars, .battery-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+}
+
+.signal-bars span, .battery-bars span {
+    width: 4px;
+    background: #fff;
+    display: block;
+    border-radius: 1px;
+}
+
+/* Create rising bars effect */
+.signal-bars span:nth-child(1) { height: 20%; opacity: 0.6; }
+.signal-bars span:nth-child(2) { height: 35%; opacity: 0.7; }
+.signal-bars span:nth-child(3) { height: 50%; opacity: 0.8; }
+.signal-bars span:nth-child(4) { height: 60%; opacity: 0.9; }
+.signal-bars span:nth-child(5) { height: 75%; }
+.signal-bars span:nth-child(6) { height: 90%; }
+.signal-bars span:nth-child(7) { height: 100%; }
+
+.battery-bars span {
+    height: 100%; 
+    background: #fff;
+    border: 1px solid #000; /* Segmented look */
+}
+
+/* Grid Container */
+.nokia-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, auto); /* Auto height rows */
+    padding: 15px 15px 60px 15px; /* Adjust padding for balance */
+    gap: 15px; /* More spacing between icons */
+    overflow-y: auto;
+    flex: 1;
+    align-content: start; /* Pack to top */
+}
+
+/* Icon Item */
+.nokia-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    padding: 8px 2px;
+    border-radius: 8px;
+    /* transition: background 0.1s; */
+}
+
+.nokia-icon-item img {
+    width: 64px; /* Larger icons */
+    height: 64px;
+    margin-bottom: 8px;
+    object-fit: contain;
+    /* Symbian icons often had a slight drop shadow */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.nokia-icon-item span {
+    font-size: 13px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-shadow: 1px 1px 2px black;
+}
+
+.nokia-icon-item:active {
+    background: #0044cc; /* Nokia Blue Selection */
+    box-shadow: 0 0 10px #0044cc; /* Glow effect */
+}
+
+/* Scrollbar Track (Visual) */
+.nokia-scrollbar-track {
+    position: absolute;
+    top: 45px;
+    right: 2px;
+    bottom: 55px;
+    width: 8px;
+    background: #222;
+    border-radius: 4px;
+    z-index: 20;
+    border: 1px solid #444;
+}
+
+.nokia-scrollbar-thumb {
+    width: 100%;
+    height: 30%;
+    background: #888;
+    border-radius: 3px;
+    background: linear-gradient(to right, #666, #aaa, #666);
+}
+
+/* Bottom Softkeys Bar */
+.nokia-bottom-bar {
+    height: 50px;
+    display: flex;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #000;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 30;
+    border-top: 1px solid #333;
+}
+
+.softkey-btn {
+    flex: 1;
+    /* Glossy Black Gradient */
+    background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+    border: none;
+    border-right: 1px solid #222; 
+    color: white;
+    font-size: 18px; /* Larger font */
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    line-height: 50px;
+    padding: 0 15px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+}
+
+.softkey-btn:last-child {
+    border-right: none;
+    border-left: 1px solid #222;
+}
+
+.softkey-btn:active {
+    background: linear-gradient(to bottom, #0044cc 0%, #003399 100%); /* Blue on press */
+}
+
+/* Text Alignment Specifics */
+.softkey-btn:first-child {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.softkey-btn:last-child {
+    text-align: right;
+    padding-right: 20px;
+}
+
+/* Override previous styles */
+.nokia-list-scroll, .nokia-list-item, .nokia-softkeys {
+    display: none !important;
+}

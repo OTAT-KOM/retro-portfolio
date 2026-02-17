@@ -2,37 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Projects</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #008080; /* Teal background */
+            background-color: #000000; /* Black background for Nokia theme */
             margin: 0;
             padding: 0;
             overflow-y: auto; /* Allow scrolling for extended grid */
             overflow-x: hidden;
             height: 100vh;
             width: 100vw;
-            font-family: 'MS Sans Serif', monospace;
         }
 
-        #ios-header {
+        .nokia-top-bar, .nokia-bottom-bar {
             display: none;
         }
 
-        /* iOS 6 Mobile Theme */
+        /* Nokia Mobile Theme */
         @media (max-width: 768px) {
+            html {
+                background: #000 !important;
+            }
             body {
-                background-color: #c5ccd4 !important; /* iOS List Background */
-                font-family: Helvetica, Arial, sans-serif !important;
+                background: #000 !important;
+                background-image: none !important;
+                font-family: 'VT323', monospace !important;
                 padding-top: 0 !important;
                 height: auto !important;
                 min-height: 100vh;
                 overflow-x: hidden !important;
                 overflow-y: auto !important;
+                display: block;
             }
 
             /* Hide Desktop Elements */
@@ -41,87 +45,53 @@
                 display: none !important;
             }
 
-            /* iOS Header */
-            #ios-header {
+            /* Nokia Header */
+            .nokia-top-bar {
                 display: flex !important;
-                align-items: center;
-                justify-content: space-between;
-                height: 44px;
-                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%);
-                border-bottom: 1px solid #2d3642;
-                padding: 0 8px;
-                position: fixed; /* Fixed Header */
-                top: 0;
-                left: 0;
-                width: 100%;
+                z-index: 1000; /* Ensure it stays above windows */
+                flex-shrink: 0 !important; /* Prevent header from shrinking */
+                height: 44px !important;
+                width: 100% !important; /* Force full width */
+                padding: 0 8px !important; /* Add padding back since we removed it from inherited styles */
+                box-sizing: border-box !important; /* Ensure padding is included in width */
+                justify-content: space-between !important; /* Ensure content is spread out */
+                align-items: center !important;
+            }
+
+            /* Nokia Bottom Bar */
+            .nokia-bottom-bar {
+                display: flex !important;
                 z-index: 1000;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-                box-sizing: border-box;
-                padding-top: env(safe-area-inset-top); /* Handle notch */
-                height: calc(44px + env(safe-area-inset-top));
             }
 
-            .ios-title {
-                color: white;
-                font-weight: bold;
-                font-size: 20px;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                padding-top: env(safe-area-inset-top);
-            }
-
-            .ios-back-btn {
-                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
-                border: 1px solid #24354b;
-                border-radius: 4px;
-                color: white;
-                font-weight: bold;
-                padding: 6px 12px;
-                font-size: 13px;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                cursor: pointer;
-                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
-                text-decoration: none;
-                font-family: Helvetica, Arial, sans-serif;
-                position: relative;
-                z-index: 20;
-            }
-
-            .ios-back-btn:active {
-                background: linear-gradient(to bottom, #354a65 0%, #2b3f59 100%);
-            }
-
-            /* Transform Desktop Area to iOS List */
+            /* Transform Desktop Area to List */
             #desktop-area {
                 display: flex !important;
                 flex-direction: column !important;
-                padding: 0 !important;
+                padding: 10px 10px calc(50px + env(safe-area-inset-bottom)) 10px !important;
                 margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                gap: 0 !important;
-                background: white;
+                gap: 10px !important;
+                background: #000;
                 height: auto !important;
-                padding-top: calc(44px + env(safe-area-inset-top)) !important; /* Push content below fixed header */
-                padding-bottom: env(safe-area-inset-bottom) !important;
+                padding-top: calc(50px + env(safe-area-inset-top)) !important; /* Push content below fixed header + small gap */
             }
 
             .window {
                 width: 100% !important;
                 display: flex;
                 flex-direction: row;
-                border: none !important;
-                border-bottom: 1px solid #e0e0e0 !important;
+                border: 1px solid #333 !important;
                 margin: 0 !important;
-                box-shadow: none !important;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.5) !important;
                 padding: 10px !important;
-                background: white !important;
+                background: #111 !important;
                 box-sizing: border-box;
                 height: auto !important;
                 min-height: 0 !important;
+                border-radius: 5px !important;
+                flex-shrink: 0 !important; /* Prevent shrinking */
             }
 
             .window .title-bar {
@@ -130,33 +100,28 @@
 
             .window-body {
                 display: grid !important;
-                grid-template-columns: 140px 1fr !important; /* Adjusted column width */
-                grid-template-rows: min-content auto !important;
-                column-gap: 15px !important;
-                row-gap: 4px !important;
+                grid-template-columns: 140px 1fr !important;
+                gap: 15px !important;
                 padding: 0 !important;
                 background: transparent !important;
                 width: 100%;
                 align-items: start !important;
                 border: none !important;
-                overflow: visible !important;
-                cursor: pointer; /* Ensure pointer cursor */
-                pointer-events: auto; /* Ensure clickable */
+                overflow: visible !important; /* Ensure content expands */
+                height: auto !important; /* Force auto height */
             }
 
-            /* Thumbnail styling - Target the first div which usually contains the image/video */
+            /* Thumbnail */
             .window-body > div:first-child {
                 grid-row: 1 / 3;
                 grid-column: 1;
-                width: 140px !important; /* Increased from 120px */
-                height: 140px !important; /* Increased from 120px */
-                padding: 0 !important;
-                margin: 0 !important;
-                border: 1px solid #ccc !important;
-                flex-shrink: 0;
-                background: black;
+                width: 140px !important;
+                height: 140px !important;
+                border: 1px solid #444 !important;
+                background: #000;
                 position: relative !important;
                 overflow: hidden;
+                flex-shrink: 0;
             }
             
             .window-body > div:first-child img, 
@@ -166,7 +131,7 @@
                 object-fit: cover !important;
                 border: none !important;
             }
-
+            
             /* Text container */
             .window-body > div:nth-child(2) {
                 grid-row: 1 / 3;
@@ -175,54 +140,55 @@
                 flex-direction: column;
                 padding: 0 !important;
                 margin: 0 !important;
+                height: 100% !important; /* Ensure container takes full height */
+                justify-content: space-between !important; /* Push content to edges */
             }
 
-            /* Title and Date */
+            /* Text */
             .window-body h3 {
-                font-family: Helvetica, Arial, sans-serif !important;
+                font-family: sans-serif !important;
                 font-size: 16px !important;
-                font-weight: bold !important;
-                color: black !important;
+                color: #fff !important;
                 margin: 0 !important;
                 margin-top: 2px !important;
                 line-height: 1.2;
             }
 
             .window-body p {
-                font-family: Helvetica, Arial, sans-serif !important;
+                font-family: sans-serif !important;
                 font-size: 13px !important;
-                color: #666 !important;
+                color: #aaa !important;
                 margin: 0 !important;
                 line-height: 1.3;
             }
             
             .window-body p strong {
                 font-weight: normal !important;
-                color: #8e8e93 !important; /* iOS gray for date */
+                color: #888 !important; /* Nokia gray for date */
                 font-size: 12px !important;
             }
 
-            /* Hide Read More button in list view, make whole row clickable? 
-               Or keep it but style it like an arrow? 
-               For now, let's keep it simple or hide it if we want pure list look.
-               Let's hide it and rely on the fact that users might click the image?
-               Actually, main.js binds the click to the button. 
-               We should probably make the whole row clickable or style the button minimally.
-            */
             .read-more-btn {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                color: #007aff !important; /* iOS Blue */
-                font-family: Helvetica, Arial, sans-serif !important;
-                font-weight: bold !important;
-                padding: 0 !important;
-                margin-top: 5px !important;
-                text-align: left !important;
+                background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%) !important;
+                border: 1px solid #666 !important;
+                border-radius: 5px !important;
+                color: white !important;
+                font-family: sans-serif !important;
                 font-size: 14px !important;
-                pointer-events: none; /* Let clicks pass through to container */
+                padding: 6px 12px !important;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.8) !important;
+                text-decoration: none !important;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+                margin-top: auto !important; /* Push to bottom */
+                align-self: flex-start !important;
+            }
+
+            .read-more-btn:active {
+                background: linear-gradient(to bottom, #0044cc 0%, #003399 100%) !important;
             }
         }
+
+        /* Container for floating windows */
         #desktop-area {
             position: relative;
             width: 95%;
@@ -303,17 +269,32 @@
             min-width: 80px;
         }
     </style>
-        
 </head>
 <body>
-    <div id="ios-header">
-        <a href="index.html" class="ios-back-btn">Menu</a>
-        <div class="ios-title">Video Projects</div>
-        <div style="width: 40px;"></div> <!-- Spacer for balance -->
+    <!-- Nokia Top Bar -->
+    <div class="nokia-top-bar">
+        <div class="bar-left">
+            <div class="signal-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="menu-title">Video Projects</div>
+        </div>
+        <div class="bar-right">
+            <div class="nokia-clock" id="nokia-clock">12:00</div>
+            <div class="battery-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </div>
     </div>
 
     <div id="desktop-area">
         <!-- Windows will be injected here by main.js -->
+    </div>
+
+    <!-- Nokia Bottom Softkeys -->
+    <div class="nokia-bottom-bar">
+        <button class="softkey-btn softkey-left">Menu</button>
+        <button class="softkey-btn softkey-right" onclick="history.back()">Back</button>
     </div>
 
     <script src="js/main.js"></script>

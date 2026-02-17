@@ -2,225 +2,214 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda & Booking</title>
+    <!-- Read More Style Update -->
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #d866c2;
-            background-image: none;
-            display: block;
-            padding: 20px;
+            background-color: #000000; /* Black background for Dark theme */
+            margin: 0;
+            padding: 0;
             overflow-y: auto;
-            position: relative;
+            overflow-x: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-family: sans-serif;
         }
-        body::before { content: none; }
-        
-        /* Layout for Booking */
+
+        .nokia-top-bar, .nokia-bottom-bar {
+            display: none;
+        }
+
+        /* iOS Header (Dark Theme) */
+        #ios-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 44px;
+            background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+            border-bottom: 1px solid #333;
+            padding: 0 8px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top);
+            height: calc(44px + env(safe-area-inset-top));
+        }
+
+        .ios-title {
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding-top: env(safe-area-inset-top);
+        }
+
+        .ios-back-btn {
+            background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+            border: 1px solid #666;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            padding: 6px 12px;
+            font-size: 13px;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+            cursor: pointer;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+            text-decoration: none;
+            font-family: sans-serif;
+            position: relative;
+            z-index: 20;
+        }
+
         .agenda-layout {
             max-width: 1000px;
             margin: 0 auto;
-            padding-left: 120px; /* Space for desktop icons */
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 20px;
+            padding-top: calc(44px + env(safe-area-inset-top) + 20px); /* Push content below header */
         }
 
-        .window.booking-window {
-            width: 100%;
-            position: relative;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-            background: transparent;
-            padding: 0;
-        }
-
-        .booking-content {
-            padding: 0;
-            background: white;
-            border: 8px solid #bdbdbdff;
-            box-sizing: border-box;
-            overflow: visible !important;
-            height: auto !important;
-            flex: none !important;
-            margin: 0;
-        }
-
-        .booking-instructions {
-            padding: 15px;
-            margin-bottom: 0;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        .info-content {
-            background: #bdbdbd !important;
-        }
-
-        #booking-iframe-container {
-            /* background: white; */
-            /* border: 2px inset #fff; */
-            min-height: 900px; 
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Mobile iOS 4 Calendar/Agenda Style */
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-        html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                overflow: hidden; /* Prevent double scrollbars */
-                background: #ffffff !important; /* Change to white so gaps disappear */
-                -webkit-overflow-scrolling: touch;
+            html {
+                background: #000 !important;
             }
-
-
-            /* Main app container */
-            .agenda-layout {
-                height: 100dvh !important; /* IMPORTANT: dynamic viewport for iOS */
-                display: flex !important;
-                flex-direction: column !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                width: 100% !important;
-                max-width: none !important;
-            }
-
-            /* Navigation Bar (iOS 4 Style) */
-            .window.booking-window:first-child .title-bar {
-                display: flex !important;
-                height: 44px !important;
-                min-height: 44px !important;
-                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%) !important;
-                border-bottom: 1px solid #2d3642 !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 0 8px !important;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-                position: relative !important;
-                z-index: 1000 !important;
-                width: 100% !important;
-                box-sizing: border-box !important;
-                padding-top: env(safe-area-inset-top) !important;
-                height: calc(44px + env(safe-area-inset-top)) !important;
-            }
-
-            /* Title Text */
-            .window.booking-window:first-child .title-bar-text {
-                color: white !important;
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                font-weight: bold !important;
-                font-size: 20px !important;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5) !important;
-                padding-top: env(safe-area-inset-top) !important;
-            }
-
-            /* Add Back Button via Pseudo-element */
-            .window.booking-window:first-child .title-bar::before {
-                content: 'Menu';
-                font-family: Helvetica, Arial, sans-serif;
-                font-weight: bold;
-                font-size: 13px;
-                color: white;
-                background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
-                padding: 6px 12px;
-                border-radius: 4px;
-                border: 1px solid #24354b;
-                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
-                position: absolute;
-                left: 10px;
-                top: calc(50% + env(safe-area-inset-top) / 2); 
-                transform: translateY(-50%);
-                cursor: pointer;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                z-index: 2;
-            }
-
-            /* Info Area (Instructions) - Style like a List Header */
-            .info-content {
-                background: #e0e0e0 !important;
-                border: none !important;
-                border-bottom: 1px solid #bcbcbc !important;
-                padding: 10px 15px !important;
-            }
-
-            .booking-instructions {
-                font-family: Helvetica, Arial, sans-serif !important;
-                font-size: 14px !important;
-                color: #4c566c !important;
-                text-align: left !important;
-                text-shadow: 0 1px 0 rgba(255,255,255,0.8) !important;
-                padding: 0 !important;
-            }
-
-            /* Hide the second title bar (the one on the iframe container) */
-            #booking-container .title-bar {
-                display: none !important;
-            }
-            
-            /* Hide Desktop-only elements */
-            .desktop-link, 
-            .desktop-icons-overlay,
-            .title-bar-controls {
-                display: none !important;
-            }
-            
-            body.has-overlay-icons .agenda-layout {
-                padding: 0 !important;
-            }
-
-            /* SCROLLABLE agenda area */
-            #booking-container {
-                flex: 1 !important;
-                width: 100% !important;
-                height: auto !important; /* Let flex control height */
-                min-height: 0 !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                background: white !important;
-                overflow-y: auto !important; 
-                -webkit-overflow-scrolling: touch;
-                display: block !important;
-            }
-
-            /* Content wrapper */
-            .booking-content {
-                border: none !important;
-                width: 100% !important;
+            body {
+                background: #000 !important;
+                background-image: none !important;
+                font-family: sans-serif !important;
+                padding-top: 0 !important;
                 height: auto !important;
-                background: white !important;
-                overflow: visible !important;
-                display: block !important;
+                min-height: 100vh;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                display: block;
             }
 
-            /* iframe must NOT control scroll */
-            #booking-iframe-container, iframe {
+            /* Hide Desktop Elements */
+            .desktop-link, 
+            .desktop-icons-overlay {
+                display: none !important;
+            }
+
+            /* Nokia Bottom Bar */
+            .nokia-bottom-bar {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                background: #000;
+                border-top: 1px solid #333;
+                z-index: 1000;
+                padding-bottom: env(safe-area-inset-bottom);
+                justify-content: space-between;
+                box-sizing: content-box; /* Ensure padding doesn't affect height calculation if set */
+            }
+
+            .softkey-btn {
+                flex: 1;
+                background: linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%);
+                border: none;
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                font-family: 'VT323', monospace;
+                cursor: pointer;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+                height: 50px;
+                padding: 0 20px;
+                line-height: 50px;
+            }
+            
+            .softkey-left { border-right: 1px solid #222; text-align: left; }
+            .softkey-right { border-left: 1px solid #222; text-align: right; }
+
+            .agenda-layout {
+                padding: calc(44px + env(safe-area-inset-top) + 15px) 15px 80px 15px !important;
+                margin: 0 !important;
                 width: 100% !important;
-                height: 100% !important; /* Increased fixed height to prevent cutoff */
-                min-height: 1600px !important;
-                border: none !important;
-                display: block !important;
-                overflow: hidden !important;
+                box-sizing: border-box;
+                gap: 15px !important;
+            }
+
+            /* Style windows like Read More containers */
+            .window {
+                width: 100% !important;
+                display: flex;
+                flex-direction: column;
+                background: #111 !important;
+                border: 1px solid #333 !important;
+                border-radius: 8px !important;
+                margin: 0 !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+                padding: 15px !important;
+                box-sizing: border-box;
+                height: auto !important;
+            }
+
+            .window .title-bar {
+                display: none !important;
+            }
+
+            .window-body {
+                background: transparent !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                color: #fff !important;
+                font-family: sans-serif !important;
+            }
+
+            /* Specific Agenda Styles */
+            .booking-instructions {
+                font-family: sans-serif !important;
+                font-size: 14px !important;
+                color: #ddd !important;
+                text-align: left !important;
+            }
+
+            #booking-iframe-container {
+                background: white !important; /* Iframe needs white bg */
+                border-radius: 4px;
+                overflow: hidden;
+                min-height: 1600px; /* Increased height to prevent cutoff */
+                margin-top: 10px;
+            }
+            
+            iframe {
+                background: white;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Fallback link if JS fails -->
-    <div class="desktop-link" onclick="window.location.href='index.html'">
-        <img src="images/icons/directory_open_file_mydocs_2k-4.png" alt="Desktop">
-        <div>Desktop</div>
+    <!-- iOS Header (Dark) -->
+    <div id="ios-header">
+        <a href="index.html" class="ios-back-btn">Menu</a>
+        <div class="ios-title">Agenda</div>
+        <div style="width: 50px;"></div> <!-- Spacer -->
     </div>
 
     <div class="agenda-layout">
         <!-- Info Window -->
         <div class="window booking-window">
-            <div class="title-bar" style="background: linear-gradient(90deg, #808080, #c0c0c0);">
-                <div class="title-bar-text" style="color: #e0e0e0;">Info</div>
+            <div class="title-bar">
+                <div class="title-bar-text">Info</div>
                 <div class="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
@@ -237,7 +226,7 @@
         <!-- Main Booking Section -->
         <div class="window booking-window" id="booking-container">
             <div class="title-bar">
-                <div class="title-bar-text" id="booking-title" style="color: #e0e0e0;">Book an Appointment</div>
+                <div class="title-bar-text" id="booking-title">Book an Appointment</div>
                 <div class="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
@@ -246,28 +235,18 @@
             </div>
             <div class="window-body booking-content">
                 <div id="booking-iframe-container">
-                    <p style="text-align:center; padding: 20px;">Loading booking system...</p>
+                    <p style="text-align:center; padding: 20px; color: #fff;">Loading booking system...</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Back Button Logic
-            if (window.innerWidth <= 768) {
-                const navBar = document.querySelector('.window.booking-window:first-child .title-bar');
-                if (navBar) {
-                    navBar.addEventListener('click', (e) => {
-                        // If click is on the left side (where the back button is)
-                        if (e.clientX < 80) {
-                            window.location.href = 'index.html';
-                        }
-                    });
-                }
-            }
-        });
-    </script>
+    <!-- Nokia Bottom Softkeys -->
+    <div class="nokia-bottom-bar">
+        <button class="softkey-btn softkey-left" onclick="window.location.href='index.html'">Menu</button>
+        <button class="softkey-btn softkey-right" onclick="history.back()">Back</button>
+    </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

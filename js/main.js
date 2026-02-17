@@ -112,7 +112,7 @@ async function loadBooking() {
         if (iframeContainer) {
             if (data.booking_url && data.booking_url.includes('http')) {
                 iframeContainer.innerHTML = `
-                    <iframe src="${data.booking_url}" style="border: 0" width="100%" height="900" frameborder="0" scrolling="no"></iframe>
+                    <iframe src="${data.booking_url}" style="border: 0" width="100%" height="1600" frameborder="0" scrolling="no"></iframe>
                 `;
             } else {
                 iframeContainer.innerHTML = `
@@ -888,68 +888,89 @@ function renderModal(item, mediaList) {
         modal.style.width = '100vw';
         modal.style.height = '100vh';
         modal.style.zIndex = 10000;
-        modal.style.background = '#c5ccd4'; // Standard iOS list/detail background
+        
+        // Check if we are coming from pictures page (dark theme) or video page (light theme)
+        // Simple check: if body background is black, use dark theme
+        const isDarkTheme = window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)';
+        
+        modal.style.background = isDarkTheme ? '#000' : '#c5ccd4';
         modal.style.display = 'flex';
         modal.style.flexDirection = 'column';
         modal.style.overflow = 'hidden';
-        modal.style.fontFamily = 'Helvetica, Arial, sans-serif';
+        modal.style.fontFamily = isDarkTheme ? 'VT323, monospace' : 'Helvetica, Arial, sans-serif';
+        
+        const headerBg = isDarkTheme 
+            ? 'linear-gradient(to bottom, #444 0%, #222 50%, #111 51%, #000 100%)' 
+            : 'linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%)';
+            
+        const headerBorder = isDarkTheme ? '#333' : '#2d3642';
+        const textColor = isDarkTheme ? '#fff' : '#000';
+        const subTextColor = isDarkTheme ? '#aaa' : '#8e8e93';
+        const containerBg = isDarkTheme ? '#111' : 'white';
+        const containerBorder = isDarkTheme ? '#333' : '#a0a0a0';
+        
+        let headerContent = '';
+        
+        // iOS Header
+        headerContent = `
+        <div style="
+            height: 44px;
+            background: ${headerBg};
+            border-bottom: 1px solid ${headerBorder};
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top);
+            height: calc(44px + env(safe-area-inset-top));
+        ">
+            <!-- Back Button -->
+            <button id="close-btn-${id}" style="
+                background: ${headerBg};
+                border: 1px solid ${isDarkTheme ? '#666' : '#24354b'};
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                padding: 6px 12px;
+                font-size: 13px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                cursor: pointer;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
+                font-family: inherit;
+                position: relative;
+                z-index: 20;
+            ">Back</button>
+
+            <!-- Title -->
+            <div style="
+                color: white;
+                font-weight: bold;
+                font-size: 20px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 60%;
+                padding-top: env(safe-area-inset-top);
+            ">${item.title}</div>
+
+            <!-- Spacer -->
+            <div style="width: 50px;"></div>
+        </div>
+        `;
         
         // Mobile Layout Content
         modal.innerHTML = `
-            <!-- Top Navigation Bar -->
-            <div style="
-                height: 44px;
-                background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%);
-                border-bottom: 1px solid #2d3642;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 8px;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-                flex-shrink: 0;
-                position: relative;
-                z-index: 10;
-                box-sizing: border-box;
-                padding-top: env(safe-area-inset-top);
-                height: calc(44px + env(safe-area-inset-top));
-            ">
-                <!-- Back Button -->
-                <button id="close-btn-${id}" style="
-                    background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%);
-                    border: 1px solid #24354b;
-                    border-radius: 4px;
-                    color: white;
-                    font-weight: bold;
-                    padding: 6px 12px;
-                    font-size: 13px;
-                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                    cursor: pointer;
-                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);
-                    font-family: Helvetica, Arial, sans-serif;
-                    position: relative;
-                    z-index: 20;
-                ">Back</button>
-
-                <!-- Title -->
-                <div style="
-                    color: white;
-                    font-weight: bold;
-                    font-size: 20px;
-                    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 60%;
-                    padding-top: env(safe-area-inset-top);
-                ">${item.title}</div>
-
-                <!-- Spacer -->
-                <div style="width: 50px;"></div>
-            </div>
+            ${headerContent}
 
             <!-- Main Scrollable Content Area -->
             <div style="
@@ -957,7 +978,7 @@ function renderModal(item, mediaList) {
                 overflow-y: auto; 
                 -webkit-overflow-scrolling: touch; 
                 overscroll-behavior: contain;
-                background: #c5ccd4;
+                background: ${isDarkTheme ? '#000' : '#c5ccd4'};
                 padding: 15px;
                 display: flex;
                 flex-direction: column;
@@ -965,13 +986,13 @@ function renderModal(item, mediaList) {
                 box-sizing: border-box;
                 width: 100%;
             ">
-                <!-- Media Container (White Box) -->
+                <!-- Media Container (Box) -->
                 <div style="
-                    background: white;
+                    background: ${containerBg};
                     border-radius: 8px;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                     overflow: hidden;
-                    border: 1px solid #a0a0a0;
+                    border: 1px solid ${containerBorder};
                     display: flex;
                     flex-direction: column;
                     flex-shrink: 0; /* Prevent container shrinking */
@@ -979,16 +1000,16 @@ function renderModal(item, mediaList) {
                     <!-- Main Media -->
                     <div id="media-view-${id}" style="
                         width: 100%; 
-                        min-height: 250px; /* Reduced from fixed 350px */
-                        max-height: 45vh;  /* Reduced from 50vh */
-                        aspect-ratio: 4/3; /* Responsive aspect ratio */
+                        min-height: 250px; 
+                        max-height: 45vh;  
+                        aspect-ratio: 4/3; 
                         position: relative;
                         flex-shrink: 0;
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        background: white;
-                        z-index: 1; /* Ensure distinct layer */
+                        background: ${isDarkTheme ? '#000' : 'white'};
+                        z-index: 1; 
                     ">
                         <!-- Media Injected Here -->
                     </div>
@@ -999,10 +1020,10 @@ function renderModal(item, mediaList) {
                         text-align: center;
                         padding: 8px 0;
                         font-size: 13px;
-                        color: #555;
-                        background: #f4f4f4;
-                        border-top: 1px solid #e0e0e0;
-                        border-bottom: 1px solid #e0e0e0;
+                        color: ${subTextColor};
+                        background: ${isDarkTheme ? '#222' : '#f4f4f4'};
+                        border-top: 1px solid ${containerBorder};
+                        border-bottom: 1px solid ${containerBorder};
                         flex-shrink: 0;
                         position: relative;
                         z-index: 2;
@@ -1017,11 +1038,11 @@ function renderModal(item, mediaList) {
                         gap: 12px; 
                         padding: 12px; 
                         overflow-x: auto; 
-                        background: #f0f0f0;
+                        background: ${isDarkTheme ? '#1a1a1a' : '#f0f0f0'};
                         justify-content: flex-start;
                         flex-shrink: 0;
                         -webkit-overflow-scrolling: touch;
-                        min-height: 80px; /* Increased for better visibility */
+                        min-height: 80px; 
                         position: relative;
                         z-index: 2;
                     ">
@@ -1029,31 +1050,31 @@ function renderModal(item, mediaList) {
                     </div>
                 </div>
 
-                <!-- Details Container (Grouped List Style) -->
+                <!-- Details Container -->
                 <div style="
-                    background: white;
+                    background: ${containerBg};
                     border-radius: 8px;
-                    border: 1px solid #a0a0a0;
+                    border: 1px solid ${containerBorder};
                     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                     padding: 15px;
                 ">
                     <h2 style="
                         margin: 0 0 10px 0; 
                         font-size: 18px; 
-                        color: black;
-                        font-family: Helvetica, Arial, sans-serif;
+                        color: ${textColor};
+                        font-family: inherit;
                     ">${item.title}</h2>
                     
                     <p style="
                         margin: 0 0 15px 0; 
-                        color: #8e8e93; 
+                        color: ${subTextColor}; 
                         font-size: 14px;
                     "><strong>Date:</strong> ${item.date}</p>
                     
                     <div style="
                         font-size: 15px; 
                         line-height: 1.4; 
-                        color: #000;
+                        color: ${textColor};
                     ">
                         ${descriptionHtml}
                     </div>
@@ -1062,6 +1083,8 @@ function renderModal(item, mediaList) {
                 <!-- Bottom Spacer for safe area -->
                 <div style="height: env(safe-area-inset-bottom); width: 100%;"></div>
             </div>
+
+
         `;
     } else {
         // Desktop Layout (Existing Windows 98 Style)
@@ -1504,3 +1527,39 @@ function openPictureModal(id) {
 
     renderModal(item, mediaList);
 }
+// Nokia 5800 Clock
+function updateNokiaClock() {
+    const clock = document.getElementById('nokia-clock');
+    if (clock) {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        clock.textContent = `${hours}:${minutes}`;
+    }
+}
+
+setInterval(updateNokiaClock, 1000);
+updateNokiaClock(); // Initial call
+
+// Nokia Softkeys
+document.addEventListener('DOMContentLoaded', () => {
+    const leftKey = document.querySelector('.softkey-left');
+    const rightKey = document.querySelector('.softkey-right');
+
+    if (leftKey) {
+        leftKey.addEventListener('click', () => {
+            // Only alert if it's "Options" (for backward compatibility if any page still has it)
+            // But if it's "Menu", we might want different behavior.
+            // For now, let's just log it to avoid annoying alerts.
+            console.log('Left softkey clicked');
+        });
+    }
+
+    if (rightKey) {
+        rightKey.addEventListener('click', () => {
+             // Simulate "Exit" to Home Screen (or just reload/close)
+             // For now, just alert or maybe toggle back to desktop if on desktop
+             console.log('Right softkey clicked');
+        });
+    }
+});

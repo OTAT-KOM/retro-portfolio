@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>About</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #9e5bdb;  
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+       .desktop-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .desktop-link img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .desktop-link div {
+            color: white;
+            font-family: 'Pixelated MS Sans Serif', Arial;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        .page-window {
+            width: 700px;
+            max-width: 90vw;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window-body {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+         
+        menu[role=tablist] {
+            display: flex;
+            margin: 0 0 -2px 0;
+            padding-left: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-link {
+            list-style: none;
+            padding: 3px 8px;
+            margin-right: 2px;
+            background: #c0c0c0;
+            cursor: pointer;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            user-select: none;
+        }
+
+        .tab-link[aria-selected="true"] {
+ 
+            border-bottom: none;
+            box-shadow: 1px 0 0 #000, 1px 0 0 #808080;  
+            z-index: 2;
+            position: relative;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+        }
+
+         
+        .tab-link[aria-selected="true"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            pointer-events: none;
+        }
+
+        .tab-content-container {
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            box-shadow: 1px 1px 0 #000;
+            padding: 20px;
+            background: #c0c0c0;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            z-index: 0;
+        }
+
+        .tab-content {
+            display: none;
+            height: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+         
+        .summary-layout {
+            display: flex;
+            gap: 30px;
+            height: 100%;
+            padding: 20px;
+            align-items: flex-start;
+        }
+
+        .summary-image-container {
+            flex-shrink: 0;
+            width: 220px;
+            height: 220px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .summary-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .summary-text {
+            flex: 1;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            overflow-y: auto;
+            color: #000;
+        }
+
+        .summary-title {
+            font-weight: bold;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+        }
+
+        .summary-desc {
+            font-size: 0.9em;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* Footer Buttons */
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: auto;
+            padding: 15px 40px; /* Add side padding */
+        }
+
+        .footer-buttons button {
+            min-width: 120px;
+            font-weight: bold;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-size: 14px;
+            height: 35px;
+        }
+
+         
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            align-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px dotted transparent;
+        }
+
+        .contact-item:hover {
+            border: 1px dotted #000;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-item img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+        }
+
+        .contact-item span {
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Nokia Phone Container (Wrapper for the whole device) -->
+    <div id="nokia-phone-wrapper">
+        <div class="nokia-phone-body">
+            <!-- Top Part (Speaker, Brand, Model, Camera) -->
+            <div class="nokia-top-part">
+                <div class="nokia-speaker-slot">
+                     <div class="nokia-speaker"></div>
+                </div>
+                <div class="nokia-brand">NOKIA</div>
+                <div class="nokia-model">XpressMusic</div>
+                <div class="nokia-camera"></div>
+            </div>
+            
+            <!-- Screen Area -->
+            <div class="nokia-screen-bezel">
+                <div class="nokia-screen" id="nokia-screen">
+                    
+                    <!-- Mobile Menu Container (Nokia 5800 Grid Style) -->
+                    <div id="mobile-menu">
+                        <!-- Nokia Top Bar -->
+                        <div class="nokia-top-bar">
+                            <div class="bar-left">
+                                <div class="signal-bars">
+                                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                                <div class="menu-title">Menu</div>
+                            </div>
+                            <div class="bar-right">
+                                <div class="nokia-clock" id="nokia-clock">18:37</div>
+                                <div class="battery-bars">
+                                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nokia Grid Content -->
+                        <div class="nokia-menu-grid">
+                            <a href="pictures.html" class="nokia-icon-item">
+                                <img src="images/icons/ios 4/Photos.png" alt="Pictures">
+                                <span>Pictures</span>
+                            </a>
+                            <a href="agenda.html" class="nokia-icon-item">
+                                <img src="images/icons/ios 4/Calendar.png" alt="Agenda">
+                                <span>Agenda</span>
+                            </a>
+                            <a href="videoprojects.html" class="nokia-icon-item">
+                                <img src="images/icons/ios 4/Videos.png" alt="Video Project">
+                                <span>Video Project</span>
+                            </a>
+                            
+                            <a href="#" class="nokia-icon-item" onclick="goToContact(event)">
+                                <img src="images/icons/ios 4/Contacts.png" alt="Contact OTAT">
+                                <span>Contact OTAT</span>
+                            </a>
+                            <a href="listen.html" class="nokia-icon-item">
+                                <img src="images/icons/ios 4/iTunes.png" alt="Listen">
+                                <span>Listen</span>
+                            </a>
+                            <a href="#" class="nokia-icon-item" onclick="showMobileAbout(event)">
+                                <img src="images/icons/ios 4/YouTube.png" alt="About OTAT">
+                                <span>About OTAT</span>
+                            </a>
+                            
+                            <a href="note.html" class="nokia-icon-item">
+                                <img src="images/icons/ios 4/Notes.png" alt="Note">
+                                <span>Note</span>
+                            </a>
+                        </div>
+
+                        <!-- Custom Scrollbar Indicator (Visual Only) -->
+                        <div class="nokia-scrollbar-track">
+                            <div class="nokia-scrollbar-thumb"></div>
+                        </div>
+
+                        <!-- Nokia Bottom Softkeys -->
+                        <div class="nokia-bottom-bar">
+                            <button class="softkey-btn">Menu</button>
+                            <button class="softkey-btn">Exit</button>
+                        </div>
+                    </div>
+
+                    <div class="window page-window" id="main-window">
+                        <!-- Mobile iOS Header (Hidden on Desktop) -->
+                        <div class="mobile-ios-header" style="display:none; height: 44px; background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%); border-bottom: 1px solid #2d3642; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box; padding-top: env(safe-area-inset-top); height: calc(44px + env(safe-area-inset-top)); flex-shrink: 0;">
+                            <button onclick="closeMainWindow()" style="background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%); border: 1px solid #24354b; border-radius: 4px; color: white; font-weight: bold; padding: 6px 12px; font-size: 13px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);">Back</button>
+                            <div style="color: white; font-weight: bold; font-size: 20px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); padding-top: env(safe-area-inset-top);">Contacts</div>
+                            <div style="width: 50px;"></div>
+                        </div>
+
+                        <div class="title-bar">
+                            <div class="title-bar-text">About</div>
+                            <div class="title-bar-controls">
+                                <button aria-label="Minimize"></button>
+                                <button aria-label="Maximize"></button>
+                                <button aria-label="Close" onclick="closeMainWindow()"></button>
+                            </div>
+                        </div>
+                        <div class="window-body">
+                            <menu role="tablist">
+                                <li role="tab" aria-selected="true" class="tab-link" data-tab="summary" >Summary</li>
+                                <li role="tab" class="tab-link" data-tab="contact" >Contact details</li>
+                            </menu>
+                            
+                            <div class="tab-content-container">
+                                
+                                <div class="tab-content active" id="tab-content-summary">
+                                    <div class="summary-layout">
+                                        <div class="summary-image-container">
+                                            <img id="about-image" src="" alt="Profile" class="summary-image">
+                                        </div>
+                                        <div class="summary-text">
+                                            <h2 id="about-title" class="summary-title">Loading...</h2>
+                                            <p id="about-text" class="summary-desc"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="tab-content" id="tab-content-contact">
+                                    <div class="contact-grid">
+                                        <p style="width: 100%; text-align: center;">Loading contact details...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="footer-buttons">
+                                <button id="btn-insta">Instagram</button>
+                                <button id="btn-twitter">Twitter</button>
+                                <button id="btn-tiktok">TikTok</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- iOS 4 SMS Interface Container -->
+                    <div id="ios-sms-app" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #dce0e6; z-index: 2000; flex-direction: column; font-family: Helvetica, Arial, sans-serif;">
+                        <!-- Header -->
+                        <div style="height: 44px; background: linear-gradient(to bottom, #b0bccd 0%, #889bb3 50%, #8195af 51%, #6d84a2 100%); border-bottom: 1px solid #2d3642; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box; padding-top: 0; height: 44px; flex-shrink: 0;">
+                            <button onclick="closeMobileAbout()" style="background: linear-gradient(to bottom, #6d84a2 0%, #3d526d 50%, #354a65 51%, #2b3f59 100%); border: 1px solid #24354b; border-radius: 4px; color: white; font-weight: bold; padding: 6px 12px; font-size: 13px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5); cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 0 rgba(255,255,255,0.2);">Menu</button>
+                            <div style="color: white; font-weight: bold; font-size: 20px; text-shadow: 0 -1px 0 rgba(0,0,0,0.5);">About OTAT</div>
+                            <div style="width: 50px;"></div> <!-- Spacer for balance -->
+                        </div>
+
+                        <!-- Messages Area -->
+                        <div id="sms-container" style="flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Content injected via JS -->
+                        </div>
+
+                        <!-- Input Area (Mock) -->
+                        <div style="height: 44px; background: url('images/ios-keyboard-bar.png') #dce0e6; border-top: 1px solid #aeb4bf; display: flex; align-items: center; padding: 0 10px; height: 44px; flex-shrink: 0;">
+                            <div onclick="showContactAlert()" style="flex: 1; height: 30px; background: white; border: 1px solid #999; border-radius: 15px; margin-right: 10px; cursor: text;"></div>
+                            <button onclick="showContactAlert()" style="background: linear-gradient(to bottom, #93a5ce 0%, #6885b6 50%, #5676ad 51%, #7992c1 100%); border: 1px solid #3e5684; border-radius: 15px; color: white; font-weight: bold; padding: 4px 12px; font-size: 14px; text-shadow: 0 -1px 0 rgba(0,0,0,0.3); cursor: pointer;">Send</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="nokia-bottom-part">
+                <div class="nokia-buttons-row">
+                    <button class="nokia-phys-btn call-btn" title="Call"></button>
+                    <button class="nokia-phys-btn menu-btn" title="Menu"></button>
+                    <button class="nokia-phys-btn end-btn" title="End"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Custom iOS Alert Overlay -->
+    <div id="ios-alert" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; font-family: Helvetica, Arial, sans-serif;">
+       <div style="background:rgba(255,255,255,0.95); width:270px; border-radius:15px; text-align:center; backdrop-filter:blur(10px);">
+           <div style="padding:20px 15px;">
+               <h3 style="margin:0 0 5px; font-size:17px; font-weight:600; color:black;">Contact OTAT</h3>
+               <p style="margin:0; font-size:13px; color:black;">Would you like to open the contact details?</p>
+           </div>
+           <div style="border-top:1px solid #b5b5b5; display:flex;">
+               <button onclick="closeAlert()" style="flex:1; background:transparent; border:none; border-right:1px solid #b5b5b5; padding:12px; font-size:17px; color:#007aff; cursor:pointer; border-bottom-left-radius: 15px;">Cancel</button>
+               <button onclick="goToContact()" style="flex:1; background:transparent; border:none; padding:12px; font-size:17px; font-weight:600; color:#007aff; cursor:pointer; border-bottom-right-radius: 15px;">Open</button>
+           </div>
+       </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        async function showMobileAbout(e) {
+            if (e) e.preventDefault();
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenu) mobileMenu.style.display = 'none';
+            
+            const smsApp = document.getElementById('ios-sms-app');
+            smsApp.style.display = 'flex';
+            
+            const container = document.getElementById('sms-container');
+            
+            // Clear content if it's just whitespace or the initial comment
+            if (container.innerHTML.trim().length < 50) { // arbitrary small length to catch empty/comments
+                 container.innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">Loading...</div>';
+            } else if (container.innerHTML.includes('Loading...')) {
+                 // Keep loading state
+            } else {
+                 // Content already loaded, don't fetch again
+                 return;
+            }
+
+            try {
+                const response = await fetch('data/about.json?t=' + Date.now());
+                const data = await response.json();
+                
+                // Construct Messages
+                container.innerHTML = `
+                    <div style="text-align: center; font-size: 11px; color: #8e8e93; font-weight: bold; margin-bottom: 5px;">Today 9:41 AM</div>
+                    
+                    <!-- Incoming Question (Gray Bubble) -->
+                    <div style="align-self: flex-start; max-width: 75%; position: relative; margin-left: 10px;">
+                        <div style="background: linear-gradient(#e5e5ea, #d0d0d6); border: 1px solid #c8c8cd; border-radius: 15px; padding: 8px 12px; font-size: 16px; color: black; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative;">
+                            Tell me about OTAT?
+                        </div>
+                    </div>
+
+                    <!-- Outgoing Image (Green Bubble style container or just image) -->
+                    ${data.summary_image ? `
+                    <div style="align-self: flex-end; max-width: 70%; position: relative; margin-right: 10px; margin-top: 5px;">
+                         <div style="background: linear-gradient(#baf068, #86d036); border: 1px solid #7dc32b; border-radius: 15px; padding: 5px; box-shadow: 0 1px 1px rgba(0,0,0,0.1);">
+                            <img src="${data.summary_image}" style="width: 100%; border-radius: 10px; display: block;">
+                         </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Outgoing Response (Green Bubble) - Text -->
+                    <div style="align-self: flex-end; max-width: 80%; position: relative; margin-right: 10px; display: flex; flex-direction: column; align-items: flex-end;">
+                        <div style="background: linear-gradient(#baf068, #86d036); border: 1px solid #7dc32b; border-radius: 15px; padding: 8px 12px; font-size: 16px; color: black; box-shadow: 0 1px 1px rgba(0,0,0,0.1); text-shadow: 0 1px 0 rgba(255,255,255,0.3);">
+                            ${data.summary_text || "About OTAT..."}
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; font-size: 11px; color: #8e8e93; font-weight: bold; margin-top: 10px;">Read 9:42 AM</div>
+                `;
+
+            } catch(err) {
+                container.innerHTML = '<div style="text-align: center; color: red;">Error loading message.</div>';
+            }
+        }
+
+        function closeMobileAbout() {
+            document.getElementById('ios-sms-app').style.display = 'none';
+            document.getElementById('mobile-menu').style.display = 'flex'; 
+        }
+
+        // --- Notification Logic ---
+        function showContactAlert() {
+            document.getElementById('ios-alert').style.display = 'flex';
+        }
+
+        function closeAlert() {
+            document.getElementById('ios-alert').style.display = 'none';
+        }
+
+        function goToContact(e) {
+            if (e) e.preventDefault();
+            closeAlert();
+            // Hide SMS app
+            document.getElementById('ios-sms-app').style.display = 'none';
+            // Hide Mobile Menu (if called from there)
+            document.getElementById('mobile-menu').style.display = 'none';
+            
+            // Show Main Window in Mobile View
+            const mainWindow = document.getElementById('main-window');
+            if (mainWindow) {
+                mainWindow.classList.add('mobile-view');
+                // Switch to Contact Tab
+                const contactTab = mainWindow.querySelector('.tab-link[data-tab="contact"]');
+                if (contactTab) contactTab.click();
+            }
+        }
+
+        function closeMainWindow() {
+            const mainWindow = document.getElementById('main-window');
+            if (mainWindow) {
+                mainWindow.classList.remove('mobile-view');
+                // Show Mobile Menu
+                document.getElementById('mobile-menu').style.display = 'flex';
+            }
+        }
+
+        async function loadExtraContactLogic() {
+            try {
+                // Check URL params to switch tabs
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('tab') === 'contact') {
+                    const contactTab = document.querySelector('.tab-link[data-tab="contact"]');
+                    if (contactTab) {
+                        // Simulate click to switch
+                        contactTab.click();
+                    }
+                }
+
+                const response = await fetch('data/about.json?t=' + Date.now());
+                if (!response.ok) return;
+                const data = await response.json();
+                
+                const showEmailAlert = (email) => {
+                    const overlay = document.createElement('div');
+                    Object.assign(overlay.style, {
+                        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.1)', zIndex: 9998
+                    });
+                    
+                    const win = document.createElement('div');
+                    win.className = 'window';
+                    Object.assign(win.style, {
+                        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                        zIndex: 9999, width: '300px'
+                    });
+                    
+                    win.innerHTML = `
+                        <div class="title-bar">
+                            <div class="title-bar-text">Email Address</div>
+                            <div class="title-bar-controls">
+                                <button aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="window-body">
+                            <p style="text-align: center; margin: 20px 0; user-select: text; font-size: 14px;">${email}</p>
+                            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                                <button id="btn-copy-email" style="min-width: 70px;">Copy</button>
+                                <button id="btn-close-alert" style="min-width: 70px;">OK</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(overlay);
+                    document.body.appendChild(win);
+                    
+                    const close = () => { win.remove(); overlay.remove(); };
+                    win.querySelector('[aria-label="Close"]').onclick = close;
+                    win.querySelector('#btn-close-alert').onclick = close;
+                    
+                    const copyBtn = win.querySelector('#btn-copy-email');
+                    copyBtn.onclick = () => {
+                        navigator.clipboard.writeText(email).then(() => {
+                            copyBtn.textContent = 'Copied!';
+                            setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+                        });
+                    };
+                };
+
+                // Clear existing items
+                const grid = document.querySelector('.contact-grid');
+                if (grid) {
+                    grid.innerHTML = '';
+                    
+                    // Add social media items
+                    if (data.social_media && Array.isArray(data.social_media)) {
+                        data.social_media.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'contact-item';
+                            div.onclick = () => window.open(item.url, '_blank');
+                            
+                            // Handle missing icon
+                            const iconSrc = item.icon || 'images/icons/directory_favorites-2.png';
+                            
+                            div.innerHTML = `
+                                <img src="${iconSrc}" alt="${item.name}">
+                                <span>${item.name}</span>
+                            `;
+                            grid.appendChild(div);
+                        });
+                    }
+
+                    // Add Email button if exists
+                    if (data.contact_email) {
+                        const emailDiv = document.createElement('div');
+                        emailDiv.className = 'contact-item';
+                        emailDiv.onclick = () => showEmailAlert(data.contact_email);
+                        emailDiv.innerHTML = `
+                            <img src="images/icons/outlook_express-4.png" alt="Email">
+                            <span>Email Me</span>
+                        `;
+                        grid.appendChild(emailDiv);
+                    }
+                }
+
+            } catch(e) { console.log(e); }
+        }
+        
+         
+        document.addEventListener('DOMContentLoaded', () => {
+            loadExtraContactLogic();
+            
+            // On Mobile: Open About (SMS App) ONLY on first visit of the session
+            if (window.innerWidth <= 768) {
+                const hasSeenIntro = sessionStorage.getItem('hasSeenIntro');
+                
+                if (!hasSeenIntro) {
+                    showMobileAbout();
+                    sessionStorage.setItem('hasSeenIntro', 'true');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
